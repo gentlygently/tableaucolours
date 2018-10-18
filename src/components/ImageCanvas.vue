@@ -3,7 +3,8 @@
         <scalable-image 
             v-show="hasImage" 
             :image="image" 
-            :scale="scale" />
+            :scale="scale"
+            @colour-selected="colourSelected" />
     </div>
 </template>
 
@@ -29,6 +30,9 @@ export default {
       }
   },
   methods: {
+      colourSelected (colour) {
+          this.$emit('colour-selected', colour);
+      },
       wheel (event) {
         if (!event.deltaY) {
             return;
@@ -60,6 +64,7 @@ export default {
     background-position: 0 0, 1.5rem 1.5rem;
     background-size: 3rem 3rem;
     overflow: auto;
+    position: relative;
 }
 
 .imagecontainer.highlight {

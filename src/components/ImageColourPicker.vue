@@ -1,5 +1,8 @@
 <template>
-    <image-canvas :image="image" class="canvas" />
+    <image-canvas 
+        :image="image" 
+        @colour-selected="colourSelected"
+        class="canvas" />
 </template>
 
 <script>
@@ -19,6 +22,9 @@ export default {
       ImageCanvas
   },
   methods: {
+      colourSelected (colour) {
+          this.$emit('colour-selected', colour);
+      },
       paste(event) {
         if (!event.clipboardData || !event.clipboardData.items) {
             return;

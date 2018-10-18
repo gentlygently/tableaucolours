@@ -4,7 +4,7 @@
       <colour-palette :palette="palette" />
     </section>
     <section id="imagesection">
-      <image-colour-picker />
+      <image-colour-picker @colour-selected="colourSelected" />
     </section>
   </main>
 </template>
@@ -26,11 +26,29 @@ export default {
           colours: [
               {
                   id: 1,
-                  colour: '#ffffff'
+                  colour: '#ffffff',
+                  isSelected: true
               }
           ]
         }
       }
+  },
+  computed: {
+    currentColour () {
+      return this.palette.colours.find(x => x.isSelected);
+    },
+    canSelectColour () {
+      return this.currentColour ? true : false;
+    }
+  },
+  methods: {
+    colourSelected (colour) {
+      let currentColour = this.currentColour;
+      
+      if (currentColour) {
+        currentColour.colour = colour;
+      }
+    }
   }
 }
 </script>
