@@ -1,6 +1,9 @@
 <template>
-    <div class="container">
-        <scalable-image v-show="hasImage" :image="image" :scale="scale" />
+    <div class="container" @wheel.shift="wheel">
+        <scalable-image 
+            v-show="hasImage" 
+            :image="image" 
+            :scale="scale" />
     </div>
 </template>
 
@@ -23,6 +26,22 @@ export default {
   computed: {
       hasImage () {
           return this.image.width && this.image.height;
+      }
+  },
+  methods: {
+      wheel (event) {
+        if (!event.deltaY) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (event.deltaY < 0 && this.scale <= 0.1) {
+            return;
+        }
+
+        this.scale *= (event.deltaY < 0 ? 0.9 : 1.1);
       }
   }
 }
