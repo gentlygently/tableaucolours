@@ -1,10 +1,11 @@
 <template>
     <div class="container" @wheel.shift="wheel">
         <scalable-image 
-            v-show="hasImage" 
+            v-show="hasImage"
+            :can-pick-colour="canPickColour" 
             :image="image" 
             :scale="scale"
-            @colour-selected="colourSelected" />
+            @colour-picked="colourPicked" />
     </div>
 </template>
 
@@ -14,6 +15,7 @@ import ScalableImage from './ScalableImage.vue'
 export default {
   name: 'ImageCanvas',
   props: {
+      canPickColour: Boolean,
       image: HTMLImageElement
   },
   data() {
@@ -30,8 +32,8 @@ export default {
       }
   },
   methods: {
-      colourSelected (colour) {
-          this.$emit('colour-selected', colour);
+      colourPicked (colour) {
+          this.$emit('colour-picked', colour);
       },
       wheel (event) {
         if (!event.deltaY) {
@@ -57,7 +59,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: solid 0.1rem #000;
     box-sizing: border-box;
     background-color: #fff;
     background-image: linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%), linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%);
@@ -68,7 +69,6 @@ export default {
 }
 
 .imagecontainer.highlight {
-    border-color: #358cd6;
     background-image: linear-gradient(45deg, #eaf3fb 26%, transparent 25%, transparent 75%, #eaf3fb 75%), linear-gradient(45deg, #eaf3fb 26%, transparent 25%, transparent 75%, #eaf3fb 75%);
 }
 

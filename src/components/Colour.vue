@@ -1,5 +1,5 @@
 <template>
-    <li>
+    <li :class="activeClass" @click="click">
         <colour-swatch :colour="colour.colour" class="swatch" />
         <colour-picker :colour="colour.colour" class="picker" />
     </li>
@@ -17,25 +17,39 @@ export default {
         required: true
     }
   },
+  computed: {
+      activeClass () {
+          return this.colour.isSelected ? 'active' : '';
+      }
+  },
   components: {
     ColourPicker,
     ColourSwatch
+  },
+  methods: {
+      click () {
+          this.$emit('select', this.colour);
+      }
   }
 }
 </script>
 
 <style scoped lang="less">
 li {
-    border: solid 1px #ccc;
-    padding: 1rem;
+    border-bottom: solid 1px #d8d5d3;
+    padding: 0.5rem 1.5rem;
     margin: 0;
     list-style: none;
-    line-height: 4rem;
+    line-height: 3.5rem;
+}
+li.active {
+    background-color: #d7d5d3;
+    border-color: #c7c5c3;
 }
 .swatch {
     display: inline-block;
-    width: 4rem;
-    height: 4rem;
+    width: 3.5rem;
+    height: 3.5rem;
     box-sizing: border-box;
 }
 .picker {

@@ -16,6 +16,6 @@ export default {
 
 <style scoped lang="less">
 span {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 </style>

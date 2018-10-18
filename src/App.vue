@@ -1,10 +1,15 @@
 <template>
   <main id="app">
     <section id="palettesection">
-      <colour-palette :palette="palette" />
+      <colour-palette 
+        :palette="palette" 
+        @add-colour="addColour"
+        @select-colour="selectColour" />
     </section>
     <section id="imagesection">
-      <image-colour-picker @colour-selected="colourSelected" />
+      <image-colour-picker 
+        :can-pick-colour="canPickColour"
+        @colour-picked="colourPicked" />
     </section>
   </main>
 </template>
@@ -12,6 +17,8 @@
 <script>
 import ColourPalette from './components/ColourPalette.vue'
 import ImageColourPicker from './components/ImageColourPicker.vue'
+
+let nextColourId = 1;
 
 export default {
   name: 'app',
@@ -25,7 +32,7 @@ export default {
           name: 'New colour palette',
           colours: [
               {
-                  id: 1,
+                  id: nextColourId++,
                   colour: '#ffffff',
                   isSelected: true
               }
@@ -34,20 +41,37 @@ export default {
       }
   },
   computed: {
-    currentColour () {
-      return this.palette.colours.find(x => x.isSelected);
+    currentColour: {
+      get () {
+          return this.palette.colours.find(x => x.isSelected);
+      },
+      set (colour) {
+        this.palette.colours.forEach(x => x.isSelected = (x === colour));
+      }  
     },
-    canSelectColour () {
+    canPickColour () {
       return this.currentColour ? true : false;
     }
   },
   methods: {
-    colourSelected (colour) {
+    addColour () {
+      const colour = {
+        id: nextColourId++,
+        colour: '#ffffff',
+        isSelected: false
+      };
+      this.palette.colours.push(colour);
+      this.currentColour = colour;
+    },
+    colourPicked (colour) {
       let currentColour = this.currentColour;
       
       if (currentColour) {
         currentColour.colour = colour;
       }
+    },
+    selectColour (colour) {
+      this.currentColour = colour;
     }
   }
 }
@@ -70,22 +94,22 @@ html, body {
     align-items: flex-start;
     align-content: stretch;
     height: 100%;
-    padding: 1rem;
     box-sizing: border-box;
     position: relative;
 }
 #palettesection {
-  width: 15rem;
+  width: 20rem;
   height: 100%;
   box-sizing: border-box;
   position: relative;
   flex-shrink: 0;
   flex-grow: 0;
+  background-color: #efeceb;
+  border-right: 0.1rem solid #d8d5d3;
 }
 #imagesection {
   height: 100%;
   padding-bottom: 3rem;
-  margin-left: 1rem;
   box-sizing: border-box;
   position: relative;
   flex-grow: 1;

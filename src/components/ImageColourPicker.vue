@@ -1,7 +1,8 @@
 <template>
     <image-canvas 
         :image="image" 
-        @colour-selected="colourSelected"
+        :can-pick-colour="canPickColour"
+        @colour-picked="colourPicked"
         class="canvas" />
 </template>
 
@@ -11,7 +12,7 @@ import ImageCanvas from './ImageCanvas.vue'
 export default {
   name: 'ImageColourPicker',
   props: {
-    
+    canPickColour: Boolean
   },
   data() {
       return {
@@ -22,8 +23,8 @@ export default {
       ImageCanvas
   },
   methods: {
-      colourSelected (colour) {
-          this.$emit('colour-selected', colour);
+      colourPicked (colour) {
+          this.$emit('colour-picked', colour);
       },
       paste(event) {
         if (!event.clipboardData || !event.clipboardData.items) {

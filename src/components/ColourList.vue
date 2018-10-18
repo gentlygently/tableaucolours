@@ -4,6 +4,7 @@
             v-for="colour in colours" 
             :key="colour.id"
             :colour="colour"
+            @select="select"
             class="colour" />
     </ul>
 </template>
@@ -21,6 +22,11 @@ export default {
   },
   components: {
     Colour
+  },
+  methods: {
+      select (colour) {
+          this.$emit('select-colour', colour);
+      }
   }
 }
 </script>
