@@ -5,6 +5,7 @@
             :key="colour.id"
             :colour="colour"
             @select="select"
+            @remove="remove"
             class="colour" />
     </ul>
 </template>
@@ -26,6 +27,9 @@ export default {
   methods: {
       select (colour) {
           this.$emit('select-colour', colour);
+      },
+      remove (colour) {
+          this.$emit('remove-colour', colour);
       }
   }
 }

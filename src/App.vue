@@ -4,7 +4,8 @@
       <colour-palette 
         :palette="palette" 
         @add-colour="addColour"
-        @select-colour="selectColour" />
+        @select-colour="selectColour"
+        @remove-colour="removeColour" />
     </section>
     <section id="imagesection">
       <image-colour-picker 
@@ -72,6 +73,9 @@ export default {
     },
     selectColour (colour) {
       this.currentColour = colour;
+    },
+    removeColour (colour) {
+      this.palette.colours = this.palette.colours.filter(x => x !== colour);
     }
   }
 }

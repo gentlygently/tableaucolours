@@ -5,7 +5,8 @@
         </div>
         <colour-list 
             :colours="palette.colours"
-            @select-colour="selectColour" />
+            @select-colour="selectColour"
+            @remove-colour="removeColour" />
         <div class="palette-actions">
             <span @click="add" class="add fas fa-plus" title="Add colour"></span>
         </div>
@@ -35,6 +36,9 @@ export default {
       },
       selectColour (colour) {
           this.$emit('select-colour', colour);
+      },
+      removeColour (colour) {
+          this.$emit('remove-colour', colour);
       }
   }
 }
