@@ -113,7 +113,6 @@ html, body {
 }
 #imagesection {
   height: 100%;
-  padding-bottom: 3rem;
   box-sizing: border-box;
   position: relative;
   flex-grow: 1;

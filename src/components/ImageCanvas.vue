@@ -63,6 +63,8 @@ export default {
     background-size: 3rem 3rem;
     overflow: auto;
     position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .imagecontainer.highlight {
