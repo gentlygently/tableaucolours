@@ -1,6 +1,9 @@
 <template>
-    <div :class="activeClass">
-        <canvas ref="image" @click="click"></canvas>
+    <div class="container">
+        <div class="hackyverticalspacer">&nbsp;</div>
+        <div class="image" :class="{active: canPickColour}">
+            <canvas ref="image" @click="click"></canvas>
+        </div>
     </div>
 </template>
 
@@ -41,6 +44,8 @@ export default {
         
         drawingContext.scale(this.scale, this.scale);
         drawingContext.drawImage(this.image, 0, 0);
+
+        console.log(this.width + ' x ' + this.height);
       },
       getDrawingContext () {
           return this.$refs.image.getContext('2d')
@@ -72,7 +77,24 @@ export default {
 </script>
 
 <style scoped lang="less">
-    .active canvas:hover {
+    div.container {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        white-space: nowrap;
+    }
+    div.hackyverticalspacer {
+        display: inline-block;
+        content: "";
+        height: 100%;
+        vertical-align: middle;
+        width: 0;
+    }
+    div.image {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    div.image.active canvas:hover {
         cursor: crosshair;
     }
 </style>

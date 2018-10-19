@@ -56,9 +56,6 @@ export default {
 <style scoped lang="less">
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     box-sizing: border-box;
     background-color: #fff;
     background-image: linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%), linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%);
