@@ -1,8 +1,8 @@
 <template>
     <div>
-        <label for="selectImage">
+        <label ref="label" for="selectImage">
             <input id="selectImage" type="file" style="display:none;" @input="input">
-            <span class="fas fa-folder-open" title="Open image..."></span>
+            <a class="button fas fa-folder-open" title="Open image..." @click.prevent="click" href="#"></a>
         </label>
     </div>
 </template>
@@ -14,8 +14,8 @@ export default {
       input (event) {
           this.$emit('file-selected', event.target.files);
       },
-      submit () {
-
+      click () {
+          this.$refs.label.click();
       }
   }
 }

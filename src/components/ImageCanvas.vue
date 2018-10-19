@@ -16,12 +16,8 @@ export default {
   name: 'ImageCanvas',
   props: {
       canPickColour: Boolean,
-      image: HTMLImageElement
-  },
-  data() {
-      return {
-          scale: 1
-      }
+      image: HTMLImageElement,
+      scale: Number
   },
   components: {
       ScalableImage
@@ -43,11 +39,7 @@ export default {
         event.preventDefault();
         event.stopPropagation();
 
-        if (event.deltaY < 0 && this.scale <= 0.1) {
-            return;
-        }
-
-        this.scale *= (event.deltaY < 0 ? 0.9 : 1.1);
+        this.$emit('zoom', this.scale * (event.deltaY < 0 ? 0.9 : 1.1));
       }
   }
 }

@@ -8,7 +8,7 @@
             @select-colour="selectColour"
             @remove-colour="removeColour" />
         <div class="palette-actions">
-            <span @click="add" class="add fas fa-plus" title="Add colour"></span>
+            <a @click="add" class="button add fas fa-plus" title="Add colour" @click.prevent.stop></a>
         </div>
     </div>
 </template>
@@ -45,8 +45,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "./../variables.less";
+
 .palette-name {
-    border-bottom: solid 0.1rem #d8d5d3;
+    border-bottom: @border;
     padding: 1rem;
     box-sizing: border-box;
     height: 5rem;
@@ -62,20 +64,19 @@ export default {
     input:focus {
         font-weight: normal;
         background-color: #fff;
-        border: solid 0.1rem #d8d5d3;
+        border: @border;
     }
 }
 .palette-actions {
     box-sizing: border-box;
     height: 3rem;
-    border-bottom: solid 0.1rem #d8d5d3;
-    color: #73716f;
+    border-bottom: @border;
 
     .add {
         display: block;
         float: right;
         width: 3rem;
-        border-left: solid 0.1rem #d8d5d3;
+        border-left: @border;
         text-align: center;
         font-size: 2rem;
         line-height: 2.9rem;

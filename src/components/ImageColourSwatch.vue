@@ -28,12 +28,14 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "./../variables.less";
+
 div.swatch {
     display: block;
     position: absolute;
     width: 4rem;
     height: 4rem;
-    border: solid 0.1rem #d8d5d3;
+    border: @border;
     border-radius: 50%;
 }
 </style>

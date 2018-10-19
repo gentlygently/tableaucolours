@@ -2,7 +2,7 @@
     <li :class="activeClass" @click="click">
         <colour-swatch :colour="colour.colour" class="swatch" />
         <colour-picker :colour="colour.colour" class="picker" />
-        <span @click.prevent.stop="remove" class="remove fas fa-times" title="Delete colour"></span>
+        <a @click.prevent.stop="remove" class="button remove fas fa-times" title="Delete colour"></a>
     </li>
 </template>
 
@@ -39,8 +39,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "./../variables.less";
+
 li {
-    border-bottom: solid 1px #d8d5d3;
+    border-bottom: @border;
     padding: 0.5rem 1rem 0.5rem 1.5rem;
     margin: 0;
     list-style: none;
@@ -64,12 +66,11 @@ li {
     display: inline-block;
     margin-left: 1rem;
 }
-.remove {
+a.remove {
     display: none;
     float: right;
     width: 1.5rem;
     font-size: 2rem;
     line-height: 3.5rem;
-    color: #73716f;
 }
 </style>

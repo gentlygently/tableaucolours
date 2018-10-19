@@ -82,6 +82,8 @@ export default {
 </script>
 
 <style lang="less">
+@import "./variables.less";
+
 html, body { 
     height: 100%;
     padding: 0;
@@ -108,8 +110,8 @@ html, body {
   position: relative;
   flex-shrink: 0;
   flex-grow: 0;
-  background-color: #efeceb;
-  border-right: 0.1rem solid #d8d5d3;
+  background-color: @background-colour;
+  border-right: @border;
 }
 #imagesection {
   height: 100%;
@@ -117,5 +119,17 @@ html, body {
   position: relative;
   flex-grow: 1;
   overflow: hidden;
+}
+a.button {
+  color: @tool-colour;
+  text-decoration: none;
+
+  &:hover {
+    color: @tool-colour-hover;
+  }
+
+  &:active {
+    color: @tool-colour-active;
+  }
 }
 </style>

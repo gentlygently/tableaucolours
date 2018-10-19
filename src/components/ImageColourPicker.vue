@@ -3,11 +3,20 @@
         <div class="canvas">
             <image-canvas 
                 :image="image" 
+                :scale="scale"
                 :can-pick-colour="canPickColour"
-                @colour-picked="colourPicked" />
+                @colour-picked="colourPicked"
+                @zoom="zoom" />
         </div>
-        <div class="controls">
-            <image-file-open @file-selected="fileSelected" />
+        <div class="toolbar">
+            <ul class="controls">
+                <li class="zoomImage">
+                    <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom" />
+                </li>
+                <li class="selectFile">
+                    <image-file-open @file-selected="fileSelected" />
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -15,6 +24,7 @@
 <script>
 import ImageCanvas from './ImageCanvas.vue'
 import ImageFileOpen from './ImageFileOpen.vue'
+import ImageZoom from './ImageZoom.vue'
 
 export default {
   name: 'ImageColourPicker',
@@ -23,12 +33,20 @@ export default {
   },
   data() {
       return {
-          image: new Image()
+          image: new Image(),
+          scale: 1,
+          zoomRange: { min: 0.1, max: 10 }
       }
+  },
+  computed: {
+      hasImage () {
+          return this.image.width && this.image.height;
+      },
   },
   components: {
       ImageCanvas,
-      ImageFileOpen
+      ImageFileOpen,
+      ImageZoom
   },
   methods: {
       colourPicked (colour) {
@@ -67,6 +85,15 @@ export default {
             .map(i => i.getAsFile());
 
         this.displayFirstImage(files);
+      },
+      zoom (scale) {
+          if (scale < this.zoomRange.min) {
+              scale = this.zoomRange.min;
+          }
+          else if (scale > this.zoomRange.max) {
+              scale = this.zoomRange.max;
+          }
+          this.scale = scale;
       }
   },
   created () {
@@ -79,6 +106,8 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "./../variables.less";
+
 div.container {
     display: flex;
     flex-flow: column nowrap;
@@ -94,17 +123,39 @@ div.canvas {
     flex-grow: 1;
     box-sizing: border-box;
 }
-div.controls {
+div.toolbar {
     height: 4rem;
     width: 100%;
     box-sizing: border-box;
-    background-color: #efeceb;
-    border-top: 0.1rem solid #d8d5d3;
+    background-color: @background-colour;
+    border-top: @border;
     flex-shrink: 0;
     flex-grow: 0; 
-    padding: 0.5rem;
+}
+ul.controls {
+    display: block;
+    box-sizing: border-box;
+    list-style: none;
+    height: 100%;
     line-height: 2.9rem;
     font-size: 2rem;
-    color: #73716f;
+    color: @tool-colour;
+    text-align: right;
+    margin: 0;
+    padding: 0.5rem 0;
+
+    > li {
+        display: inline-block;
+        border-left: @border;
+        text-align:center;
+        vertical-align: middle;
+        padding: 0 1rem;
+        margin: 0;
+        white-space: nowrap;
+
+        &:first-child {
+            border: none;
+        }
+    }
 }
 </style>
