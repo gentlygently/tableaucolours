@@ -8,11 +8,17 @@
             @select-colour="selectColour"
             @remove-colour="removeColour" />
         <ul class="palette-actions">
+            <li class="import">
+                <a @click.prevent.stop class="button fas fa-file-import" title="Import XML" href="#"></a>
+            </li>
+            <li class="code">
+                <a @click.prevent.stop class="button fas fa-code" title="Get code" href="#"></a>
+            </li>
             <li class="discard">
-                <a @click.prevent.stop="discard" class="button fas fa-trash-alt" title="Delete palette"></a>
+                <a @click.prevent.stop="discard" class="button fas fa-trash-alt" title="Delete palette" href="#"></a>
             </li>
             <li class="add">
-                <a @click.prevent.stop="add" class="button fas fa-plus" title="Add colour"></a>
+                <a @click.prevent.stop="add" class="button fas fa-plus" title="Add colour" href="#"></a>
             </li>
         </ul>
     </div>
@@ -96,6 +102,7 @@ ul.palette-actions {
     line-height: 2.9rem;
     border-bottom: @border;
     text-align: right;
+    overflow: hidden;
 
     > li {
         display: inline-block;
@@ -103,10 +110,11 @@ ul.palette-actions {
         border-left: @border;
         width: 3rem;
         text-align: center;
-        font-size: 2rem;
+        font-size: 1.7rem;
 
-        &.discard {
-            font-size: 1.8rem;
+        &.add {
+            font-size: 1.9rem;
+            padding-top: 0.1rem;
         }
     }
 }
