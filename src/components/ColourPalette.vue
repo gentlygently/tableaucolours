@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="palette-name">
-            <input type="text" v-model="palette.name" placeholder="Enter a palette name" />
+            <input type="text" v-model="palette.name" placeholder="Enter a palette name" @keyup.enter="blurName" />
         </div>
         <colour-list 
             :colours="palette.colours"
@@ -38,12 +38,20 @@ export default {
           required: true
       }
   },
+  computed: {
+      selectedColourIndex () {
+          return this.palette.colours.findIndex(x => x.isSelected);
+      }
+  },
   components: {
       ColourList
   },
   methods: {
       add () {
           this.$emit('add-colour');
+      },
+      blurName (event) {
+          event.target.blur();
       },
       selectColour (colour) {
           this.$emit('select-colour', colour);
@@ -55,8 +63,32 @@ export default {
           this.$emit('discard-palette');
       },
       keyUp (event) {
-          if (event.target.tagName.toLowerCase() === 'body' && event.key === '+') {
-              this.add();
+          if (event.target.tagName.toLowerCase() !== 'body')  {
+              return;
+          }
+
+          let index = -1;
+
+          switch (event.key) {
+              case '+':
+                this.add();
+                return;
+
+                case 'Down':
+                case 'ArrowDown':
+                    index = this.selectedColourIndex;
+                    if (index < this.palette.colours.length - 1) {
+                        this.selectColour(this.palette.colours[index + 1]);
+                    }
+                    return;
+
+                case 'Up':
+                case 'ArrowUp':
+                    index = this.selectedColourIndex;
+                    if (index > 0) {
+                        this.selectColour(this.palette.colours[index - 1]);
+                    }
+                    return;
           }
       }
   },
