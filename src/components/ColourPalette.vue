@@ -1,15 +1,20 @@
 <template>
     <div>
         <div class="palette-name">
-            <input type="text" v-model="palette.name" />
+            <input type="text" v-model="palette.name" placeholder="Enter a palette name" />
         </div>
         <colour-list 
             :colours="palette.colours"
             @select-colour="selectColour"
             @remove-colour="removeColour" />
-        <div class="palette-actions">
-            <a @click="add" class="button add fas fa-plus" title="Add colour" @click.prevent.stop></a>
-        </div>
+        <ul class="palette-actions">
+            <li class="discard">
+                <a @click.prevent.stop="discard" class="button fas fa-trash-alt" title="Delete palette"></a>
+            </li>
+            <li class="add">
+                <a @click.prevent.stop="add" class="button fas fa-plus" title="Add colour"></a>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -39,7 +44,21 @@ export default {
       },
       removeColour (colour) {
           this.$emit('remove-colour', colour);
+      },
+      discard () {
+          this.$emit('discard-palette');
+      },
+      keyUp (event) {
+          if (event.target.tagName.toLowerCase() === 'body' && event.key === '+') {
+              this.add();
+          }
       }
+  },
+  created: function() {
+      window.addEventListener('keyup', this.keyUp, false);
+  },
+  destroyed () {
+      window.removeEventListener('keyup', this.keyUp);
   }
 }
 </script>
@@ -67,19 +86,28 @@ export default {
         border: @border;
     }
 }
-.palette-actions {
+ul.palette-actions {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     height: 3rem;
+    line-height: 2.9rem;
     border-bottom: @border;
+    text-align: right;
 
-    .add {
-        display: block;
-        float: right;
-        width: 3rem;
+    > li {
+        display: inline-block;
+        height: 2.9rem;
         border-left: @border;
+        width: 3rem;
         text-align: center;
         font-size: 2rem;
-        line-height: 2.9rem;
+
+        &.discard {
+            font-size: 1.8rem;
+        }
     }
 }
 

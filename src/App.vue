@@ -5,7 +5,8 @@
         :palette="palette" 
         @add-colour="addColour"
         @select-colour="selectColour"
-        @remove-colour="removeColour" />
+        @remove-colour="removeColour"
+        @discard-palette="discardPalette" />
     </section>
     <section id="imagesection">
       <image-colour-picker 
@@ -29,16 +30,7 @@ export default {
   },
   data () {
       return {
-        palette: {
-          name: 'New colour palette',
-          colours: [
-              {
-                  id: nextColourId++,
-                  colour: '#ffffff',
-                  isSelected: true
-              }
-          ]
-        }
+        palette: this.createPalette()
       }
   },
   computed: {
@@ -55,6 +47,18 @@ export default {
     }
   },
   methods: {
+    createPalette() {
+       return {
+          name: 'New colour palette',
+          colours: [
+              {
+                  id: nextColourId++,
+                  colour: '#ffffff',
+                  isSelected: true
+              }
+          ]
+        }
+    },
     addColour () {
       const colour = {
         id: nextColourId++,
@@ -70,6 +74,9 @@ export default {
       if (currentColour) {
         currentColour.colour = colour;
       }
+    },
+    discardPalette() {
+      this.palette = this.createPalette();
     },
     selectColour (colour) {
       this.currentColour = colour;

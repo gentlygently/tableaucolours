@@ -40,7 +40,7 @@ export default {
   },
   computed: {
       hasImage () {
-          return this.image.width && this.image.height;
+          return this.image.width > 0 && this.image.height > 0;
       },
   },
   components: {
