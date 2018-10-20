@@ -1,11 +1,12 @@
 <template>
-    <div class="container">
+    <div class="image-colour-picker">
         <div class="canvas">
             <image-canvas 
                 :image="image" 
                 :scale="scale"
                 :can-pick-colour="canPickColour"
                 @colour-picked="colourPicked"
+                @file-dropped="fileSelected"
                 @zoom="zoom" />
         </div>
         <div class="toolbar">
@@ -41,7 +42,7 @@ export default {
   computed: {
       hasImage () {
           return this.image.width > 0 && this.image.height > 0;
-      },
+      }
   },
   components: {
       ImageCanvas,
@@ -108,54 +109,56 @@ export default {
 <style scoped lang="less">
 @import "./../variables.less";
 
-div.container {
+.image-colour-picker {
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
     align-content: stretch;
     height: 100%;
     width: 100%;
-}
-div.canvas {
-    width: 100%;
-    min-height: 10rem;
-    height: 10rem;
-    flex-grow: 1;
-    box-sizing: border-box;
-}
-div.toolbar {
-    height: 4rem;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: @background-colour;
-    border-top: @border;
-    flex-shrink: 0;
-    flex-grow: 0; 
-}
-ul.controls {
-    display: block;
-    box-sizing: border-box;
-    list-style: none;
-    height: 100%;
-    line-height: 2.9rem;
-    font-size: 2rem;
-    color: @tool-colour;
-    text-align: right;
-    margin: 0;
-    padding: 0.5rem 0;
 
-    > li {
-        display: inline-block;
-        border-left: @border;
-        text-align:center;
-        vertical-align: middle;
-        padding: 0 1rem;
+    div.canvas {
+        width: 100%;
+        min-height: 10rem;
+        height: 10rem;
+        flex-grow: 1;
+        box-sizing: border-box;
+    }
+    div.toolbar {
+        height: 4rem;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: @background-colour;
+        border-top: @border;
+        flex-shrink: 0;
+        flex-grow: 0; 
+    }
+    ul.controls {
+        display: block;
+        box-sizing: border-box;
+        list-style: none;
+        height: 100%;
+        line-height: 2.9rem;
+        font-size: 2rem;
+        color: @tool-colour;
+        text-align: right;
         margin: 0;
-        white-space: nowrap;
+        padding: 0.5rem 0;
 
-        &:first-child {
-            border: none;
+        > li {
+            display: inline-block;
+            border-left: @border;
+            text-align:center;
+            vertical-align: middle;
+            padding: 0 1rem;
+            margin: 0;
+            white-space: nowrap;
+
+            &:first-child {
+                border: none;
+            }
         }
     }
 }
+
 </style>

@@ -49,7 +49,7 @@ export default {
   methods: {
     createPalette() {
        return {
-          name: 'New colour palette',
+          name: '',
           colours: [
               {
                   id: nextColourId++,

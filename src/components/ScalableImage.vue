@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="scalable-image">
         <div class="hackyverticalspacer">&nbsp;</div>
         <div class="image" :class="{active: canPickColour}">
             <image-colour-swatch 
@@ -112,25 +112,27 @@ export default {
 </script>
 
 <style scoped lang="less">
-    div.container {
+    .scalable-image {
         width: 100%;
         height: 100%;
         text-align: center;
         white-space: nowrap;
+
+        div.hackyverticalspacer {
+            display: inline-block;
+            content: "";
+            height: 100%;
+            vertical-align: middle;
+            width: 0;
+        }
+        div.image {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+        }
+        div.image.active canvas:hover {
+            cursor: crosshair;
+        }
     }
-    div.hackyverticalspacer {
-        display: inline-block;
-        content: "";
-        height: 100%;
-        vertical-align: middle;
-        width: 0;
-    }
-    div.image {
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
-    }
-    div.image.active canvas:hover {
-        cursor: crosshair;
-    }
+    
 </style>
