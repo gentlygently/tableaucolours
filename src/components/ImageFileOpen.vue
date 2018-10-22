@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="imagefileopen">
         <label ref="label" for="selectImage">
             <input id="selectImage" type="file" style="display:none;" @input="input">
-            <a class="button fas fa-folder-open" title="Open image..." @click.prevent="click" href="#"></a>
+            <button class="imagefileopen--button icon-button fas fa-folder-open" title="Open image..." @click.prevent="click"></button>
         </label>
     </div>
 </template>
@@ -22,5 +22,12 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+.imagefileopen {
+    &--button {
+        font-size: 2rem;
+        vertical-align: middle;
+        top: -0.2rem;
+        position: relative;
+    }
+}
 </style>

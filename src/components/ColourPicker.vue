@@ -1,5 +1,5 @@
 <template>
-    <span>{{ colour }}</span>
+    <span class="colourpicker">{{ colour }}</span>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-span {
+.colourpicker {
     font-size: 1.3rem;
 }
 </style>

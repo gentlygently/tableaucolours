@@ -50,6 +50,7 @@ export default {
     createPalette() {
        return {
           name: '',
+          type: 'regular',
           colours: [
               {
                   id: nextColourId++,
@@ -127,9 +128,17 @@ html, body {
   flex-grow: 1;
   overflow: hidden;
 }
-a.button {
+button.icon-button {
   color: @tool-colour;
   text-decoration: none;
+  margin: 0;
+  border: none;
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: transparent;
+  font-size: 1rem;
+  outline: none;
 
   &:hover {
     color: @tool-colour-hover;

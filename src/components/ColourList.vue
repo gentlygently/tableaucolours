@@ -1,12 +1,12 @@
 <template>
-    <ul>
+    <ul class="colourlist">
         <Colour 
             v-for="colour in colours" 
             :key="colour.id"
             :colour="colour"
             @select="select"
             @remove="remove"
-            class="colour" />
+            class="colourlist-colour" />
     </ul>
 </template>
 
@@ -36,12 +36,15 @@ export default {
 </script>
 
 <style scoped lang="less">
-ul {
+
+.colourlist {
     margin: 0;
     padding: 0;
+
+    &-colour {
+        display: block;
+        position: relative;
+    }
 }
-.colour {
-    display: block;
-    position: relative;
-}
+
 </style>

@@ -1,7 +1,7 @@
 <template>
-    <div class="scalable-image">
-        <div class="hackyverticalspacer">&nbsp;</div>
-        <div class="image" :class="{active: canPickColour}">
+    <div class="scalableimage">
+        <div class="scalableimage-hackyverticalspacer">&nbsp;</div>
+        <div class="scalableimage-image" :class="{'scalableimage-image--active': canPickColour}">
             <image-colour-swatch 
                 v-show="canPickColour && currentColour"
                 :colour="currentColour"
@@ -112,27 +112,28 @@ export default {
 </script>
 
 <style scoped lang="less">
-    .scalable-image {
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        white-space: nowrap;
+.scalableimage {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    white-space: nowrap;
 
-        div.hackyverticalspacer {
-            display: inline-block;
-            content: "";
-            height: 100%;
-            vertical-align: middle;
-            width: 0;
-        }
-        div.image {
-            display: inline-block;
-            vertical-align: middle;
-            position: relative;
-        }
-        div.image.active canvas:hover {
+    &-hackyverticalspacer {
+        display: inline-block;
+        content: "";
+        height: 100%;
+        vertical-align: middle;
+        width: 0;
+    }
+    &-image {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+
+        &--active canvas:hover {
             cursor: crosshair;
         }
     }
+}
     
 </style>

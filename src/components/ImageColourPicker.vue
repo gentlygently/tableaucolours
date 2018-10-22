@@ -1,6 +1,6 @@
 <template>
-    <div class="image-colour-picker">
-        <div class="canvas">
+    <div class="imagecolourpicker">
+        <div class="imagecolourpicker-canvas">
             <image-canvas 
                 :image="image" 
                 :scale="scale"
@@ -9,7 +9,8 @@
                 @file-dropped="fileSelected"
                 @zoom="zoom" />
         </div>
-        <div class="toolbar">
+        <div class="imagecolourpicker-toolbar">
+            <!--  TODO: Put these in a separate component -->
             <ul class="controls">
                 <li class="zoomImage">
                     <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom" />
@@ -107,9 +108,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "./../variables.less";
+@import "../variables.less";
 
-.image-colour-picker {
+.imagecolourpicker {
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
@@ -117,14 +118,14 @@ export default {
     height: 100%;
     width: 100%;
 
-    div.canvas {
+    &-canvas {
         width: 100%;
         min-height: 10rem;
         height: 10rem;
         flex-grow: 1;
         box-sizing: border-box;
     }
-    div.toolbar {
+    &-toolbar {
         height: 4rem;
         width: 100%;
         box-sizing: border-box;
@@ -138,21 +139,24 @@ export default {
         box-sizing: border-box;
         list-style: none;
         height: 100%;
-        line-height: 2.9rem;
-        font-size: 2rem;
         color: @tool-colour;
         text-align: right;
         margin: 0;
         padding: 0.5rem 0;
+        white-space: nowrap;
 
         > li {
             display: inline-block;
             border-left: @border;
-            text-align:center;
+            text-align: center;
             vertical-align: middle;
             padding: 0 1rem;
             margin: 0;
             white-space: nowrap;
+
+            button.button-icon {
+                font-size: 2rem;
+            }
 
             &:first-child {
                 border: none;

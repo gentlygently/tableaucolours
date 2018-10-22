@@ -1,5 +1,5 @@
 <template>
-    <span v-bind:style="{ 'background-color': colour }">&nbsp;</span>
+    <span class="colourswatch" v-bind:style="{ 'background-color': colour }">&nbsp;</span>
 </template>
 
 <script>
@@ -15,9 +15,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "./../variables.less";
+@import "../variables.less";
 
-span {
+.colourswatch {
     display: inline-block;
     width: 100%;
     height: 100%;

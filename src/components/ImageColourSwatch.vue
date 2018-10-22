@@ -1,5 +1,5 @@
 <template>
-    <div class="swatch" v-bind:style="swatchStyle">&nbsp;</div>
+    <div class="imagecolourswatch" v-bind:style="swatchStyle">&nbsp;</div>
 </template>
 
 <script>
@@ -28,9 +28,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "./../variables.less";
+@import "../variables.less";
 
-div.swatch {
+.imagecolourswatch {
     display: block;
     position: absolute;
     width: 4rem;

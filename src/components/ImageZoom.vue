@@ -1,9 +1,8 @@
 <template>
-    <div class="zoom">
-        <a 
-            class="button zoomOut fas fa-image" 
-            href="#" 
-            @click.prevent.stop="zoomOut"></a>
+    <div class="imagezoom">
+        <button 
+            class="icon-button imagezoom-out fas fa-image" 
+            @click.prevent.stop="zoomOut"></button>
         <input 
             type="range" 
             min="1" 
@@ -12,12 +11,12 @@
             v-model="sliderValue" 
             @mousedown="sliderActive = true" 
             @mouseup="sliderActive = false" 
-            class="slider">
-        <a 
-            class="button zoomIn fas fa-image" 
-            href="#" 
-            @click.prevent.stop="zoomIn"></a>
-        <div class="percentage">{{ percentage }}%</div>
+            class="imagezoom-slider">
+        <button 
+            class="icon-button imagezoom-in fas fa-image" 
+            @click.prevent.stop="zoomIn"></button>
+
+        <div class="imagezoom-percentage">{{ percentage }}%</div>
     </div>
 </template>
 
@@ -78,7 +77,7 @@ export default {
 <style scoped lang="less">
 @import "../variables.less";
 
-div.zoom {
+.imagezoom {
     display: inline-block;
     padding: 0;
     margin: 0;
@@ -86,79 +85,83 @@ div.zoom {
     vertical-align: middle;
     position: relative;
     top: -0.5rem;
+
+    &-percentage {
+        position: absolute;
+        top: 2.2rem;
+        left: 10.5rem;
+        font-size: 0.8rem;
+        color: @tool-colour;
+        width: 3rem;
+        text-align: center;
+    }
+
+    &-in,
+    &-out {
+        display: inline-block;
+        padding-top: 0.5rem;
+        vertical-align: middle;
+        line-height: 2.9rem;
+    }
+
+    &-out {
+        font-size: 1rem;
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+    }
+
+    &-in {
+        padding-left: 0.5rem;
+        font-size: 2rem;
+    }
+
+    .sliderTrack {
+        width: 100%;
+        height: 0.2rem;
+        cursor: pointer;
+        box-shadow: 0 0 0.1rem #000000, 0 0 0 #0d0d0d;
+        background: @tool-colour;
+        border-radius: 0;
+        border: 0;
+    }
+
+    .sliderTrackActive {
+        background: @tool-colour-active;
+    }
+
+    .sliderThumb {
+        box-shadow: none;
+        border: solid 0.1rem @tool-colour;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+    }
+
+    &-slider {
+        -webkit-appearance: none;
+        width: 20rem;
+        margin: 0;
+        display: inline-block;
+
+        &:focus {
+            outline: none;
+        }
+
+        &::-webkit-slider-runnable-track { .sliderTrack }
+        &::-moz-range-track { .sliderTrack }
+
+        &:active::-webkit-slider-runnable-track { .sliderTrackActive }
+
+        &::-webkit-slider-thumb {
+            .sliderThumb;
+            -webkit-appearance: none;
+            margin-top: -0.75rem;
+        }
+        &::-moz-range-thumb { .sliderThumb }
+    }
 }
 
-div.percentage {
-    position: absolute;
-    top: 1.9rem;
-    left: 10.5rem;
-    font-size: 0.8rem;
-    color: @tool-colour;
-    width: 3rem;
-    text-align: center;
-}
-
-a.zoomIn,
-a.zoomOut {
-    display: inline-block;
-    padding-top: 0.5rem;
-    vertical-align: middle;
-}
-
-a.zoomOut {
-    font-size: 1rem;
-    padding-right: 0.5rem;
-}
-
-a.zoomIn {
-    padding-left: 0.5rem;
-}
-
-.sliderTrack {
-    width: 100%;
-    height: 0.2rem;
-    cursor: pointer;
-    box-shadow: 0 0 0.1rem #000000, 0 0 0 #0d0d0d;
-    background: @tool-colour;
-    border-radius: 0;
-    border: 0;
-}
-
-.sliderTrackActive {
-    background: @tool-colour-active;
-}
-
-.sliderThumb {
-    box-shadow: none;
-    border: solid 0.1rem @tool-colour;
-    height: 1.5rem;
-    width: 1.5rem;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-}
-
-input[type=range] {
-  -webkit-appearance: none;
-  width: 20rem;
-  margin: 0;
-  display: inline-block;
-
-  &:focus {
-    outline: none;
-  }
-
-  &::-webkit-slider-runnable-track { .sliderTrack }
-  &::-moz-range-track { .sliderTrack }
-
-  &:active::-webkit-slider-runnable-track { .sliderTrackActive }
-
-  &::-webkit-slider-thumb {
-    .sliderThumb;
-    -webkit-appearance: none;
-    margin-top: -0.75rem;
-  }
-  &::-moz-range-thumb { .sliderThumb }
-}
 
 </style>

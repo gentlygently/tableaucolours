@@ -1,31 +1,45 @@
 <template>
-    <div>
-        <div class="palette-name">
+    <div class="colourpalette">
+        <div class="colourpalette-name">
             <input type="text" v-model="palette.name" placeholder="Enter a palette name" @keyup.enter="blurName" />
+        </div>
+        <div class="colourpalette-type">
+            <label for="type">Type</label>
+            <select name="type" v-model="palette.type">
+                <option>regular</option>
+                <option>ordered-sequential</option>
+                <option>ordered-diverging</option>
+            </select>
         </div>
         <colour-list 
             :colours="palette.colours"
             @select-colour="selectColour"
             @remove-colour="removeColour" />
-        <ul class="palette-actions">
+        <ul class="colourpalette-actions">
+            <!-- TODO: Put these in a separate component? -->
             <li class="import">
-                <a @click.prevent.stop class="button fas fa-file-import" title="Import XML" href="#"></a>
+                <button @click.prevent.stop class="icon-button fas fa-file-import" title="Import XML"></button>
             </li>
             <li class="code">
-                <a @click.prevent.stop class="button fas fa-code" title="Get code" href="#"></a>
+                <button @click.prevent.stop="codeModalOpen = true" class="icon-button fas fa-code" title="Get code"></button>
             </li>
             <li class="discard">
-                <a @click.prevent.stop="discard" class="button fas fa-trash-alt" title="Delete palette" href="#"></a>
+                <button @click.prevent.stop="discard" class="icon-button fas fa-trash-alt" title="Delete palette"></button>
             </li>
             <li class="add">
-                <a @click.prevent.stop="add" class="button fas fa-plus" title="Add colour" href="#"></a>
+                <button @click.prevent.stop="add" class="icon-button fas fa-plus" title="Add colour"></button>
             </li>
         </ul>
+        <modal v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
+            <get-code :palette="palette" />
+        </modal>
     </div>
 </template>
 
 <script>
 import ColourList from './ColourList.vue'
+import GetCode from './GetCode.vue'
+import Modal from './Modal.vue'
 
 export default {
   name: 'ColourPalette',
@@ -38,13 +52,20 @@ export default {
           required: true
       }
   },
+  data: function() {
+      return {
+          codeModalOpen: false
+      };
+  },
   computed: {
       selectedColourIndex () {
           return this.palette.colours.findIndex(x => x.isSelected);
       }
   },
   components: {
-      ColourList
+      ColourList, 
+      GetCode,
+      Modal
   },
   methods: {
       add () {
@@ -102,53 +123,90 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "./../variables.less";
+@import "../variables.less";
 
-.palette-name {
-    border-bottom: @border;
-    padding: 1rem;
-    box-sizing: border-box;
-    height: 5rem;
-    font-size: 2rem;
+.colourpalette {
+    &-name {
+        border-bottom: @border;
+        padding: 1rem;
+        box-sizing: border-box;
+        height: 5rem;
+        font-size: 2rem;
 
-    input { 
-        width: 100%; 
-        border: none;
-        background-color: transparent;
-        font-weight: bold;
-        font-size: 1.5rem;
+        input { 
+            width: 100%; 
+            border: none;
+            background-color: transparent;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        input:focus {
+            font-weight: normal;
+            background-color: #fff;
+            border: @border;
+        }
     }
-    input:focus {
-        font-weight: normal;
-        background-color: #fff;
-        border: @border;
+    &-type {
+        padding: 1rem;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-start;
+        align-content: stretch;
+        border-bottom: @border;
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            flex-grow: 0;
+            flex-shrink: 0;
+            line-height: 2.3rem;
+        }
+
+        select {
+            font-size: 1.2rem;
+            border: @border;
+            border-radius: 0.2rem;
+            background-color: transparent;
+            padding: 0.3rem;
+            display: block;
+            flex-grow: 1;
+        }
     }
-}
-ul.palette-actions {
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    height: 3rem;
-    line-height: 2.9rem;
-    border-bottom: @border;
-    text-align: right;
-    overflow: hidden;
+    &-actions {
+        display: block;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        height: 3rem;
+        border-bottom: @border;
+        text-align: right;
+        overflow: hidden;
 
-    > li {
-        display: inline-block;
-        height: 2.9rem;
-        border-left: @border;
-        width: 3rem;
-        text-align: center;
-        font-size: 1.7rem;
+        > li {
+            display: inline-block;
+            height: 2.9rem;
+            border-left: @border;
+            width: 3rem;
+            text-align: center;
+            white-space: nowrap;
 
-        &.add {
-            font-size: 1.9rem;
-            padding-top: 0.1rem;
+            .icon-button {
+                font-size: 1.7rem;
+                line-height: 2.9rem;
+            }
+
+            &.add {
+                padding-top: 0.1rem;
+                .icon-button {
+                    font-size: 1.9rem;
+                }
+            }
         }
     }
 }
+
 
 </style>

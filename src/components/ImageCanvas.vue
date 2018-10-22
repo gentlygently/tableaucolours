@@ -1,5 +1,6 @@
 <template>
-    <div class="image-canvas" :class="highlightClass"
+    <div class="imagecanvas" 
+        :class="highlightClass"
         @wheel.shift="wheel" 
         @dragenter.stop.prevent="drageEnter"
         @dragover.stop.prevent="dragEnter"
@@ -33,7 +34,7 @@ export default {
           return this.image.width && this.image.height;
       },
       highlightClass () {
-          return this.isDropHighlightActive ? 'highlight' : '';
+          return this.isDropHighlightActive ? 'imagecanvas--highlight' : '';
       }
   },
   methods: {
@@ -80,7 +81,7 @@ export default {
 
 <style scoped lang="less">
 
-.image-canvas {
+.imagecanvas {
     box-sizing: border-box;
     background-color: #fff;
     background-image: linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%), linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%);
@@ -91,11 +92,9 @@ export default {
     width: 100%;
     height: 100%;
 
-    &.highlight {
+    &--highlight {
         background-image: linear-gradient(45deg, #eaf3fb 26%, transparent 25%, transparent 75%, #eaf3fb 75%), linear-gradient(45deg, #eaf3fb 26%, transparent 25%, transparent 75%, #eaf3fb 75%);
     }
 }
-
-
 
 </style>

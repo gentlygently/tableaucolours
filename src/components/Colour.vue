@@ -1,8 +1,8 @@
 <template>
-    <li :class="activeClass" @click="click">
-        <colour-swatch :colour="colour.colour" class="swatch" />
-        <colour-picker :colour="colour.colour" class="picker" />
-        <a @click.prevent.stop="remove" class="button remove fas fa-times" title="Delete colour"></a>
+    <li class="colour" :class="activeClass" @click="click">
+        <colour-swatch :colour="colour.colour" class="colour-swatch" />
+        <colour-picker :colour="colour.colour" class="colour-picker" />
+        <button @click.prevent.stop="remove" class="colour-remove icon-button fas fa-times" title="Delete colour"></button>
     </li>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   },
   computed: {
       activeClass () {
-          return this.colour.isSelected ? 'active' : '';
+          return this.colour.isSelected ? 'colour--active' : '';
       }
   },
   components: {
@@ -39,38 +39,43 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "./../variables.less";
+@import "../variables.less";
 
-li {
+.colour {
     border-bottom: @border;
     padding: 0.5rem 1rem 0.5rem 1.5rem;
     margin: 0;
     list-style: none;
     line-height: 3.5rem;
 
-    &.active {
+    &--active {
         background-color: #d7d5d3;
         border-color: #c7c5c3;
     }
-    &:hover .remove {
+
+    &:hover .colour-remove {
         display: block;
     }
+
+    &-swatch {
+        display: inline-block;
+        width: 3.5rem;
+        height: 3.5rem;
+        box-sizing: border-box;
+    }
+    
+    &-picker {
+        display: inline-block;
+        margin-left: 1rem;
+    }
+
+    &-remove {
+        display: none;
+        float: right;
+        width: 1.5rem;
+        font-size: 2rem;
+        line-height: 3.5rem;
+    }
 }
-.swatch {
-    display: inline-block;
-    width: 3.5rem;
-    height: 3.5rem;
-    box-sizing: border-box;
-}
-.picker {
-    display: inline-block;
-    margin-left: 1rem;
-}
-a.remove {
-    display: none;
-    float: right;
-    width: 1.5rem;
-    font-size: 2rem;
-    line-height: 3.5rem;
-}
+
 </style>
