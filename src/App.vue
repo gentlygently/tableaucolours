@@ -6,7 +6,8 @@
         @add-colour="addColour"
         @select-colour="selectColour"
         @remove-colour="removeColour"
-        @discard-palette="discardPalette" />
+        @discard-palette="discardPalette"
+        @import-palette="importPalette" />
     </section>
     <section id="imagesection">
       <image-colour-picker 
@@ -47,17 +48,16 @@ export default {
     }
   },
   methods: {
-    createPalette() {
+    createPalette(colours) {
+      colours = colours || ['#ffffff'];
        return {
           name: '',
           type: 'regular',
-          colours: [
-              {
+          colours: colours.map((c, i) => ({ 
                   id: nextColourId++,
-                  colour: '#ffffff',
-                  isSelected: true
-              }
-          ]
+                  colour: c,
+                  isSelected: i === 0
+              }))
         }
     },
     addColour () {
@@ -75,6 +75,11 @@ export default {
       if (currentColour) {
         currentColour.colour = colour;
       }
+    },
+    importPalette (palette) {
+      this.palette = this.createPalette(palette.colours);
+      this.palette.name = palette.name;
+      this.palette.type = palette.type;
     },
     discardPalette() {
       this.palette = this.createPalette();
@@ -102,6 +107,11 @@ html, body {
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
 }
+
+input, select, textarea {
+  font-size: 1rem;
+}
+
 #app {
     display: flex;
     flex-flow: row nowrap;

@@ -1,6 +1,8 @@
 <template>
     <div class="getcode">
-        <pre class="getcode-code" ref="code">{{ xml }}</pre>
+        <div class="getcode-codecontainer">
+            <pre class="getcode-code" ref="code">{{ xml }}</pre>
+        </div>
         <transition>
             <button class="getcode-copy" @click.stop.prevent="copy" v-if="!copied">Copy to clipboard</button>
             <button class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy" v-if="copied">Copied <span class="fas fa-check"></span></button>
@@ -75,10 +77,16 @@ export default {
         height: 0;
     }
 
+    &-codecontainer {
+        width: 50rem;
+        height: 30rem;
+    }
+
     &-code {
         box-sizing: border-box;
-        width: 50em;
-        height: 30em;
+        font-size: 1.3rem;
+        width: 100%;
+        height: 100%;
         border: @border;
         background-color: @background-colour;
         border-radius: 0.2rem;

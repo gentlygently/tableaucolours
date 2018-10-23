@@ -18,7 +18,7 @@
         <ul class="colourpalette-actions">
             <!-- TODO: Put these in a separate component? -->
             <li class="import">
-                <button @click.prevent.stop class="icon-button fas fa-file-import" title="Import XML"></button>
+                <button @click.prevent.stop="importModalOpen = true" class="icon-button fas fa-file-import" title="Import XML"></button>
             </li>
             <li class="code">
                 <button @click.prevent.stop="codeModalOpen = true" class="icon-button fas fa-code" title="Get code"></button>
@@ -33,12 +33,16 @@
         <modal v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
             <get-code :palette="palette" />
         </modal>
+        <modal v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
+            <import-code @import-palette="importPalette" @close="importModalOpen = false"  />
+        </modal>
     </div>
 </template>
 
 <script>
 import ColourList from './ColourList.vue'
 import GetCode from './GetCode.vue'
+import ImportCode from './ImportCode.vue'
 import Modal from './Modal.vue'
 
 export default {
@@ -54,7 +58,8 @@ export default {
   },
   data: function() {
       return {
-          codeModalOpen: false
+          codeModalOpen: false,
+          importModalOpen: false
       };
   },
   computed: {
@@ -65,6 +70,7 @@ export default {
   components: {
       ColourList, 
       GetCode,
+      ImportCode,
       Modal
   },
   methods: {
@@ -82,6 +88,10 @@ export default {
       },
       discard () {
           this.$emit('discard-palette');
+      },
+      importPalette (palette) {
+          this.importModalOpen = false;
+          this.$emit('import-palette', palette);
       },
       keyUp (event) {
           if (event.target.tagName.toLowerCase() !== 'body')  {

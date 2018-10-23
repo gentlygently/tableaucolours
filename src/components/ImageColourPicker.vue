@@ -79,9 +79,10 @@ export default {
         this.displayFirstImage([...files]);          
       },
       paste(event) {
-        if (!event.clipboardData || !event.clipboardData.items) {
+        if (!event.clipboardData || !event.clipboardData.items || event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
             return;
         }
+
          const files = [...event.clipboardData.items]
             .filter(i => i.kind === 'file')
             .map(i => i.getAsFile());
