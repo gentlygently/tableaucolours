@@ -39,7 +39,10 @@ export default {
   },
   methods: {
       dragEnter (event) {
-        this.isDropHighlightActive = true;
+        if (event.dataTransfer.files.length || [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/' > -1))) {
+            this.isDropHighlightActive = true;
+            event.dataTransfer.dropEffect = 'copy';
+        }
       },
       dragLeave (event) {
         this.isDropHighlightActive = false;

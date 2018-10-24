@@ -1,17 +1,20 @@
 <template>
     <ul class="colourlist">
-        <Colour 
-            v-for="colour in colours" 
-            :key="colour.id"
-            :colour="colour"
-            @select="select"
-            @remove="remove"
-            class="colourlist-colour" />
+        <draggable v-model="colours">
+            <Colour 
+                v-for="colour in colours" 
+                :key="colour.id"
+                :colour="colour"
+                @select="select"
+                @remove="remove"
+                class="colourlist-colour" />
+        </draggable>
     </ul>
 </template>
 
 <script>
 import Colour from './Colour.vue'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'ColourList',
@@ -22,7 +25,8 @@ export default {
     }
   },
   components: {
-    Colour
+    Colour,
+    draggable
   },
   methods: {
       select (colour) {
