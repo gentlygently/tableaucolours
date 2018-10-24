@@ -4,38 +4,38 @@
 
 <script>
 export default {
-  name: 'ImageColourSwatch',
+  name: "ImageColourSwatch",
   props: {
     colour: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     mousePosition: {
-        type: Object,
-        required: true
+      type: Object,
+      required: true
     }
   },
   computed: {
-      swatchStyle () {
-          return {
-              'background-color': this.colour,
-              top: (this.mousePosition.y - 40) + 'px',
-              left: (this.mousePosition.x + 10) + 'px'
-          }
-      }
+    swatchStyle() {
+      return {
+        "background-color": this.colour,
+        top: this.mousePosition.y - 40 + "px",
+        left: this.mousePosition.x + 10 + "px"
+      };
+    }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
 @import "../variables.less";
 
 .imagecolourswatch {
-    display: block;
-    position: absolute;
-    width: 4rem;
-    height: 4rem;
-    border: @border;
-    border-radius: 50%;
+  display: block;
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  border: @border;
+  border-radius: 50%;
 }
 </style>

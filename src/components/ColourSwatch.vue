@@ -4,24 +4,24 @@
 
 <script>
 export default {
-  name: 'ColourSwatch',
+  name: "ColourSwatch",
   props: {
     colour: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
 @import "../variables.less";
 
 .colourswatch {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    border: @border;
-    border-radius: 50%;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  border: @border;
+  border-radius: 50%;
 }
 </style>

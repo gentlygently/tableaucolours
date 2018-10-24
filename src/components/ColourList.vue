@@ -1,27 +1,28 @@
 <template>
     <ul class="colourlist">
         <draggable v-model="colours">
-            <Colour 
-                v-for="colour in colours" 
+            <Colour
+                v-for="colour in colours"
                 :key="colour.id"
                 :colour="colour"
                 @select="select"
                 @remove="remove"
-                class="colourlist-colour" />
+                class="colourlist-colour"
+            />
         </draggable>
     </ul>
 </template>
 
 <script>
-import Colour from './Colour.vue'
-import draggable from 'vuedraggable'
+import Colour from "./Colour.vue";
+import draggable from "vuedraggable";
 
 export default {
-  name: 'ColourList',
+  name: "ColourList",
   props: {
     colours: {
-        type: Array,
-        required: true
+      type: Array,
+      required: true
     }
   },
   components: {
@@ -29,26 +30,24 @@ export default {
     draggable
   },
   methods: {
-      select (colour) {
-          this.$emit('select-colour', colour);
-      },
-      remove (colour) {
-          this.$emit('remove-colour', colour);
-      }
+    select(colour) {
+      this.$emit("select-colour", colour);
+    },
+    remove(colour) {
+      this.$emit("remove-colour", colour);
+    }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
-
 .colourlist {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 
-    &-colour {
-        display: block;
-        position: relative;
-    }
+  &-colour {
+    display: block;
+    position: relative;
+  }
 }
-
 </style>

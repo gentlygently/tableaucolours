@@ -1,82 +1,81 @@
 <template>
   <main id="app">
     <section id="palettesection">
-      <colour-palette 
-        :palette="palette" 
+      <colour-palette
+        :palette="palette"
         @add-colour="addColour"
         @select-colour="selectColour"
         @remove-colour="removeColour"
         @discard-palette="discardPalette"
-        @import-palette="importPalette" />
+        @import-palette="importPalette"
+      />
     </section>
     <section id="imagesection">
-      <image-colour-picker 
-        :can-pick-colour="canPickColour"
-        @colour-picked="colourPicked" />
+      <image-colour-picker :can-pick-colour="canPickColour" @colour-picked="colourPicked"/>
     </section>
   </main>
 </template>
 
 <script>
-import ColourPalette from './components/ColourPalette.vue'
-import ImageColourPicker from './components/ImageColourPicker.vue'
+import ColourPalette from "./components/ColourPalette.vue";
+import ImageColourPicker from "./components/ImageColourPicker.vue";
 
 let nextColourId = 1;
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     ColourPalette,
     ImageColourPicker
   },
-  data () {
-      return {
-        palette: this.createPalette()
-      }
+  data() {
+    return {
+      palette: this.createPalette()
+    };
   },
   computed: {
     currentColour: {
-      get () {
-          return this.palette.colours.find(x => x.isSelected);
+      get() {
+        return this.palette.colours.find(x => x.isSelected);
       },
-      set (colour) {
-        this.palette.colours.forEach(x => x.isSelected = (x === colour));
-      }  
+      set(colour) {
+        this.palette.colours.forEach(x => (x.isSelected = x === colour));
+      }
     },
-    canPickColour () {
+    canPickColour() {
       return this.currentColour ? true : false;
     }
   },
   methods: {
     createPalette(colours) {
-      colours = colours || ['#ffffff'];
-       return {
-          name: '',
-          type: 'regular',
-          colours: colours.map((c, i) => ({ 
-                  id: nextColourId++,
-                  colour: c,
-                  isSelected: i === 0
-              }))
-        }
+      colours = colours || ["#FFFFFF"];
+      return {
+        name: "",
+        type: "regular",
+        colours: colours.map((c, i) => ({
+          id: nextColourId++,
+          colour: c.toUpperCase(),
+          isSelected: i === 0
+        }))
+      };
     },
-    addColour () {
+    addColour() {
       const colour = {
         id: nextColourId++,
-        colour: '#ffffff',
+        colour: "#ffffff",
         isSelected: false
       };
       this.palette.colours.push(colour);
       this.currentColour = colour;
     },
-    colourPicked (colour) {
+    colourPicked(colour) {
       let currentColour = this.currentColour;
-      
+
       if (currentColour) {
         currentColour.colour = colour;
       }
     },
-    importPalette (palette) {
+    importPalette(palette) {
       this.palette = this.createPalette(palette.colours);
       this.palette.name = palette.name;
       this.palette.type = palette.type;
@@ -84,42 +83,45 @@ export default {
     discardPalette() {
       this.palette = this.createPalette();
     },
-    selectColour (colour) {
+    selectColour(colour) {
       this.currentColour = colour;
     },
-    removeColour (colour) {
+    removeColour(colour) {
       this.palette.colours = this.palette.colours.filter(x => x !== colour);
     }
   }
-}
+};
 </script>
 
 <style lang="less">
 @import "./variables.less";
 
-html, body { 
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    font-size: 10px;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale;
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: 10px;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: 1rem;
 }
 
 #app {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-start;
-    align-content: stretch;
-    height: 100%;
-    box-sizing: border-box;
-    position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  align-content: stretch;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
 #palettesection {
   width: 20rem;

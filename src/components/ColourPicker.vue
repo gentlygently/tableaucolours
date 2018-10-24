@@ -4,18 +4,18 @@
 
 <script>
 export default {
-  name: 'ColourPicker',
+  name: "ColourPicker",
   props: {
     colour: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
 .colourpicker {
-    font-size: 1.3rem;
+  font-size: 1.3rem;
 }
 </style>
