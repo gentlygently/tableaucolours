@@ -3,18 +3,14 @@
     <div class="colourpalette-name">
       <input
         type="text"
+        id="name"
         v-model="palette.name"
         placeholder="Enter a palette name"
         @keyup.enter="blurName"
       >
     </div>
     <div class="colourpalette-type">
-      <label for="type">Type</label>
-      <select name="type" v-model="palette.type">
-        <option>regular</option>
-        <option>ordered-sequential</option>
-        <option>ordered-diverging</option>
-      </select>
+      <palette-types :selected-type="palette.type" @type-selected="typeSelected"/>
     </div>
     <colour-list
       :colours="palette.colours"
@@ -62,6 +58,7 @@ import ColourList from './ColourList.vue'
 import GetCode from './GetCode.vue'
 import ImportCode from './ImportCode.vue'
 import Modal from './Modal.vue'
+import PaletteTypes from './PaletteTypes.vue'
 
 export default {
   name: 'ColourPalette',
@@ -86,7 +83,8 @@ export default {
     ColourList,
     GetCode,
     ImportCode,
-    Modal
+    Modal,
+    PaletteTypes
   },
   methods: {
     add () {
@@ -100,6 +98,10 @@ export default {
     },
     removeColour (colour) {
       this.$emit('remove-colour', colour)
+    },
+    typeSelected (type) {
+      console.log('cp ' + type)
+      this.$emit('type-selected', type)
     },
     discard () {
       this.$emit('discard-palette')
@@ -163,6 +165,11 @@ export default {
       background-color: transparent;
       font-weight: bold;
       font-size: 1.5rem;
+      border-radius: 0.5rem;
+    }
+    input:hover {
+      border: @border;
+      border-color: @border-colour-hover;
     }
     input:focus {
       font-weight: normal;
@@ -172,31 +179,6 @@ export default {
   }
   &-type {
     padding: 1rem;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-start;
-    align-content: stretch;
-    border-bottom: @border;
-
-    label {
-      display: block;
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-right: 0.5rem;
-      flex-grow: 0;
-      flex-shrink: 0;
-      line-height: 2.3rem;
-    }
-
-    select {
-      font-size: 1.2rem;
-      border: @border;
-      border-radius: 0.2rem;
-      background-color: transparent;
-      padding: 0.3rem;
-      display: block;
-      flex-grow: 1;
-    }
   }
   &-actions {
     display: block;

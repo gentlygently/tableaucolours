@@ -3,6 +3,7 @@
     <section id="palettesection">
       <colour-palette
         :palette="palette"
+        @type-selected="typeSelected"
         @add-colour="addColour"
         @select-colour="selectColour"
         @remove-colour="removeColour"
@@ -58,6 +59,9 @@ export default {
           isSelected: i === 0
         }))
       }
+    },
+    typeSelected (type) {
+      this.palette.type = type
     },
     addColour () {
       const colour = {
