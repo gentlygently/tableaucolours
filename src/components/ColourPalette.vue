@@ -35,7 +35,12 @@
         ></button>
       </li>
       <li class="add">
-        <button @click.prevent.stop="add" class="icon-button fas fa-plus" title="Add colour"></button>
+        <button
+          @click.prevent.stop="add"
+          class="icon-button fas fa-plus"
+          title="Add colour"
+          :disabled="!canAddColour"
+        ></button>
       </li>
     </ul>
     <modal v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
@@ -69,6 +74,9 @@ export default {
     }
   },
   computed: {
+    canAddColour () {
+      return this.palette.colours.length < this.palette.maximumColours
+    },
     selectedColourIndex () {
       return this.palette.colours.findIndex(x => x.isSelected)
     }
@@ -82,7 +90,9 @@ export default {
   },
   methods: {
     add () {
-      this.$emit('add-colour')
+      if (this.canAddColour) {
+        this.$emit('add-colour')
+      }
     },
     selectColour (colour) {
       this.$emit('select-colour', colour)

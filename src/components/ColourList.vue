@@ -1,10 +1,11 @@
 <template>
   <ul class="colourlist">
-    <draggable v-model="colours">
+    <draggable v-model="colours" class="colourlist-draggable">
       <Colour
-        v-for="colour in colours"
+        v-for="(colour, index) in colours"
         :key="colour.id"
         :colour="colour"
+        :index="index"
         @select="select"
         @remove="remove"
         class="colourlist-colour"
@@ -43,7 +44,13 @@ export default {
 <style scoped lang="less">
 .colourlist {
   margin: 0;
-  padding: 0.5rem;
+  padding: 1rem;
+
+  &-draggable {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 5rem 5rem 5rem 5rem;
+  }
 
   &-colour {
     display: block;

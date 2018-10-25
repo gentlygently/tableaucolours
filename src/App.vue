@@ -53,6 +53,7 @@ export default {
       return {
         name: '',
         type: 'regular',
+        maximumColours: 20,
         colours: colours.map((c, i) => ({
           id: nextColourId++,
           colour: c.toUpperCase(),
@@ -64,6 +65,9 @@ export default {
       this.palette.type = type
     },
     addColour () {
+      if (this.palette.colours.length >= this.palette.maximumColours) {
+        return
+      }
       const colour = {
         id: nextColourId++,
         colour: '#FFFFFF',

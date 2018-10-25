@@ -1,5 +1,11 @@
 <template>
-  <li class="colour" :class="activeClass" @click="click" :title="colour.colour">
+  <li
+    class="colour"
+    :class="activeClass"
+    @click="click"
+    :title="colour.colour"
+    :style="{ 'grid-column': column, 'grid-row': row }"
+  >
     <div class="colour-swatch" :style="{ 'background-color': colour.colour }">&nbsp;</div>
     <div class="colour-remove" @click.prevent.stop="remove">
       <span class="fas fa-times"></span>
@@ -14,11 +20,21 @@ export default {
     colour: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      required: true
     }
   },
   computed: {
     activeClass () {
       return this.colour.isSelected ? 'colour--selected' : ''
+    },
+    column () {
+      return Math.floor(this.index / 5) + 1
+    },
+    row () {
+      return (this.index % 5) + 1
     }
   },
   methods: {
@@ -37,16 +53,15 @@ export default {
 
 .colour {
   display: block;
-  float: left;
   box-sizing: border-box;
   width: 5rem;
   height: 5rem;
   padding: 0.5rem;
-  margin: 0.5rem;
   list-style: none;
   background-color: #fff;
   border-radius: 0.2rem;
   box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
+  position: relative;
 
   &:hover {
     box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour-hover;
