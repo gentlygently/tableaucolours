@@ -29,8 +29,6 @@ export default {
 
 .palettetype {
   border: @border;
-  border-color: transparent;
-  border-width: 0.2rem;
   padding: 0.5rem;
   background-color: #fff;
   border-radius: 0.2rem;

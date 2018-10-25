@@ -1,19 +1,13 @@
 <template>
-  <li class="colour" :class="activeClass" @click="click">
-    <colour-swatch :colour="colour.colour" class="colour-swatch"/>
-    <colour-picker :colour="colour.colour" class="colour-picker"/>
-    <button
-      @click.prevent.stop="remove"
-      class="colour-remove icon-button fas fa-times"
-      title="Delete colour"
-    ></button>
+  <li class="colour" :class="activeClass" @click="click" :title="colour.colour">
+    <div class="colour-swatch" :style="{ 'background-color': colour.colour }">&nbsp;</div>
+    <div class="colour-remove" @click.prevent.stop="remove">
+      <span class="fas fa-times"></span>
+    </div>
   </li>
 </template>
 
 <script>
-import ColourPicker from './ColourPicker.vue'
-import ColourSwatch from './ColourSwatch.vue'
-
 export default {
   name: 'Colour',
   props: {
@@ -24,12 +18,8 @@ export default {
   },
   computed: {
     activeClass () {
-      return this.colour.isSelected ? 'colour--active' : ''
+      return this.colour.isSelected ? 'colour--selected' : ''
     }
-  },
-  components: {
-    ColourPicker,
-    ColourSwatch
   },
   methods: {
     click () {
@@ -46,15 +36,25 @@ export default {
 @import '../variables.less';
 
 .colour {
-  border-bottom: @border;
-  padding: 0.5rem 1rem 0.5rem 1.5rem;
-  margin: 0;
+  display: block;
+  float: left;
+  box-sizing: border-box;
+  width: 5rem;
+  height: 5rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
   list-style: none;
-  line-height: 3.5rem;
+  background-color: #fff;
+  border-radius: 0.2rem;
+  box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
 
-  &--active {
-    background-color: #d7d5d3;
-    border-color: #c7c5c3;
+  &:hover {
+    box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour-hover;
+  }
+
+  &--selected,
+  &--selected:hover {
+    box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour-active;
   }
 
   &:hover .colour-remove {
@@ -62,23 +62,28 @@ export default {
   }
 
   &-swatch {
-    display: inline-block;
-    width: 3.5rem;
-    height: 3.5rem;
+    border: @border;
+    border-radius: 0.2rem;
+    height: 100%;
     box-sizing: border-box;
-  }
-
-  &-picker {
-    display: inline-block;
-    margin-left: 1rem;
   }
 
   &-remove {
     display: none;
-    float: right;
-    width: 1.5rem;
-    font-size: 2rem;
-    line-height: 3.5rem;
+    position: absolute;
+    top: -0.75rem;
+    right: -0.75rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    line-height: 1.9rem;
+    text-align: center;
+    padding-left: 0.1rem;
+    color: #fff;
+    background-color: #e94544;
+    box-sizing: border-box;
+    box-shadow: 0rem 0rem 0.1rem 0.1rem #fff;
   }
 }
 </style>

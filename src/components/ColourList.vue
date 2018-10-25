@@ -43,7 +43,7 @@ export default {
 <style scoped lang="less">
 .colourlist {
   margin: 0;
-  padding: 0;
+  padding: 0.5rem;
 
   &-colour {
     display: block;

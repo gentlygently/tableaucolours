@@ -66,7 +66,7 @@ export default {
     addColour () {
       const colour = {
         id: nextColourId++,
-        colour: '#ffffff',
+        colour: '#FFFFFF',
         isSelected: false
       }
       this.palette.colours.push(colour)
@@ -130,7 +130,6 @@ textarea {
 #palettesection {
   width: 25rem;
   height: 100%;
-  box-sizing: border-box;
   position: relative;
   flex-shrink: 0;
   flex-grow: 0;
