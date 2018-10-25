@@ -1,13 +1,7 @@
 <template>
   <div class="colourpalette">
     <div class="colourpalette-name">
-      <input
-        type="text"
-        id="name"
-        v-model="palette.name"
-        placeholder="Enter a palette name"
-        @keyup.enter="blurName"
-      >
+      <input type="text" id="name" v-model="palette.name" placeholder="Enter a palette name">
     </div>
     <div class="colourpalette-type">
       <palette-types :selected-type="palette.type" @type-selected="typeSelected"/>
@@ -90,9 +84,6 @@ export default {
     add () {
       this.$emit('add-colour')
     },
-    blurName (event) {
-      event.target.blur()
-    },
     selectColour (colour) {
       this.$emit('select-colour', colour)
     },
@@ -153,32 +144,26 @@ export default {
 
 .colourpalette {
   &-name {
-    border-bottom: @border;
     padding: 1rem;
     box-sizing: border-box;
-    height: 5rem;
-    font-size: 2rem;
 
     input {
       width: 100%;
-      border: none;
-      background-color: transparent;
-      font-weight: bold;
+      border: @border;
+      background-color: #fff;
+      padding: 0.5rem;
       font-size: 1.5rem;
-      border-radius: 0.5rem;
+      border-radius: 0.2rem;
+      box-sizing: border-box;
     }
     input:hover {
       border: @border;
       border-color: @border-colour-hover;
     }
-    input:focus {
-      font-weight: normal;
-      background-color: #fff;
-      border: @border;
-    }
   }
   &-type {
     padding: 1rem;
+    padding-top: 0;
   }
   &-actions {
     display: block;

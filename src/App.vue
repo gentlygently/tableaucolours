@@ -128,7 +128,7 @@ textarea {
   position: relative;
 }
 #palettesection {
-  width: 20rem;
+  width: 25rem;
   height: 100%;
   box-sizing: border-box;
   position: relative;
