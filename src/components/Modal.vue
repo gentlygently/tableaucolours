@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" @click.stop.prevent="$emit('close')">
+    <div class="modal-mask" @click.self.stop.prevent="$emit('close')">
       <div class="modal-wrapper">
         <div class="modal-container" :style="{ width: width }" @click.stop.prevent>
           <button class="modal-close icon-button fas fa-times" @click.stop.prevent="$emit('close')"></button>
