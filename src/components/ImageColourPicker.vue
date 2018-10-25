@@ -1,49 +1,49 @@
 <template>
-    <div class="imagecolourpicker">
-        <div class="imagecolourpicker-canvas">
-            <image-canvas
-                :image="image"
-                :scale="scale"
-                :can-pick-colour="canPickColour"
-                @colour-picked="colourPicked"
-                @file-dropped="fileSelected"
-                @zoom="zoom"
-            />
-        </div>
-        <div class="imagecolourpicker-toolbar">
-            <!--  TODO: Put these in a separate component -->
-            <ul class="controls">
-                <li class="zoomImage">
-                    <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom"/>
-                </li>
-                <li class="selectFile">
-                    <image-file-open @file-selected="fileSelected"/>
-                </li>
-            </ul>
-        </div>
+  <div class="imagecolourpicker">
+    <div class="imagecolourpicker-canvas">
+      <image-canvas
+        :image="image"
+        :scale="scale"
+        :can-pick-colour="canPickColour"
+        @colour-picked="colourPicked"
+        @file-dropped="fileSelected"
+        @zoom="zoom"
+      />
     </div>
+    <div class="imagecolourpicker-toolbar">
+      <!--  TODO: Put these in a separate component -->
+      <ul class="controls">
+        <li class="zoomImage">
+          <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom"/>
+        </li>
+        <li class="selectFile">
+          <image-file-open @file-selected="fileSelected"/>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
-import ImageCanvas from "./ImageCanvas.vue";
-import ImageFileOpen from "./ImageFileOpen.vue";
-import ImageZoom from "./ImageZoom.vue";
+import ImageCanvas from './ImageCanvas.vue'
+import ImageFileOpen from './ImageFileOpen.vue'
+import ImageZoom from './ImageZoom.vue'
 
 export default {
-  name: "ImageColourPicker",
+  name: 'ImageColourPicker',
   props: {
     canPickColour: Boolean
   },
-  data() {
+  data () {
     return {
       image: new Image(),
       scale: 1,
       zoomRange: { min: 0.1, max: 10 }
-    };
+    }
   },
   computed: {
-    hasImage() {
-      return this.image.width > 0 && this.image.height > 0;
+    hasImage () {
+      return this.image.width > 0 && this.image.height > 0
     }
   },
   components: {
@@ -52,68 +52,68 @@ export default {
     ImageZoom
   },
   methods: {
-    colourPicked(colour) {
-      this.$emit("colour-picked", colour);
+    colourPicked (colour) {
+      this.$emit('colour-picked', colour)
     },
-    displayFirstImage(files) {
-      const file = files.find(i => i.type.indexOf("image/") > -1);
+    displayFirstImage (files) {
+      const file = files.find(i => i.type.indexOf('image/') > -1)
 
       if (!file) {
-        console.log("File list did not contain image");
-        return;
+        console.log('File list did not contain image')
+        return
       }
 
-      let vm = this;
-      let reader = new FileReader();
-      reader.onload = function() {
-        var tempImage = new Image();
-        tempImage.onload = function() {
-          vm.scale = 1;
-          vm.image = this;
-        };
-        tempImage.src = reader.result;
-      };
-      reader.readAsDataURL(file);
+      let vm = this
+      let reader = new FileReader()
+      reader.onload = function () {
+        var tempImage = new Image()
+        tempImage.onload = function () {
+          vm.scale = 1
+          vm.image = this
+        }
+        tempImage.src = reader.result
+      }
+      reader.readAsDataURL(file)
     },
-    fileSelected(files) {
-      this.displayFirstImage([...files]);
+    fileSelected (files) {
+      this.displayFirstImage([...files])
     },
-    paste(event) {
+    paste (event) {
       if (
         !event.clipboardData ||
         !event.clipboardData.items ||
-        event.target.tagName === "INPUT" ||
-        event.target.tagName === "TEXTAREA"
+        event.target.tagName === 'INPUT' ||
+        event.target.tagName === 'TEXTAREA'
       ) {
-        return;
+        return
       }
 
       const files = [...event.clipboardData.items]
-        .filter(i => i.kind === "file")
-        .map(i => i.getAsFile());
+        .filter(i => i.kind === 'file')
+        .map(i => i.getAsFile())
 
-      this.displayFirstImage(files);
+      this.displayFirstImage(files)
     },
-    zoom(scale) {
+    zoom (scale) {
       if (scale < this.zoomRange.min) {
-        scale = this.zoomRange.min;
+        scale = this.zoomRange.min
       } else if (scale > this.zoomRange.max) {
-        scale = this.zoomRange.max;
+        scale = this.zoomRange.max
       }
-      this.scale = scale;
+      this.scale = scale
     }
   },
-  created() {
-    window.addEventListener("paste", this.paste, false);
+  created () {
+    window.addEventListener('paste', this.paste, false)
   },
-  destroyed() {
-    window.removeEventListener("paste", this.paste);
+  destroyed () {
+    window.removeEventListener('paste', this.paste)
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .imagecolourpicker {
   display: flex;

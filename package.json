@@ -14,22 +14,19 @@
     "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-plugin-unit-mocha": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
+    "@vue/eslint-config-prettier": "^3.0.5",
     "@vue/eslint-config-standard": "^3.0.5",
-    "@vue/test-utils": "^1.0.0-beta.20",
+    "@vue/test-utils": "1.0.0-beta.25",
+    "babel-core": "^7.0.0-beta.47",
     "chai": "^4.1.2",
-    "eslint": "^5.7.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^5.0.0-beta.3",
+    "eslint-plugin-vue": "5.0.0-beta.3",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.0.0"
   },
   "eslintConfig": {
     "root": true,

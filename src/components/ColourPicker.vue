@@ -1,17 +1,17 @@
 <template>
-    <span class="colourpicker">{{ colour }}</span>
+  <span class="colourpicker">{{ colour }}</span>
 </template>
 
 <script>
 export default {
-  name: "ColourPicker",
+  name: 'ColourPicker',
   props: {
     colour: {
       type: String,
       required: true
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">

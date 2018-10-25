@@ -1,48 +1,45 @@
 <template>
-    <transition name="modal">
-        <div class="modal-mask" @click.stop.prevent="$emit('close')">
-            <div class="modal-wrapper">
-                <div class="modal-container" :style="{ width: width }" @click.stop.prevent>
-                    <button
-                        class="modal-close icon-button fas fa-times"
-                        @click.stop.prevent="$emit('close')"
-                    ></button>
-                    <slot></slot>
-                </div>
-            </div>
+  <transition name="modal">
+    <div class="modal-mask" @click.stop.prevent="$emit('close')">
+      <div class="modal-wrapper">
+        <div class="modal-container" :style="{ width: width }" @click.stop.prevent>
+          <button class="modal-close icon-button fas fa-times" @click.stop.prevent="$emit('close')"></button>
+          <slot></slot>
         </div>
-    </transition>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
 export default {
-  name: "Modal",
+  name: 'Modal',
   props: {
     width: {
       type: String
     }
   },
   methods: {
-    keyUp(event) {
+    keyUp (event) {
       if (
-        event.target.tagName.toLowerCase() !== "input" &&
-        event.key === "Escape"
+        event.target.tagName.toLowerCase() !== 'input' &&
+        event.key === 'Escape'
       ) {
-        this.$emit("close");
+        this.$emit('close')
       }
     }
   },
-  created: function() {
-    window.addEventListener("keyup", this.keyUp, false);
+  created: function () {
+    window.addEventListener('keyup', this.keyUp, false)
   },
-  destroyed() {
-    window.removeEventListener("keyup", this.keyUp);
+  destroyed () {
+    window.removeEventListener('keyup', this.keyUp)
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .modal {
   &-mask {

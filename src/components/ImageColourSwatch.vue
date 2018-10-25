@@ -1,10 +1,10 @@
 <template>
-    <div class="imagecolourswatch" v-bind:style="swatchStyle">&nbsp;</div>
+  <div class="imagecolourswatch" v-bind:style="swatchStyle">&nbsp;</div>
 </template>
 
 <script>
 export default {
-  name: "ImageColourSwatch",
+  name: 'ImageColourSwatch',
   props: {
     colour: {
       type: String,
@@ -16,19 +16,19 @@ export default {
     }
   },
   computed: {
-    swatchStyle() {
+    swatchStyle () {
       return {
-        "background-color": this.colour,
-        top: this.mousePosition.y - 40 + "px",
-        left: this.mousePosition.x + 10 + "px"
-      };
+        'background-color': this.colour,
+        top: this.mousePosition.y - 40 + 'px',
+        left: this.mousePosition.x + 10 + 'px'
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .imagecolourswatch {
   display: block;

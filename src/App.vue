@@ -17,84 +17,84 @@
 </template>
 
 <script>
-import ColourPalette from "./components/ColourPalette.vue";
-import ImageColourPicker from "./components/ImageColourPicker.vue";
+import ColourPalette from './components/ColourPalette.vue'
+import ImageColourPicker from './components/ImageColourPicker.vue'
 
-let nextColourId = 1;
+let nextColourId = 1
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     ColourPalette,
     ImageColourPicker
   },
-  data() {
+  data () {
     return {
       palette: this.createPalette()
-    };
+    }
   },
   computed: {
     currentColour: {
-      get() {
-        return this.palette.colours.find(x => x.isSelected);
+      get () {
+        return this.palette.colours.find(x => x.isSelected)
       },
-      set(colour) {
-        this.palette.colours.forEach(x => (x.isSelected = x === colour));
+      set (colour) {
+        this.palette.colours.forEach(x => (x.isSelected = x === colour))
       }
     },
-    canPickColour() {
-      return this.currentColour ? true : false;
+    canPickColour () {
+      return !!this.currentColour
     }
   },
   methods: {
-    createPalette(colours) {
-      colours = colours || ["#FFFFFF"];
+    createPalette (colours) {
+      colours = colours || ['#FFFFFF']
       return {
-        name: "",
-        type: "regular",
+        name: '',
+        type: 'regular',
         colours: colours.map((c, i) => ({
           id: nextColourId++,
           colour: c.toUpperCase(),
           isSelected: i === 0
         }))
-      };
-    },
-    addColour() {
-      const colour = {
-        id: nextColourId++,
-        colour: "#ffffff",
-        isSelected: false
-      };
-      this.palette.colours.push(colour);
-      this.currentColour = colour;
-    },
-    colourPicked(colour) {
-      let currentColour = this.currentColour;
-
-      if (currentColour) {
-        currentColour.colour = colour;
       }
     },
-    importPalette(palette) {
-      this.palette = this.createPalette(palette.colours);
-      this.palette.name = palette.name;
-      this.palette.type = palette.type;
+    addColour () {
+      const colour = {
+        id: nextColourId++,
+        colour: '#ffffff',
+        isSelected: false
+      }
+      this.palette.colours.push(colour)
+      this.currentColour = colour
     },
-    discardPalette() {
-      this.palette = this.createPalette();
+    colourPicked (colour) {
+      let currentColour = this.currentColour
+
+      if (currentColour) {
+        currentColour.colour = colour
+      }
     },
-    selectColour(colour) {
-      this.currentColour = colour;
+    importPalette (palette) {
+      this.palette = this.createPalette(palette.colours)
+      this.palette.name = palette.name
+      this.palette.type = palette.type
     },
-    removeColour(colour) {
-      this.palette.colours = this.palette.colours.filter(x => x !== colour);
+    discardPalette () {
+      this.palette = this.createPalette()
+    },
+    selectColour (colour) {
+      this.currentColour = colour
+    },
+    removeColour (colour) {
+      this.palette.colours = this.palette.colours.filter(x => x !== colour)
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-@import "./variables.less";
+@import './variables.less';
 
 html,
 body {
@@ -103,7 +103,7 @@ body {
   margin: 0;
   overflow: hidden;
   font-size: 10px;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

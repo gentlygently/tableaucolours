@@ -1,21 +1,21 @@
 <template>
-    <li class="colour" :class="activeClass" @click="click">
-        <colour-swatch :colour="colour.colour" class="colour-swatch"/>
-        <colour-picker :colour="colour.colour" class="colour-picker"/>
-        <button
-            @click.prevent.stop="remove"
-            class="colour-remove icon-button fas fa-times"
-            title="Delete colour"
-        ></button>
-    </li>
+  <li class="colour" :class="activeClass" @click="click">
+    <colour-swatch :colour="colour.colour" class="colour-swatch"/>
+    <colour-picker :colour="colour.colour" class="colour-picker"/>
+    <button
+      @click.prevent.stop="remove"
+      class="colour-remove icon-button fas fa-times"
+      title="Delete colour"
+    ></button>
+  </li>
 </template>
 
 <script>
-import ColourPicker from "./ColourPicker.vue";
-import ColourSwatch from "./ColourSwatch.vue";
+import ColourPicker from './ColourPicker.vue'
+import ColourSwatch from './ColourSwatch.vue'
 
 export default {
-  name: "Colour",
+  name: 'Colour',
   props: {
     colour: {
       type: Object,
@@ -23,8 +23,8 @@ export default {
     }
   },
   computed: {
-    activeClass() {
-      return this.colour.isSelected ? "colour--active" : "";
+    activeClass () {
+      return this.colour.isSelected ? 'colour--active' : ''
     }
   },
   components: {
@@ -32,18 +32,18 @@ export default {
     ColourSwatch
   },
   methods: {
-    click() {
-      this.$emit("select", this.colour);
+    click () {
+      this.$emit('select', this.colour)
     },
-    remove() {
-      this.$emit("remove", this.colour);
+    remove () {
+      this.$emit('remove', this.colour)
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .colour {
   border-bottom: @border;

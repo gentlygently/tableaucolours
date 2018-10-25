@@ -1,86 +1,83 @@
 <template>
-    <div class="getcode">
-        <div class="getcode-codecontainer">
-            <pre class="getcode-code" ref="code">{{ xml }}</pre>
-        </div>
-        <transition>
-            <button class="getcode-copy" @click.stop.prevent="copy" v-if="!copied">Copy to clipboard</button>
-            <button
-                class="getcode-copy getcode-copy--copied"
-                @click.stop.prevent="copy"
-                v-if="copied"
-            >Copied
-                <span class="fas fa-check"></span>
-            </button>
-        </transition>
+  <div class="getcode">
+    <div class="getcode-codecontainer">
+      <pre class="getcode-code" ref="code">{{ xml }}</pre>
     </div>
+    <transition>
+      <button class="getcode-copy" @click.stop.prevent="copy" v-if="!copied">Copy to clipboard</button>
+      <button class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy" v-if="copied">
+        Copied
+        <span class="fas fa-check"></span>
+      </button>
+    </transition>
+  </div>
 </template>
 
 <script>
-import he from "he";
+import he from 'he'
 
 export default {
-  name: "GetCode",
+  name: 'GetCode',
   props: {
     palette: {
       type: Object,
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return {
       copied: false
-    };
+    }
   },
   computed: {
-    xml() {
+    xml () {
       let x = `<color-palette name="${he.encode(this.palette.name, {
         useNamedReferences: true
-      })}" type="${this.palette.type}">\n`;
+      })}" type="${this.palette.type}">\n`
 
       this.palette.colours.forEach(
         c => (x += `    <color>${c.colour}</color>\n`)
-      );
+      )
 
-      return x + "</color-palette>";
+      return x + '</color-palette>'
     }
   },
   methods: {
-    copy() {
+    copy () {
       if (document.body.createTextRange) {
-        const range = document.body.createTextRange();
-        range.moveToElementText(this.$refs.code);
-        range.select();
+        const range = document.body.createTextRange()
+        range.moveToElementText(this.$refs.code)
+        range.select()
       } else if (window.getSelection) {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(this.$refs.code);
-        selection.removeAllRanges();
-        selection.addRange(range);
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(this.$refs.code)
+        selection.removeAllRanges()
+        selection.addRange(range)
       } else {
-        console.log("Text selection not supported");
+        console.log('Text selection not supported')
       }
-      document.execCommand("copy");
-      this.copied = true;
+      document.execCommand('copy')
+      this.copied = true
     },
-    xmlEscape(s) {
-      let el = document.createElement("textarea");
-      el.value = s;
-      return el.innerHTML;
+    xmlEscape (s) {
+      let el = document.createElement('textarea')
+      el.value = s
+      return el.innerHTML
     }
   },
-  created: function() {
-    this.copied = false;
+  created: function () {
+    this.copied = false
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .getcode {
   &:after {
-    content: " ";
+    content: ' ';
     display: block;
     clear: both;
     width: 0;

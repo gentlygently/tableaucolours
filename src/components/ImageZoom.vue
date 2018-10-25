@@ -1,79 +1,79 @@
 <template>
-    <div class="imagezoom">
-        <button class="icon-button imagezoom-out fas fa-image" @click.prevent.stop="zoomOut"></button>
-        <input
-            type="range"
-            min="1"
-            max="100"
-            :disabled="!enabled"
-            v-model="sliderValue"
-            @mousedown="sliderActive = true"
-            @mouseup="sliderActive = false"
-            class="imagezoom-slider"
-        >
-        <button class="icon-button imagezoom-in fas fa-image" @click.prevent.stop="zoomIn"></button>
-        <div class="imagezoom-percentage">{{ percentage }}%</div>
-    </div>
+  <div class="imagezoom">
+    <button class="icon-button imagezoom-out fas fa-image" @click.prevent.stop="zoomOut"></button>
+    <input
+      type="range"
+      min="1"
+      max="100"
+      :disabled="!enabled"
+      v-model="sliderValue"
+      @mousedown="sliderActive = true"
+      @mouseup="sliderActive = false"
+      class="imagezoom-slider"
+    >
+    <button class="icon-button imagezoom-in fas fa-image" @click.prevent.stop="zoomIn"></button>
+    <div class="imagezoom-percentage">{{ percentage }}%</div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "ImageZoom",
+  name: 'ImageZoom',
   props: {
     scale: Number,
     range: Object,
     enabled: Boolean
   },
-  data: function() {
+  data: function () {
     return {
       sliderValue: 50,
       sliderActive: false
-    };
+    }
   },
   computed: {
-    percentage() {
-      return Math.round(100 * this.scale);
+    percentage () {
+      return Math.round(100 * this.scale)
     }
   },
   watch: {
-    scale(newValue) {
+    scale (newValue) {
       if (this.sliderActive) {
-        return;
+        return
       }
       this.sliderValue =
         newValue < 1
           ? ((newValue - this.range.min) * 49) / (1 - this.range.min) + 1
-          : ((newValue - 1) * 50) / (this.range.max - 1) + 50;
+          : ((newValue - 1) * 50) / (this.range.max - 1) + 50
     },
-    sliderValue(newValue) {
+    sliderValue (newValue) {
       const scale =
         newValue < 50
           ? ((newValue - 1) * (1 - this.range.min)) / 49 + this.range.min
-          : ((newValue - 50) * (this.range.max - 1)) / 50 + 1;
+          : ((newValue - 50) * (this.range.max - 1)) / 50 + 1
 
-      this.$emit("zoom", scale);
+      this.$emit('zoom', scale)
     }
   },
   methods: {
-    input(event, value) {
-      this.sliderValue = event.target.value;
+    input (event, value) {
+      this.sliderValue = event.target.value
     },
-    zoomIn() {
+    zoomIn () {
       if (this.enabled) {
-        this.$emit("zoom", this.scale * 1.1);
+        this.$emit('zoom', this.scale * 1.1)
       }
     },
-    zoomOut() {
+    zoomOut () {
       if (this.enabled) {
-        this.$emit("zoom", this.scale * 0.9);
+        this.$emit('zoom', this.scale * 0.9)
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .imagezoom {
   display: inline-block;

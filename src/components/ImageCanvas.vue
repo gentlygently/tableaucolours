@@ -1,109 +1,109 @@
 <template>
-    <div
-        class="imagecanvas"
-        :class="dropClass"
-        ref="container"
-        @dragenter.prevent="dragEnter"
-        @dragover.prevent="dragEnter"
-        @dragleave.prevent="dragLeave"
-        @drop.stop.prevent="drop"
-    >
-        <div class="imagecanvas-canvas" @wheel.shift="wheel">
-            <scalable-image
-                v-show="hasImage"
-                :can-pick-colour="canPickColour"
-                :image="image"
-                :scale="scale"
-                @colour-picked="colourPicked"
-            />
-        </div>
-        <div class="droptarget" ref="droptarget">
-            <div class="droptarget-textwrapper">
-                <div class="droptarget-text">
-                    <span class="droptarget-icon fas fa-hand-point-down"></span>
-                    <br>Drop image here
-                </div>
-            </div>
-        </div>
+  <div
+    class="imagecanvas"
+    :class="dropClass"
+    ref="container"
+    @dragenter.prevent="dragEnter"
+    @dragover.prevent="dragEnter"
+    @dragleave.prevent="dragLeave"
+    @drop.stop.prevent="drop"
+  >
+    <div class="imagecanvas-canvas" @wheel.shift="wheel">
+      <scalable-image
+        v-show="hasImage"
+        :can-pick-colour="canPickColour"
+        :image="image"
+        :scale="scale"
+        @colour-picked="colourPicked"
+      />
     </div>
+    <div class="droptarget" ref="droptarget">
+      <div class="droptarget-textwrapper">
+        <div class="droptarget-text">
+          <span class="droptarget-icon fas fa-hand-point-down"></span>
+          <br>Drop image here
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import ScalableImage from "./ScalableImage.vue";
+import ScalableImage from './ScalableImage.vue'
 
 export default {
-  name: "ImageCanvas",
+  name: 'ImageCanvas',
   props: {
     canPickColour: Boolean,
     image: HTMLImageElement,
     scale: Number
   },
-  data: function() {
+  data: function () {
     return {
       isDropHighlightActive: false
-    };
+    }
   },
   components: {
     ScalableImage
   },
   computed: {
-    hasImage() {
-      return this.image.width && this.image.height;
+    hasImage () {
+      return this.image.width && this.image.height
     },
-    dropClass() {
-      return this.isDropHighlightActive ? "imagecanvas--drop" : "";
+    dropClass () {
+      return this.isDropHighlightActive ? 'imagecanvas--drop' : ''
     }
   },
   methods: {
-    dragEnter(event) {
+    dragEnter (event) {
       if (
         event.dataTransfer.files.length ||
         [...event.dataTransfer.items].find(
-          x => x.kind === "file" && x.type.indexOf("image/" > -1)
+          x => x.kind === 'file' && x.type.indexOf('image/' > -1)
         )
       ) {
-        this.isDropHighlightActive = true;
-        event.dataTransfer.dropEffect = "copy";
+        this.isDropHighlightActive = true
+        event.dataTransfer.dropEffect = 'copy'
       }
     },
-    dragLeave(event) {
+    dragLeave (event) {
       if (event.target === this.$refs.droptarget) {
-        this.isDropHighlightActive = false;
+        this.isDropHighlightActive = false
       }
     },
-    drop(event) {
-      this.isDropHighlightActive = false;
+    drop (event) {
+      this.isDropHighlightActive = false
 
       if (!event.dataTransfer || !event.dataTransfer.files) {
-        return;
+        return
       }
 
-      this.$emit("file-dropped", event.dataTransfer.files);
+      this.$emit('file-dropped', event.dataTransfer.files)
     },
-    colourPicked(colour) {
-      this.$emit("colour-picked", colour);
+    colourPicked (colour) {
+      this.$emit('colour-picked', colour)
     },
-    preventDefaults(event) {
-      event.preventDefault();
-      event.stopPropagation();
+    preventDefaults (event) {
+      event.preventDefault()
+      event.stopPropagation()
     },
-    wheel(event) {
+    wheel (event) {
       if (!event.deltaY) {
-        return;
+        return
       }
-      this.preventDefaults(event);
-      this.$emit("zoom", this.scale * (event.deltaY > 0 ? 0.9 : 1.1));
+      this.preventDefaults(event)
+      this.$emit('zoom', this.scale * (event.deltaY > 0 ? 0.9 : 1.1))
     }
   },
-  created: function() {
-    window.addEventListener("dragover", this.preventDefaults, false);
-    window.addEventListener("drop", this.preventDefaults, false);
+  created: function () {
+    window.addEventListener('dragover', this.preventDefaults, false)
+    window.addEventListener('drop', this.preventDefaults, false)
   },
-  destroyed: function() {
-    window.removeEventListener("dragover", this.preventDefaults);
-    window.removeEventListener("drop", this.preventDefaults);
+  destroyed: function () {
+    window.removeEventListener('dragover', this.preventDefaults)
+    window.removeEventListener('drop', this.preventDefaults)
   }
-};
+}
 </script>
 
 <style scoped lang="less">
@@ -136,14 +136,12 @@ export default {
     width: 100%;
     height: 100%;
   }
-
   &--drop {
     .droptarget {
       display: table;
     }
   }
 }
-
 .droptarget {
   position: absolute;
   display: none;
@@ -155,19 +153,16 @@ export default {
   top: 0;
   left: 0;
   z-index: 9997;
-
   &-textwrapper {
     display: table-cell;
     vertical-align: middle;
   }
-
   &-text {
     margin: 0 auto;
     color: #fff;
     font-size: 2.5rem;
     text-align: center;
   }
-
   &-icon {
     font-size: 3rem;
   }

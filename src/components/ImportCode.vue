@@ -1,127 +1,127 @@
 <template>
-    <div class="importcode">
-        <div class="importcode-codecontainer">
-            <textarea
-                class="importcode-code"
-                :class="codeClasses"
-                v-model.trim="xml"
-                placeholder="Paste a &lt;color-palette&gt;"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-            ></textarea>
-            <div
-                class="importcode-validationmessage"
-                v-show="hasValidationMessage"
-            >{{ validationMessage }}</div>
-        </div>
-        <button
-            class="importcode-button importcode-button--import"
-            @click="importXml"
-            :disabled="!isValid"
-        >Import</button>
-        <button class="importcode-button importcode-button--cancel" @click="$emit('close')">Cancel</button>
+  <div class="importcode">
+    <div class="importcode-codecontainer">
+      <textarea
+        class="importcode-code"
+        :class="codeClasses"
+        v-model.trim="xml"
+        placeholder="Paste a &lt;color-palette&gt;"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      ></textarea>
+      <div
+        class="importcode-validationmessage"
+        v-show="hasValidationMessage"
+      >{{ validationMessage }}</div>
     </div>
+    <button
+      class="importcode-button importcode-button--import"
+      @click="importXml"
+      :disabled="!isValid"
+    >Import</button>
+    <button class="importcode-button importcode-button--cancel" @click="$emit('close')">Cancel</button>
+  </div>
 </template>
 
 <script>
-const xmlParser = new DOMParser();
-const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i;
+const xmlParser = new DOMParser()
+const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i
 
 export default {
-  name: "ImportCode",
-  data: function() {
+  name: 'ImportCode',
+  data: function () {
     return {
-      xml: "",
+      xml: '',
       isValid: false,
-      validationMessage: "",
+      validationMessage: '',
       palette: {}
-    };
+    }
   },
   computed: {
-    hasCode() {
-      return !!this.xml;
+    hasCode () {
+      return !!this.xml
     },
-    hasValidationMessage() {
-      return !!this.validationMessage;
+    hasValidationMessage () {
+      return !!this.validationMessage
     },
-    codeClasses() {
-      let classes = [];
+    codeClasses () {
+      let classes = []
 
       if (this.hasCode && !this.isValid) {
-        classes.push("importcode-code--invalid");
+        classes.push('importcode-code--invalid')
       }
 
       if (this.hasValidationMessage) {
-        classes.push("importcode-code--validationmessage");
+        classes.push('importcode-code--validationmessage')
       }
 
-      return classes;
+      return classes
     }
   },
   methods: {
-    invalid(message) {
-      this.isValid = false;
-      this.validationMessage = message;
-      this.palette = {};
+    invalid (message) {
+      this.isValid = false
+      this.validationMessage = message
+      this.palette = {}
     },
-    importXml(event) {
-      this.$emit("import-palette", this.palette);
+    importXml (event) {
+      this.$emit('import-palette', this.palette)
     }
   },
   watch: {
-    xml(newValue) {
+    xml (newValue) {
       if (!newValue) {
-        return this.invalid("");
+        return this.invalid('')
       }
 
-      const doc = xmlParser.parseFromString(newValue, "application/xml");
-      const root = doc.documentElement;
+      const doc = xmlParser.parseFromString(newValue, 'application/xml')
+      const root = doc.documentElement
 
-      if (root.getElementsByTagName("parsererror").length) {
-        return this.invalid("Unable to parse XML");
+      if (root.getElementsByTagName('parsererror').length) {
+        return this.invalid('Unable to parse XML')
       }
 
-      if (root.tagName !== "color-palette") {
-        return this.invalid("Expected a root element of <color-palette>");
+      if (root.tagName !== 'color-palette') {
+        return this.invalid('Expected a root element of <color-palette>')
       }
 
       const colours = [...root.children]
-        .filter(x => x.tagName === "color")
-        .map(x => x.innerHTML.trim());
+        .filter(x => x.tagName === 'color')
+        .map(x => x.innerHTML.trim())
 
       if (!colours.length) {
-        return this.invalid("Expected one or more <color> elements");
+        return this.invalid('Expected one or more <color> elements')
       }
 
       if (colours.filter(x => !x).length > 0) {
-        return this.invalid("All <color> elements must contain a valid colour");
+        return this.invalid('All <color> elements must contain a valid colour')
       }
 
-      const invalidColour = colours.find(x => !colourPattern.test(x));
+      const invalidColour = colours.find(x => !colourPattern.test(x))
 
       if (invalidColour) {
-        return this.invalid(`'${invalidColour}' is not a valid colour`);
+        return this.invalid(`'${invalidColour}' is not a valid colour`)
       }
 
-      this.isValid = true;
-      this.validationMessage = "";
+      this.isValid = true
+      this.validationMessage = ''
       this.palette = {
-        name: root.getAttribute("name"),
-        type: root.getAttribute("type"),
+        name: root.getAttribute('name'),
+        type: root.getAttribute('type'),
         colours: colours
-      };
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .importcode {
   &:after {
-    content: " ";
+    content: ' ';
     display: block;
     clear: both;
     width: 0;

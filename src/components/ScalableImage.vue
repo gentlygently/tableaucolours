@@ -1,30 +1,30 @@
 <template>
-    <div class="scalableimage">
-        <div class="scalableimage-hackyverticalspacer">&nbsp;</div>
-        <div class="scalableimage-image" :class="{'scalableimage-image--active': canPickColour}">
-            <image-colour-swatch
-                v-show="canPickColour && currentColour"
-                :colour="currentColour"
-                :mouse-position="mousePosition"
-            />
-            <canvas
-                ref="image"
-                @click="click"
-                @mouseover="setMouseAndColour"
-                @mousemove="setMouseAndColour"
-                @mouseleave="resetMouseAndColour"
-            ></canvas>
-        </div>
+  <div class="scalableimage">
+    <div class="scalableimage-hackyverticalspacer">&nbsp;</div>
+    <div class="scalableimage-image" :class="{'scalableimage-image--active': canPickColour}">
+      <image-colour-swatch
+        v-show="canPickColour && currentColour"
+        :colour="currentColour"
+        :mouse-position="mousePosition"
+      />
+      <canvas
+        ref="image"
+        @click="click"
+        @mouseover="setMouseAndColour"
+        @mousemove="setMouseAndColour"
+        @mouseleave="resetMouseAndColour"
+      ></canvas>
     </div>
+  </div>
 </template>
 
 <script>
-import ImageColourSwatch from "./ImageColourSwatch.vue";
+import ImageColourSwatch from './ImageColourSwatch.vue'
 
-const defaultMousePosition = { x: 0, y: 0 };
+const defaultMousePosition = { x: 0, y: 0 }
 
 export default {
-  name: "ScalableImage",
+  name: 'ScalableImage',
   props: {
     canPickColour: {
       type: Boolean
@@ -38,87 +38,87 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return {
-      currentColour: "",
+      currentColour: '',
       mousePosition: defaultMousePosition
-    };
+    }
   },
   computed: {
-    height() {
-      return this.image.height * this.scale;
+    height () {
+      return this.image.height * this.scale
     },
-    width() {
-      return this.image.width * this.scale;
+    width () {
+      return this.image.width * this.scale
     },
-    activeClass() {
-      return this.canPickColour ? "active" : "";
+    activeClass () {
+      return this.canPickColour ? 'active' : ''
     }
   },
   methods: {
-    drawImage() {
-      let canvas = this.$refs.image;
-      const drawingContext = this.getDrawingContext();
+    drawImage () {
+      let canvas = this.$refs.image
+      const drawingContext = this.getDrawingContext()
 
-      canvas.width = this.width;
-      canvas.height = this.height;
-      drawingContext.scale(this.scale, this.scale);
-      drawingContext.drawImage(this.image, 0, 0);
+      canvas.width = this.width
+      canvas.height = this.height
+      drawingContext.scale(this.scale, this.scale)
+      drawingContext.drawImage(this.image, 0, 0)
     },
-    getDrawingContext() {
-      return this.$refs.image.getContext("2d");
+    getDrawingContext () {
+      return this.$refs.image.getContext('2d')
     },
-    click(event) {
+    click (event) {
       if (!this.canPickColour) {
-        return;
+        return
       }
-      this.setMouseAndColour(event);
-      this.$emit("colour-picked", this.currentColour);
+      this.setMouseAndColour(event)
+      this.$emit('colour-picked', this.currentColour)
     },
-    toHex(v) {
-      const s = v.toString(16).toUpperCase();
-      return s.length == 1 ? "0" + s : s;
+    toHex (v) {
+      const s = v.toString(16).toUpperCase()
+      return s.length === 1 ? '0' + s : s
     },
-    setMouseAndColour(event) {
-      this.setCurrentColour(event);
-      this.setMousePosition(event);
+    setMouseAndColour (event) {
+      this.setCurrentColour(event)
+      this.setMousePosition(event)
     },
-    resetMouseAndColour() {
-      this.currentColour = "";
-      this.mousePosition = defaultMousePosition;
+    resetMouseAndColour () {
+      this.currentColour = ''
+      this.mousePosition = defaultMousePosition
     },
-    setCurrentColour(event) {
+    setCurrentColour (event) {
       const colour = this.getDrawingContext().getImageData(
         event.offsetX,
         event.offsetY,
         1,
         1
-      ).data;
+      ).data
 
       this.currentColour =
-        "#" +
+        '#' +
         this.toHex(colour[0]) +
         this.toHex(colour[1]) +
-        this.toHex(colour[2]);
+        this.toHex(colour[2])
     },
-    setMousePosition(event) {
-      this.mousePosition = { x: event.offsetX, y: event.offsetY };
+    setMousePosition (event) {
+      this.mousePosition = { x: event.offsetX, y: event.offsetY }
     }
   },
   watch: {
-    image() {
-      this.resetMouseAndColour();
-      this.drawImage();
+    image () {
+      this.resetMouseAndColour()
+      this.drawImage()
     },
-    scale() {
-      this.resetMouseAndColour();
-      this.drawImage();
+    scale () {
+      this.resetMouseAndColour()
+      this.drawImage()
     }
   },
   components: {
     ImageColourSwatch
   }
-};
+}
 </script>
 
 <style scoped lang="less">
@@ -130,7 +130,7 @@ export default {
 
   &-hackyverticalspacer {
     display: inline-block;
-    content: "";
+    content: '';
     height: 100%;
     vertical-align: middle;
     width: 0;

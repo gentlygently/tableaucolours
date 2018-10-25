@@ -1,92 +1,85 @@
 <template>
-    <div class="colourpalette">
-        <div class="colourpalette-name">
-            <input
-                type="text"
-                v-model="palette.name"
-                placeholder="Enter a palette name"
-                @keyup.enter="blurName"
-            >
-        </div>
-        <div class="colourpalette-type">
-            <label for="type">Type</label>
-            <select name="type" v-model="palette.type">
-                <option>regular</option>
-                <option>ordered-sequential</option>
-                <option>ordered-diverging</option>
-            </select>
-        </div>
-        <colour-list
-            :colours="palette.colours"
-            @select-colour="selectColour"
-            @remove-colour="removeColour"
-        />
-        <ul class="colourpalette-actions">
-            <!-- TODO: Put these in a separate component? -->
-            <li class="import">
-                <button
-                    @click.prevent.stop="importModalOpen = true"
-                    class="icon-button fas fa-file-import"
-                    title="Import XML"
-                ></button>
-            </li>
-            <li class="code">
-                <button
-                    @click.prevent.stop="codeModalOpen = true"
-                    class="icon-button fas fa-code"
-                    title="Get code"
-                ></button>
-            </li>
-            <li class="discard">
-                <button
-                    @click.prevent.stop="discard"
-                    class="icon-button fas fa-trash-alt"
-                    title="Delete palette"
-                ></button>
-            </li>
-            <li class="add">
-                <button
-                    @click.prevent.stop="add"
-                    class="icon-button fas fa-plus"
-                    title="Add colour"
-                ></button>
-            </li>
-        </ul>
-        <modal v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
-            <get-code :palette="palette"/>
-        </modal>
-        <modal v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
-            <import-code @import-palette="importPalette" @close="importModalOpen = false"/>
-        </modal>
+  <div class="colourpalette">
+    <div class="colourpalette-name">
+      <input
+        type="text"
+        v-model="palette.name"
+        placeholder="Enter a palette name"
+        @keyup.enter="blurName"
+      >
     </div>
+    <div class="colourpalette-type">
+      <label for="type">Type</label>
+      <select name="type" v-model="palette.type">
+        <option>regular</option>
+        <option>ordered-sequential</option>
+        <option>ordered-diverging</option>
+      </select>
+    </div>
+    <colour-list
+      :colours="palette.colours"
+      @select-colour="selectColour"
+      @remove-colour="removeColour"
+    />
+    <ul class="colourpalette-actions">
+      <!-- TODO: Put these in a separate component? -->
+      <li class="import">
+        <button
+          @click.prevent.stop="importModalOpen = true"
+          class="icon-button fas fa-file-import"
+          title="Import XML"
+        ></button>
+      </li>
+      <li class="code">
+        <button
+          @click.prevent.stop="codeModalOpen = true"
+          class="icon-button fas fa-code"
+          title="Get code"
+        ></button>
+      </li>
+      <li class="discard">
+        <button
+          @click.prevent.stop="discard"
+          class="icon-button fas fa-trash-alt"
+          title="Delete palette"
+        ></button>
+      </li>
+      <li class="add">
+        <button @click.prevent.stop="add" class="icon-button fas fa-plus" title="Add colour"></button>
+      </li>
+    </ul>
+    <modal v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
+      <get-code :palette="palette"/>
+    </modal>
+    <modal v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
+      <import-code @import-palette="importPalette" @close="importModalOpen = false"/>
+    </modal>
+  </div>
 </template>
 
 <script>
-import ColourList from "./ColourList.vue";
-import GetCode from "./GetCode.vue";
-import ImportCode from "./ImportCode.vue";
-import Modal from "./Modal.vue";
+import ColourList from './ColourList.vue'
+import GetCode from './GetCode.vue'
+import ImportCode from './ImportCode.vue'
+import Modal from './Modal.vue'
 
 export default {
-  name: "ColourPalette",
-  props: {
-    //msg: String
-  },
+  name: 'ColourPalette',
   props: {
     palette: {
       type: Object,
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return {
       codeModalOpen: false,
       importModalOpen: false
-    };
+    }
   },
   computed: {
-    selectedColourIndex() {
-      return this.palette.colours.findIndex(x => x.isSelected);
+    selectedColourIndex () {
+      return this.palette.colours.findIndex(x => x.isSelected)
     }
   },
   components: {
@@ -96,66 +89,65 @@ export default {
     Modal
   },
   methods: {
-    add() {
-      this.$emit("add-colour");
+    add () {
+      this.$emit('add-colour')
     },
-    blurName(event) {
-      event.target.blur();
+    blurName (event) {
+      event.target.blur()
     },
-    selectColour(colour) {
-      this.$emit("select-colour", colour);
+    selectColour (colour) {
+      this.$emit('select-colour', colour)
     },
-    removeColour(colour) {
-      this.$emit("remove-colour", colour);
+    removeColour (colour) {
+      this.$emit('remove-colour', colour)
     },
-    discard() {
-      this.$emit("discard-palette");
+    discard () {
+      this.$emit('discard-palette')
     },
-    importPalette(palette) {
-      this.importModalOpen = false;
-      this.$emit("import-palette", palette);
+    importPalette (palette) {
+      this.importModalOpen = false
+      this.$emit('import-palette', palette)
     },
-    keyUp(event) {
-      if (event.target.tagName.toLowerCase() !== "body") {
-        return;
+    keyUp (event) {
+      if (event.target.tagName.toLowerCase() !== 'body') {
+        return
       }
 
-      let index = -1;
+      let index = -1
 
       switch (event.key) {
-        case "+":
-          this.add();
-          return;
+        case '+':
+          this.add()
+          return
 
-        case "Down":
-        case "ArrowDown":
-          index = this.selectedColourIndex;
+        case 'Down':
+        case 'ArrowDown':
+          index = this.selectedColourIndex
           if (index < this.palette.colours.length - 1) {
-            this.selectColour(this.palette.colours[index + 1]);
+            this.selectColour(this.palette.colours[index + 1])
           }
-          return;
+          return
 
-        case "Up":
-        case "ArrowUp":
-          index = this.selectedColourIndex;
+        case 'Up':
+        case 'ArrowUp':
+          index = this.selectedColourIndex
           if (index > 0) {
-            this.selectColour(this.palette.colours[index - 1]);
+            this.selectColour(this.palette.colours[index - 1])
           }
-          return;
       }
     }
   },
-  created: function() {
-    window.addEventListener("keyup", this.keyUp, false);
+  created: function () {
+    window.addEventListener('keyup', this.keyUp, false)
   },
-  destroyed() {
-    window.removeEventListener("keyup", this.keyUp);
+  destroyed () {
+    window.removeEventListener('keyup', this.keyUp)
   }
-};
+}
 </script>
 
 <style scoped lang="less">
-@import "../variables.less";
+@import '../variables.less';
 
 .colourpalette {
   &-name {
