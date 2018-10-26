@@ -4,7 +4,7 @@
       v-model="draggableColours"
       class="colourlist-draggable"
       @change="colourMoved"
-      :options="{ chosenClass: 'colour--dragging' }"
+      :options="{ chosenClass: 'colour--dragging', delay: 25 }"
     >
       <Colour
         v-for="(colour, index) in draggableColours"

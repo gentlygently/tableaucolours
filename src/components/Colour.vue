@@ -42,6 +42,7 @@ export default {
       this.$emit('select', this.colour)
     },
     remove () {
+      console.log('remove')
       this.$emit('remove', this.colour)
     }
   }
@@ -104,6 +105,7 @@ export default {
     background-color: #e94544;
     box-sizing: border-box;
     box-shadow: 0rem 0rem 0.1rem 0.1rem #fff;
+    z-index: 1;
   }
 }
 </style>
