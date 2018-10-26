@@ -77,8 +77,9 @@ export default {
       this.palette.colours.push(colour)
       this.currentColour = colour
     },
-    moveColour ({ newIndex, oldIndex }) {
+    moveColour ({ colour, newIndex }) {
       let colours = this.palette.colours
+      const oldIndex = colours.indexOf(colour)
       colours.splice(newIndex, 0, colours.splice(oldIndex, 1)[0])
       this.palette.colours = colours
     },

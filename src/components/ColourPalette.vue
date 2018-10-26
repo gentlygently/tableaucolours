@@ -81,9 +81,6 @@ export default {
   computed: {
     canAddColour () {
       return this.palette.colours.length < this.palette.maximumColours
-    },
-    selectedColourIndex () {
-      return this.palette.colours.findIndex(x => x.isSelected)
     }
   },
   components: {
@@ -120,31 +117,8 @@ export default {
       this.$emit('import-palette', palette)
     },
     keyUp (event) {
-      if (event.target.tagName.toLowerCase() !== 'body') {
-        return
-      }
-
-      let index = -1
-
-      switch (event.key) {
-        case '+':
-          this.add()
-          return
-
-        case 'Down':
-        case 'ArrowDown':
-          index = this.selectedColourIndex
-          if (index < this.palette.colours.length - 1) {
-            this.selectColour(this.palette.colours[index + 1])
-          }
-          return
-
-        case 'Up':
-        case 'ArrowUp':
-          index = this.selectedColourIndex
-          if (index > 0) {
-            this.selectColour(this.palette.colours[index - 1])
-          }
+      if (event.target.tagName.toLowerCase() === 'body' && event.key === '+') {
+        this.add()
       }
     }
   },

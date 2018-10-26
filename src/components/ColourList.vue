@@ -43,18 +43,95 @@ export default {
       set (newValue) {
         // ignore
       }
+    },
+    selectedColourIndex () {
+      return this.colours.findIndex(x => x.isSelected)
     }
   },
   methods: {
+    getColour (index) {
+      if (index < 0 || index >= this.colours.length) {
+        return null
+      }
+      return this.colours[index]
+    },
+    getValidColumnIndex (currentIndex, increment) {
+      const newIndex = currentIndex + increment
+      if (newIndex < 0 || newIndex >= this.colours.length) {
+        return -1
+      }
+      const currentColumn = Math.floor(currentIndex / 5)
+      const newColumn = Math.floor(newIndex / 5)
+
+      return newColumn === currentColumn ? newIndex : -1
+    },
+    getValidRowIndex (currentIndex, increment) {
+      const newIndex = currentIndex + increment
+      if (newIndex < 0 || newIndex >= this.colours.length) {
+        return -1
+      }
+      const currentRow = Math.floor(currentIndex % 5)
+      const newRow = Math.floor(newIndex % 5)
+
+      return newRow === currentRow ? newIndex : -1
+    },
     select (colour) {
-      this.$emit('select-colour', colour)
+      if (colour) {
+        this.$emit('select-colour', colour)
+      }
+    },
+    selectByIndex (index) {
+      this.select(this.getColour(index))
+    },
+    move (colour, newIndex) {
+      this.$emit('move-colour', { colour, newIndex })
+    },
+    moveSelectedColourToIndex (index) {
+      if (index < 0) {
+        return
+      }
+      this.move(this.colours[this.selectedColourIndex], index)
     },
     remove (colour) {
       this.$emit('remove-colour', colour)
     },
     colourMoved (event) {
-      this.$emit('move-colour', event.moved)
+      this.move(this.colours[event.moved.oldIndex], event.moved.newIndex)
+    },
+    keyUp (event) {
+      if (event.target.tagName.toLowerCase() !== 'body') {
+        return
+      }
+      const moveOrSelect = event.getModifierState('Shift')
+        ? this.moveSelectedColourToIndex
+        : this.selectByIndex
+      switch (event.key) {
+        case 'Down':
+        case 'ArrowDown':
+          moveOrSelect(this.getValidColumnIndex(this.selectedColourIndex, 1))
+          return
+
+        case 'Up':
+        case 'ArrowUp':
+          moveOrSelect(this.getValidColumnIndex(this.selectedColourIndex, -1))
+          return
+
+        case 'Left':
+        case 'ArrowLeft':
+          moveOrSelect(this.getValidRowIndex(this.selectedColourIndex, -5))
+          return
+
+        case 'Right':
+        case 'ArrowRight':
+          moveOrSelect(this.getValidRowIndex(this.selectedColourIndex, 5))
+      }
     }
+  },
+  created: function () {
+    window.addEventListener('keyup', this.keyUp, false)
+  },
+  destroyed () {
+    window.removeEventListener('keyup', this.keyUp)
   }
 }
 </script>
@@ -63,6 +140,7 @@ export default {
 .colourlist {
   margin: 0;
   padding: 1rem;
+  height: 29rem;
 
   &-draggable {
     display: grid;
