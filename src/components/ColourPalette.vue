@@ -12,8 +12,8 @@
       @select-colour="selectColour"
       @remove-colour="removeColour"
     />
-    <div class="colourpalette-example">
-      <palette-example :palette="palette"/>
+    <div class="colourpalette-preview">
+      <palette-preview :palette="palette"/>
     </div>
     <ul class="colourpalette-actions">
       <!-- TODO: Put these in a separate component? -->
@@ -61,7 +61,7 @@ import ColourList from './ColourList.vue'
 import GetCode from './GetCode.vue'
 import ImportCode from './ImportCode.vue'
 import Modal from './Modal.vue'
-import PaletteExample from './PaletteExample.vue'
+import PalettePreview from './PalettePreview.vue'
 import PaletteTypes from './PaletteTypes.vue'
 
 export default {
@@ -91,7 +91,7 @@ export default {
     GetCode,
     ImportCode,
     Modal,
-    PaletteExample,
+    PalettePreview,
     PaletteTypes
   },
   methods: {
@@ -183,7 +183,7 @@ export default {
     padding: 1rem;
     padding-top: 0;
   }
-  &-example {
+  &-preview {
     padding: 1rem;
   }
   &-actions {

@@ -1,10 +1,10 @@
 <template>
-  <div class="paletteexample" :style="{ background: backgroundStyle }">&nbsp;</div>
+  <div class="palettepreview" :style="{ background: backgroundStyle }">&nbsp;</div>
 </template>
 
 <script>
 export default {
-  name: 'PaletteExample',
+  name: 'PalettePreview',
   props: {
     palette: {
       type: Object,
@@ -24,13 +24,9 @@ export default {
             )
             .join(', ')})`
 
+        case 'ordered-diverging':
         case 'ordered-sequential':
           return `linear-gradient(to right, ${this.palette.colours
-            .map(x => x.colour)
-            .join(', ')})`
-
-        case 'ordered-diverging':
-          return `linear-gradient(to left, ${this.palette.colours
             .map(x => x.colour)
             .join(', ')})`
       }
@@ -43,7 +39,7 @@ export default {
 <style scoped lang="less">
 @import '../variables.less';
 
-.paletteexample {
+.palettepreview {
   height: 3rem;
   border-radius: 0.2rem;
   box-sizing: border-box;
