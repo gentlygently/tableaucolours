@@ -48,7 +48,6 @@ export default {
   },
   watch: {
     selectedType (newValue) {
-      console.log(newValue)
       this.types.forEach(x => (x.isSelected = x.name === newValue))
     }
   }

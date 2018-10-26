@@ -1,8 +1,13 @@
 <template>
   <ul class="colourlist">
-    <draggable v-model="colours" class="colourlist-draggable">
+    <draggable
+      v-model="draggableColours"
+      class="colourlist-draggable"
+      @change="colourMoved"
+      :options="{ chosenClass: 'colour--dragging' }"
+    >
       <Colour
-        v-for="(colour, index) in colours"
+        v-for="(colour, index) in draggableColours"
         :key="colour.id"
         :colour="colour"
         :index="index"
@@ -30,12 +35,25 @@ export default {
     Colour,
     draggable
   },
+  computed: {
+    draggableColours: {
+      get () {
+        return this.colours
+      },
+      set (newValue) {
+        // ignore
+      }
+    }
+  },
   methods: {
     select (colour) {
       this.$emit('select-colour', colour)
     },
     remove (colour) {
       this.$emit('remove-colour', colour)
+    },
+    colourMoved (event) {
+      this.$emit('move-colour', event.moved)
     }
   }
 }

@@ -50,8 +50,10 @@ export default {
 
   &-example {
     box-sizing: border-box;
+    width: 100%;
     height: 2rem;
     border: @border;
+    font-size: 0;
 
     &--regular {
       background: linear-gradient(

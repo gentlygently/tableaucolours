@@ -5,6 +5,7 @@
         :palette="palette"
         @type-selected="typeSelected"
         @add-colour="addColour"
+        @move-colour="moveColour"
         @select-colour="selectColour"
         @remove-colour="removeColour"
         @discard-palette="discardPalette"
@@ -75,6 +76,11 @@ export default {
       }
       this.palette.colours.push(colour)
       this.currentColour = colour
+    },
+    moveColour ({ newIndex, oldIndex }) {
+      let colours = this.palette.colours
+      colours.splice(newIndex, 0, colours.splice(oldIndex, 1)[0])
+      this.palette.colours = colours
     },
     colourPicked (colour) {
       let currentColour = this.currentColour

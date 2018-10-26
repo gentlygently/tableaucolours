@@ -8,6 +8,7 @@
     </div>
     <colour-list
       :colours="palette.colours"
+      @move-colour="moveColour"
       @select-colour="selectColour"
       @remove-colour="removeColour"
     />
@@ -105,8 +106,10 @@ export default {
     removeColour (colour) {
       this.$emit('remove-colour', colour)
     },
+    moveColour (args) {
+      this.$emit('move-colour', args)
+    },
     typeSelected (type) {
-      console.log('cp ' + type)
       this.$emit('type-selected', type)
     },
     discard () {

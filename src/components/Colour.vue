@@ -6,7 +6,7 @@
     :title="colour.colour"
     :style="{ 'grid-column': column, 'grid-row': row }"
   >
-    <div class="colour-swatch" :style="{ 'background-color': colour.colour }">&nbsp;</div>
+    <div class="colour-swatch" :style="{ 'background-color': colour.colour }"></div>
     <div class="colour-remove" @click.prevent.stop="remove">
       <span class="fas fa-times"></span>
     </div>
@@ -74,6 +74,11 @@ export default {
 
   &:hover .colour-remove {
     display: block;
+  }
+
+  &--dragging .colour-remove,
+  &--dragging:hover .colour-remove {
+    display: none;
   }
 
   &-swatch {
