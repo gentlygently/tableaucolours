@@ -9,6 +9,7 @@
         autocorrect="off"
         autocapitalize="off"
         spellcheck="false"
+        ref="code"
       ></textarea>
       <div
         class="importcode-validationmessage"
@@ -112,6 +113,9 @@ export default {
         colours: colours
       }
     }
+  },
+  mounted () {
+    this.$refs.code.focus()
   }
 }
 </script>
