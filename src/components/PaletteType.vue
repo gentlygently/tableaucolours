@@ -1,10 +1,8 @@
 <template>
-  <li class="palettetype" :class="selectedClass" @click="$emit('type-selected', type.name)">
-    <div :class="'palettetype--' + type.classModifier">
-      <div :class="'palettetype-example--' + type.classModifier">&nbsp;</div>
-      <label class="palettetype-label">{{ type.displayName }}</label>
-    </div>
-  </li>
+  <div class="palettetype" :class="'palettetype--' + type.classModifier">
+    <div :class="'palettetype-example--' + type.classModifier">&nbsp;</div>
+    <label class="palettetype-label">{{ type.displayName }}</label>
+  </div>
 </template>
 
 <script>
@@ -15,11 +13,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  computed: {
-    selectedClass () {
-      return this.type.isSelected ? 'palettetype--selected' : ''
-    }
   }
 }
 </script>
@@ -28,20 +21,7 @@ export default {
 @import '../variables.less';
 
 .palettetype {
-  border: @border;
   padding: 0.5rem;
-  background-color: #fff;
-  border-radius: 0.2rem;
-  box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
-
-  &:hover {
-    box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour-hover;
-  }
-
-  &--selected,
-  &--selected:hover {
-    box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour-active;
-  }
 
   &-label {
     padding-top: 0.2rem;

@@ -1,10 +1,20 @@
 <template>
   <div class="colourpalette">
     <div class="colourpalette-name">
-      <input type="text" id="name" v-model="palette.name" placeholder="Enter a palette name">
+      <input
+        type="text"
+        id="name"
+        v-model="palette.name"
+        tabindex="1"
+        placeholder="Enter a palette name"
+      >
     </div>
     <div class="colourpalette-type">
-      <palette-types :selected-type="palette.type" @type-selected="typeSelected"/>
+      <palette-types
+        :selected-type-name="palette.type"
+        :tab-index="2"
+        @type-selected="typeSelected"
+      />
     </div>
     <colour-list
       :colours="palette.colours"
@@ -147,10 +157,16 @@ export default {
       font-size: 1.5rem;
       border-radius: 0.2rem;
       box-sizing: border-box;
+      outline: none;
+      box-shadow: @box-shadow;
     }
     input:hover {
       border: @border;
       border-color: @border-colour-hover;
+      box-shadow: @box-shadow-hover;
+    }
+    input:focus {
+      box-shadow: @box-shadow-active;
     }
   }
   &-type {
