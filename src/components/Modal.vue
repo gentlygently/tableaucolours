@@ -1,7 +1,13 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" @click.self.stop.prevent="$emit('close')">
-      <div class="modal-wrapper">
+    <div class="modal-mask">
+      <div
+        class="modal-wrapper"
+        ref="wrapper"
+        @mousedown.self="wrapperMouseDown"
+        @mouseup.self="wrapperMouseUp"
+        @mouseleave="wrapperMouseLeave"
+      >
         <div class="modal-container" :style="{ width: width }" @click.stop.prevent>
           <button class="modal-close icon-button fas fa-times" @click.stop.prevent="$emit('close')"></button>
           <slot></slot>
@@ -19,6 +25,11 @@ export default {
       type: String
     }
   },
+  data: function () {
+    return {
+      isMouseDownOnWrapper: false
+    }
+  },
   methods: {
     keyUp (event) {
       if (
@@ -27,9 +38,21 @@ export default {
       ) {
         this.$emit('close')
       }
+    },
+    wrapperMouseDown () {
+      this.isMouseDownOnWrapper = true
+    },
+    wrapperMouseLeave () {
+      this.isMouseDownOnWrapper = false
+    },
+    wrapperMouseUp () {
+      if (this.isMouseDownOnWrapper) {
+        this.isMouseDownOnWrapper = false
+        this.$emit('close')
+      }
     }
   },
-  created: function () {
+  created () {
     window.addEventListener('keyup', this.keyUp, false)
   },
   destroyed () {

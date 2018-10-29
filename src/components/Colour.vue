@@ -42,7 +42,6 @@ export default {
       this.$emit('select', this.colour)
     },
     remove () {
-      console.log('remove')
       this.$emit('remove', this.colour)
     }
   }
