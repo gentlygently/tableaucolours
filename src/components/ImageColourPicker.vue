@@ -1,6 +1,6 @@
 <template>
   <div class="imagecolourpicker">
-    <div class="imagecolourpicker-canvas">
+    <div class="imagecolourpicker-canvas" ref="canvas">
       <image-canvas
         :image="image"
         :scale="scale"
@@ -68,7 +68,18 @@ export default {
       reader.onload = function () {
         var tempImage = new Image()
         tempImage.onload = function () {
-          vm.scale = 1
+          let scale = 1
+          const canvasWidth = vm.$refs.canvas.clientWidth
+          const canvasHeight = vm.$refs.canvas.clientHeight
+
+          if (canvasWidth < this.width || canvasHeight < this.height) {
+            let xRatio = canvasWidth / this.width
+            let yRatio = canvasHeight / this.height
+
+            scale = Math.floor(Math.min(xRatio, yRatio) * 100) / 100.0
+          }
+
+          vm.scale = scale
           vm.image = this
         }
         tempImage.src = reader.result
