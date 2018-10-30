@@ -3,6 +3,7 @@
     class="palettetypes"
     @keyup.down.exact.stop.prevent="arrowDown"
     @keyup.up.exact.stop.prevent="arrowUp"
+    @keyup.enter.exact.stop.prevent="toggleList"
     @click.stop
   >
     <div
