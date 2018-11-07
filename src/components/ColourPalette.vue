@@ -52,7 +52,7 @@
         <button
           @click.prevent.stop="add"
           class="icon-button fas fa-plus"
-          title="Add colour"
+          title="Add colour (+)"
           :disabled="!canAddColour"
         ></button>
       </li>
@@ -180,25 +180,29 @@ export default {
     display: block;
     clear: both;
     list-style: none;
-    margin: 0;
+    margin: auto;
+    width: 20rem;
     padding: 0;
     box-sizing: border-box;
-    height: 3rem;
-    border-bottom: @border;
-    text-align: right;
-    overflow: hidden;
 
     > li {
       display: inline-block;
-      height: 2.9rem;
+      height: 4rem;
+      width: 5rem;
       border-left: @border;
-      width: 3rem;
+      border-top: @border;
+      border-bottom: @border;
       text-align: center;
       white-space: nowrap;
+      box-sizing: border-box;
+      overflow: hidden;
 
+      &:last-of-type {
+        border-right: @border;
+      }
       .icon-button {
         font-size: 1.7rem;
-        line-height: 2.9rem;
+        line-height: 3.8rem;
       }
 
       &.add {
