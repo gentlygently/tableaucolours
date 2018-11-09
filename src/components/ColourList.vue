@@ -139,7 +139,6 @@ export default {
 <style scoped lang="less">
 .colourlist {
   margin: 0;
-  padding: 1rem;
   height: 29rem;
 
   &-draggable {

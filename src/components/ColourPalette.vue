@@ -17,6 +17,7 @@
       />
     </div>
     <colour-list
+      class="colourpalette-colours"
       :colours="palette.colours"
       @move-colour="moveColour"
       @select-colour="selectColour"
@@ -38,7 +39,7 @@
         <button
           @click.prevent.stop="codeModalOpen = true"
           class="icon-button fas fa-code"
-          title="Get code"
+          title="Get XML"
         ></button>
       </li>
       <li class="discard">
@@ -173,8 +174,13 @@ export default {
     padding: 1rem;
     padding-top: 0;
   }
+  &-colours {
+    padding: 1rem;
+    padding-top: 0;
+  }
   &-preview {
     padding: 1rem;
+    padding-top: 0;
   }
   &-actions {
     display: block;
