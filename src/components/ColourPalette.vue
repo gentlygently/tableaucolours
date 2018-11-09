@@ -121,7 +121,9 @@ export default {
       this.$emit('type-selected', type)
     },
     discard () {
-      this.$emit('discard-palette')
+      if (confirm('Are you sure you want to discard this palette?')) {
+        this.$emit('discard-palette')
+      }
     },
     importPalette (palette) {
       this.importModalOpen = false
