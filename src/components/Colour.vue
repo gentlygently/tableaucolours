@@ -1,19 +1,32 @@
 <template>
   <li
     class="colour"
-    :class="activeClass"
+    :class="containerClasses"
     @click="click"
     :title="colour.colour"
     :style="{ 'grid-column': column, 'grid-row': row }"
   >
-    <div class="colour-swatch" :style="{ 'background-color': colour.colour }"></div>
+    <div
+      class="colour-swatch"
+      :style="{ 'background-color': colour.colour }"
+      @dblclick="isPickerOpen=true"
+    ></div>
     <div class="colour-remove" @click.prevent.stop="remove">
       <span class="fas fa-times"></span>
     </div>
+    <colour-picker
+      v-if="isPickerOpen"
+      class="colour-picker"
+      :colour="colour.colour"
+      @colour-picked="colourPicked"
+      @done="isPickerOpen=false"
+    />
   </li>
 </template>
 
 <script>
+import ColourPicker from './ColourPicker.vue'
+
 export default {
   name: 'Colour',
   props: {
@@ -26,9 +39,20 @@ export default {
       required: true
     }
   },
+  data: function () {
+    return {
+      isPickerOpen: false
+    }
+  },
+  components: {
+    ColourPicker
+  },
   computed: {
-    activeClass () {
-      return this.colour.isSelected ? 'colour--selected' : ''
+    containerClasses () {
+      let classes = []
+      if (this.colour.isSelected) classes.push('colour--selected')
+      if (this.isPickerOpen) classes.push('colour--pickeropen')
+      return classes
     },
     column () {
       return Math.floor(this.index / 5) + 1
@@ -40,6 +64,9 @@ export default {
   methods: {
     click () {
       this.$emit('select', this.colour)
+    },
+    colourPicked (hex) {
+      this.colour.colour = hex
     },
     remove () {
       this.$emit('remove', this.colour)
@@ -77,7 +104,9 @@ export default {
   }
 
   &--dragging .colour-remove,
-  &--dragging:hover .colour-remove {
+  &--dragging:hover .colour-remove,
+  &--pickeropen .colour-remove,
+  &--pickeropen:hover .colour-remove {
     display: none;
   }
 
@@ -105,6 +134,18 @@ export default {
     box-sizing: border-box;
     box-shadow: 0rem 0rem 0.1rem 0.1rem #fff;
     z-index: 1;
+  }
+
+  &-picker {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0.5rem;
+    left: 4.5rem;
+    width: 20rem;
+    box-sizing: border-box;
+    box-shadow: @box-shadow;
+    background-color: #fff;
   }
 }
 </style>
