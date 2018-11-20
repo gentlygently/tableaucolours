@@ -1,18 +1,16 @@
 <template>
   <ul class="colourlist">
     <draggable
-      v-model="draggableColours"
+      v-model="colours"
       class="colourlist-draggable"
       @change="colourMoved"
       :options="{ chosenClass: 'colour--dragging', delay: 25 }"
     >
       <Colour
-        v-for="(colour, index) in draggableColours"
+        v-for="(colour, index) in colours"
         :key="colour.id"
         :colour="colour"
         :index="index"
-        @select="select"
-        @remove="remove"
         class="colourlist-colour"
       />
     </draggable>
@@ -25,20 +23,14 @@ import draggable from 'vuedraggable'
 
 export default {
   name: 'ColourList',
-  props: {
-    colours: {
-      type: Array,
-      required: true
-    }
-  },
   components: {
     Colour,
     draggable
   },
   computed: {
-    draggableColours: {
+    colours: {
       get () {
-        return this.colours
+        return this.$store.state.palette.colours
       },
       set (newValue) {
         // ignore
@@ -77,23 +69,20 @@ export default {
     },
     select (colour) {
       if (colour) {
-        this.$emit('select-colour', colour)
+        this.$store.commit('palette/selectColour', { colour })
       }
     },
     selectByIndex (index) {
       this.select(this.getColour(index))
     },
     move (colour, newIndex) {
-      this.$emit('move-colour', { colour, newIndex })
+      this.$store.commit('palette/moveColour', { colour, newIndex })
     },
     moveSelectedColourToIndex (index) {
       if (index < 0) {
         return
       }
       this.move(this.colours[this.selectedColourIndex], index)
-    },
-    remove (colour) {
-      this.$emit('remove-colour', colour)
     },
     colourMoved (event) {
       this.move(this.colours[event.moved.oldIndex], event.moved.newIndex)
@@ -102,28 +91,28 @@ export default {
       if (event.target.tagName.toLowerCase() !== 'body') {
         return
       }
-      const moveOrSelect = event.getModifierState('Shift')
+      const action = event.getModifierState('Shift')
         ? this.moveSelectedColourToIndex
         : this.selectByIndex
       switch (event.key) {
         case 'Down':
         case 'ArrowDown':
-          moveOrSelect(this.getValidColumnIndex(this.selectedColourIndex, 1))
+          action(this.getValidColumnIndex(this.selectedColourIndex, 1))
           return
 
         case 'Up':
         case 'ArrowUp':
-          moveOrSelect(this.getValidColumnIndex(this.selectedColourIndex, -1))
+          action(this.getValidColumnIndex(this.selectedColourIndex, -1))
           return
 
         case 'Left':
         case 'ArrowLeft':
-          moveOrSelect(this.getValidRowIndex(this.selectedColourIndex, -5))
+          action(this.getValidRowIndex(this.selectedColourIndex, -5))
           return
 
         case 'Right':
         case 'ArrowRight':
-          moveOrSelect(this.getValidRowIndex(this.selectedColourIndex, 5))
+          action(this.getValidRowIndex(this.selectedColourIndex, 5))
       }
     }
   },

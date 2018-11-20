@@ -18,12 +18,6 @@ import he from 'he'
 
 export default {
   name: 'GetCode',
-  props: {
-    palette: {
-      type: Object,
-      required: true
-    }
-  },
   data: function () {
     return {
       copied: false
@@ -31,13 +25,12 @@ export default {
   },
   computed: {
     xml () {
-      let x = `<color-palette name="${he.encode(this.palette.name, {
+      const palette = this.$store.state.palette
+      let x = `<color-palette name="${he.encode(palette.name, {
         useNamedReferences: true
-      })}" type="${this.palette.type}">\n`
+      })}" type="${palette.type}">\n`
 
-      this.palette.colours.forEach(
-        c => (x += `    <color>${c.colour}</color>\n`)
-      )
+      palette.colours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
 
       return x + '</color-palette>'
     }

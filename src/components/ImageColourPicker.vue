@@ -28,23 +28,22 @@
 import ImageCanvas from './ImageCanvas.vue'
 import ImageFileOpen from './ImageFileOpen.vue'
 import ImageZoom from './ImageZoom.vue'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'ImageColourPicker',
   props: {
     canPickColour: Boolean
   },
-  data () {
-    return {
-      image: new Image(),
-      scale: 1,
-      zoomRange: { min: 0.1, max: 10 }
-    }
-  },
   computed: {
-    hasImage () {
-      return this.image.width > 0 && this.image.height > 0
-    }
+    ...mapGetters({
+      hasImage: 'image/hasImage'
+    }),
+    ...mapState({
+      image: state => state.image.image,
+      scale: state => state.image.scale,
+      zoomRange: state => state.image.zoomRange
+    })
   },
   components: {
     ImageCanvas,
@@ -52,39 +51,14 @@ export default {
     ImageZoom
   },
   methods: {
-    colourPicked (colour) {
-      this.$emit('colour-picked', colour)
+    colourPicked (hex) {
+      this.$store.dispatch('colour-picked', hex)
     },
     displayFirstImage (files) {
-      const file = files.find(i => i.type.indexOf('image/') > -1)
-
-      if (!file) {
-        console.log('File list did not contain image')
-        return
-      }
-
-      let vm = this
-      let reader = new FileReader()
-      reader.onload = function () {
-        var tempImage = new Image()
-        tempImage.onload = function () {
-          let scale = 1
-          const canvasWidth = vm.$refs.canvas.clientWidth
-          const canvasHeight = vm.$refs.canvas.clientHeight
-
-          if (canvasWidth < this.width || canvasHeight < this.height) {
-            let xRatio = canvasWidth / this.width
-            let yRatio = canvasHeight / this.height
-
-            scale = Math.floor(Math.min(xRatio, yRatio) * 100) / 100.0
-          }
-
-          vm.scale = scale
-          vm.image = this
-        }
-        tempImage.src = reader.result
-      }
-      reader.readAsDataURL(file)
+      this.$store.dispatch('image/displayFirstImage', {
+        files,
+        canvas: this.$refs.canvas
+      })
     },
     fileSelected (files) {
       this.displayFirstImage([...files])
@@ -106,12 +80,7 @@ export default {
       this.displayFirstImage(files)
     },
     zoom (scale) {
-      if (scale < this.zoomRange.min) {
-        scale = this.zoomRange.min
-      } else if (scale > this.zoomRange.max) {
-        scale = this.zoomRange.max
-      }
-      this.scale = scale
+      this.$store.commit('palette/zoom', { scale })
     }
   },
   created () {

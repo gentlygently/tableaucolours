@@ -2,7 +2,7 @@
   <div class="colourpicker" @keyup.enter="done" @click.stop.prevent>
     <sketch-colour-picker
       :disable-alpha="true"
-      :value="colour"
+      :value="hex"
       @input="colourPicked"
       :presetColors="[]"
     />
@@ -18,7 +18,7 @@ import { Sketch } from 'vue-color'
 export default {
   name: 'ColourPIcker',
   props: {
-    colour: {
+    hex: {
       type: String,
       required: true
     }

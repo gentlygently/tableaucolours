@@ -67,7 +67,8 @@ export default {
       this.palette = {}
     },
     importXml (event) {
-      this.$emit('import-palette', this.palette)
+      this.$store.commit('palette/import', this.palette)
+      this.$emit('close')
     }
   },
   watch: {

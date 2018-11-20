@@ -1,16 +1,7 @@
 <template>
   <main id="app">
     <section id="palettesection">
-      <colour-palette
-        :palette="palette"
-        @type-selected="typeSelected"
-        @add-colour="addColour"
-        @move-colour="moveColour"
-        @select-colour="selectColour"
-        @remove-colour="removeColour"
-        @discard-palette="discardPalette"
-        @import-palette="importPalette"
-      />
+      <colour-palette/>
     </section>
     <section id="imagesection">
       <image-colour-picker :can-pick-colour="canPickColour" @colour-picked="colourPicked"/>
@@ -22,87 +13,20 @@
 import ColourPalette from './components/ColourPalette.vue'
 import ImageColourPicker from './components/ImageColourPicker.vue'
 
-let nextColourId = 1
-
 export default {
   name: 'app',
   components: {
     ColourPalette,
     ImageColourPicker
   },
-  data () {
-    return {
-      palette: this.createPalette()
-    }
-  },
   computed: {
-    currentColour: {
-      get () {
-        return this.palette.colours.find(x => x.isSelected)
-      },
-      set (colour) {
-        this.palette.colours.forEach(x => (x.isSelected = x === colour))
-      }
-    },
     canPickColour () {
-      return !!this.currentColour
+      return !!this.$store.state.palette.selectedColour
     }
   },
   methods: {
-    createPalette (colours) {
-      colours = colours || ['#FFFFFF']
-      return {
-        name: '',
-        type: 'regular',
-        maximumColours: 20,
-        colours: colours.map((c, i) => ({
-          id: nextColourId++,
-          colour: c.toUpperCase(),
-          isSelected: i === 0
-        }))
-      }
-    },
-    typeSelected (type) {
-      this.palette.type = type
-    },
-    addColour () {
-      if (this.palette.colours.length >= this.palette.maximumColours) {
-        return
-      }
-      const colour = {
-        id: nextColourId++,
-        colour: '#FFFFFF',
-        isSelected: false
-      }
-      this.palette.colours.push(colour)
-      this.currentColour = colour
-    },
-    moveColour ({ colour, newIndex }) {
-      let colours = this.palette.colours
-      const oldIndex = colours.indexOf(colour)
-      colours.splice(newIndex, 0, colours.splice(oldIndex, 1)[0])
-      this.palette.colours = colours
-    },
-    colourPicked (colour) {
-      let currentColour = this.currentColour
-
-      if (currentColour) {
-        currentColour.colour = colour
-      }
-    },
-    importPalette (palette) {
-      this.palette = this.createPalette(palette.colours)
-      this.palette.name = palette.name
-      this.palette.type = palette.type
-    },
-    discardPalette () {
-      this.palette = this.createPalette()
-    },
-    selectColour (colour) {
-      this.currentColour = colour
-    },
-    removeColour (colour) {
-      this.palette.colours = this.palette.colours.filter(x => x !== colour)
+    colourPicked (hex) {
+      this.$store.dispatch('palette/updateSelectedColour', { hex })
     }
   }
 }
@@ -168,6 +92,11 @@ button.icon-button {
 
   &:hover {
     color: @tool-colour-hover;
+  }
+
+  &:disabled,
+  &:disabled:hover {
+    color: @tool-colour-disabled;
   }
 
   &:active {

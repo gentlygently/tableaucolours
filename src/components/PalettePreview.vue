@@ -18,16 +18,13 @@ export default {
           const width = 100 / this.palette.colours.length
           let position = 0
           return `linear-gradient(to right, ${this.palette.colours
-            .map(
-              x =>
-                `${x.colour} ${position}%, ${x.colour} ${(position += width)}%`
-            )
+            .map(x => `${x.hex} ${position}%, ${x.hex} ${(position += width)}%`)
             .join(', ')})`
 
         case 'ordered-diverging':
         case 'ordered-sequential':
           return `linear-gradient(to right, ${this.palette.colours
-            .map(x => x.colour)
+            .map(x => x.hex)
             .join(', ')})`
       }
       return ''

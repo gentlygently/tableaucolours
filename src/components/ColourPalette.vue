@@ -4,9 +4,10 @@
       <input
         type="text"
         id="name"
-        v-model="palette.name"
+        :value="palette.name"
         tabindex="1"
         placeholder="Enter a palette name"
+        @input="nameChanged"
       >
     </div>
     <div class="colourpalette-type">
@@ -16,13 +17,7 @@
         @type-selected="typeSelected"
       />
     </div>
-    <colour-list
-      class="colourpalette-colours"
-      :colours="palette.colours"
-      @move-colour="moveColour"
-      @select-colour="selectColour"
-      @remove-colour="removeColour"
-    />
+    <colour-list class="colourpalette-colours"/>
     <div class="colourpalette-preview">
       <palette-preview :palette="palette"/>
     </div>
@@ -59,10 +54,10 @@
       </li>
     </ul>
     <modal v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
-      <get-code :palette="palette"/>
+      <get-code/>
     </modal>
     <modal v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
-      <import-code @import-palette="importPalette" @close="importModalOpen = false"/>
+      <import-code @close="importModalOpen = false"/>
     </modal>
   </div>
 </template>
@@ -74,15 +69,10 @@ import ImportCode from './ImportCode.vue'
 import Modal from './Modal.vue'
 import PalettePreview from './PalettePreview.vue'
 import PaletteTypes from './PaletteTypes.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ColourPalette',
-  props: {
-    palette: {
-      type: Object,
-      required: true
-    }
-  },
   data: function () {
     return {
       codeModalOpen: false,
@@ -90,8 +80,11 @@ export default {
     }
   },
   computed: {
-    canAddColour () {
-      return this.palette.colours.length < this.palette.maximumColours
+    ...mapGetters({
+      canAddColour: 'palette/canAddColour'
+    }),
+    palette () {
+      return this.$store.state.palette
     }
   },
   components: {
@@ -104,30 +97,18 @@ export default {
   },
   methods: {
     add () {
-      if (this.canAddColour) {
-        this.$emit('add-colour')
-      }
+      this.$store.dispatch('palette/addColour')
     },
-    selectColour (colour) {
-      this.$emit('select-colour', colour)
-    },
-    removeColour (colour) {
-      this.$emit('remove-colour', colour)
-    },
-    moveColour (args) {
-      this.$emit('move-colour', args)
+    nameChanged (e) {
+      this.$store.commit('palette/setName', { name: e.target.value })
     },
     typeSelected (type) {
-      this.$emit('type-selected', type)
+      this.$store.commit('palette/setType', { type })
     },
     discard () {
       if (confirm('Are you sure you want to discard this palette?')) {
-        this.$emit('discard-palette')
+        this.$store.commit('palette/reset')
       }
-    },
-    importPalette (palette) {
-      this.importModalOpen = false
-      this.$emit('import-palette', palette)
     },
     keyUp (event) {
       if (event.target.tagName.toLowerCase() === 'body' && event.key === '+') {

@@ -3,12 +3,12 @@
     class="colour"
     :class="containerClasses"
     @click="click"
-    :title="colour.colour"
+    :title="colour.hex"
     :style="{ 'grid-column': column, 'grid-row': row }"
   >
     <div
       class="colour-swatch"
-      :style="{ 'background-color': colour.colour }"
+      :style="{ 'background-color': colour.hex }"
       @dblclick="isPickerOpen=true"
     ></div>
     <div class="colour-remove" @click.prevent.stop="remove">
@@ -17,7 +17,7 @@
     <colour-picker
       v-if="isPickerOpen"
       class="colour-picker"
-      :colour="colour.colour"
+      :hex="colour.hex"
       @colour-picked="colourPicked"
       @done="isPickerOpen=false"
     />
@@ -63,13 +63,13 @@ export default {
   },
   methods: {
     click () {
-      this.$emit('select', this.colour)
+      this.$store.commit('palette/selectColour', { colour: this.colour })
     },
     colourPicked (hex) {
-      this.colour.colour = hex
+      this.$store.commit('palette/updateColour', { colour: this.colour, hex })
     },
     remove () {
-      this.$emit('remove', this.colour)
+      this.$store.commit('palette/removeColour', { colour: this.colour })
     }
   }
 }
