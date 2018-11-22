@@ -80,7 +80,7 @@ export default {
       this.displayFirstImage(files)
     },
     zoom (scale) {
-      this.$store.commit('palette/zoom', { scale })
+      this.$store.commit('image/zoom', { scale })
     }
   },
   created () {

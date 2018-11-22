@@ -78,7 +78,7 @@ textarea {
   flex-grow: 1;
   overflow: hidden;
 }
-button.icon-button {
+.iconbutton {
   color: @tool-colour;
   text-decoration: none;
   margin: 0;

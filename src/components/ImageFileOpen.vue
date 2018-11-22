@@ -3,7 +3,7 @@
     <label ref="label" for="selectImage">
       <input id="selectImage" type="file" style="display:none;" @input="input">
       <button
-        class="imagefileopen--button icon-button fas fa-folder-open"
+        class="imagefileopen--button iconbutton fas fa-folder-open"
         title="Open image..."
         @click.prevent="click"
       ></button>

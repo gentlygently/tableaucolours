@@ -1,6 +1,6 @@
 <template>
   <div class="imagezoom">
-    <button class="icon-button imagezoom-out fas fa-image" @click.prevent.stop="zoomOut"></button>
+    <button class="iconbutton imagezoom-out fas fa-image" @click.prevent.stop="zoomOut"></button>
     <input
       type="range"
       min="1"
@@ -11,7 +11,7 @@
       @mouseup="sliderActive = false"
       class="imagezoom-slider"
     >
-    <button class="icon-button imagezoom-in fas fa-image" @click.prevent.stop="zoomIn"></button>
+    <button class="iconbutton imagezoom-in fas fa-image" @click.prevent.stop="zoomIn"></button>
     <div class="imagezoom-percentage">{{ percentage }}%</div>
   </div>
 </template>

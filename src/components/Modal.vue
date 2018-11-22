@@ -8,8 +8,8 @@
         @mouseup.self="wrapperMouseUp"
         @mouseleave="wrapperMouseLeave"
       >
-        <div class="modal-container" :style="{ width: width }" @click.stop.prevent>
-          <button class="modal-close icon-button fas fa-times" @click.stop.prevent="$emit('close')"></button>
+        <div class="modal-container" :style="{ width: width }" @click.stop>
+          <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="$emit('close')"></button>
           <slot></slot>
         </div>
       </div>

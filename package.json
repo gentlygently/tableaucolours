@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@mariotacke/color-thief": "^3.0.1",
     "he": "^1.2.0",
     "vue": "^2.5.17",
     "vue-color": "^2.7.0",

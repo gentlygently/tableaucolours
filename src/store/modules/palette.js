@@ -1,20 +1,27 @@
 let nextColourId = 1
 const defaultType = 'regular'
 
-function createColours (colours) {
+function createColours (colours, selectFirstColour) {
   colours = colours || ['#FFFFFF']
-  return colours.map((c, i) => ({
+  return colours.map((c, i) => createColour(c, selectFirstColour && i === 0))
+}
+
+function createColour (hex, isSelected) {
+  if (!hex) {
+    hex = '#FFFFFF'
+  }
+  return {
     id: nextColourId++,
-    hex: c.toUpperCase(),
-    isSelected: i === 0
-  }))
+    hex: hex.toUpperCase(),
+    isSelected: isSelected === true
+  }
 }
 
 const state = {
   name: '',
   type: defaultType,
   maximumColours: 20,
-  colours: createColours()
+  colours: createColours(null, true)
 }
 
 const getters = {
@@ -28,12 +35,15 @@ const mutations = {
     if (state.colours.length >= state.maximumColours) {
       return
     }
-    const colour = {
-      id: nextColourId++,
-      hex: '#FFFFFF',
-      isSelected: false
+    state.colours.push(createColour('#FFFFFF'))
+  },
+
+  addColours (state, { hexes }) {
+    const colourCapacity = state.maximumColours - state.colours.length
+    if (hexes.length > colourCapacity) {
+      hexes = hexes.slice(0, colourCapacity)
     }
-    state.colours.push(colour)
+    hexes.forEach(x => state.colours.push(createColour(x)))
   },
 
   import (state, { name, type, colours }) {
@@ -53,10 +63,17 @@ const mutations = {
     state.colours = state.colours.filter(x => x !== colour)
   },
 
+  replaceColours (state, { hexes }) {
+    if (hexes.length > state.maximumColours) {
+      hexes = hexes.slice(0, state.maximumColours)
+    }
+    state.colours = createColours(hexes, true)
+  },
+
   reset (state) {
     state.name = ''
     state.type = defaultType
-    state.colours = createColours()
+    state.colours = createColours(null, true)
   },
 
   selectColour (state, { colour }) {

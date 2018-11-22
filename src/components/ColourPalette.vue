@@ -23,31 +23,39 @@
     </div>
     <ul class="colourpalette-actions">
       <!-- TODO: Put these in a separate component? -->
+      <li class="extract">
+        <button
+          @click.prevent.stop="extractModalOpen = true"
+          class="iconbutton fas fa-magic"
+          title="Extract colours from image (magic!)"
+          :disabled="!canExtractColours"
+        ></button>
+      </li>
       <li class="import">
         <button
           @click.prevent.stop="importModalOpen = true"
-          class="icon-button fas fa-file-import"
+          class="iconbutton fas fa-file-import"
           title="Import XML"
         ></button>
       </li>
       <li class="code">
         <button
           @click.prevent.stop="codeModalOpen = true"
-          class="icon-button fas fa-code"
+          class="iconbutton fas fa-code"
           title="Get XML"
         ></button>
       </li>
       <li class="discard">
         <button
           @click.prevent.stop="discard"
-          class="icon-button fas fa-trash-alt"
+          class="iconbutton fas fa-trash-alt"
           title="Delete palette"
         ></button>
       </li>
       <li class="add">
         <button
           @click.prevent.stop="add"
-          class="icon-button fas fa-plus"
+          class="iconbutton fas fa-plus"
           title="Add colour (+)"
           :disabled="!canAddColour"
         ></button>
@@ -59,12 +67,16 @@
     <modal v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
       <import-code @close="importModalOpen = false"/>
     </modal>
+    <modal v-if="extractModalOpen" width="54rem" @close="extractModalOpen = false">
+      <extract-colours @close="extractModalOpen = false"/>
+    </modal>
   </div>
 </template>
 
 <script>
 import ColourList from './ColourList.vue'
 import GetCode from './GetCode.vue'
+import ExtractColours from './ExtractColours.vue'
 import ImportCode from './ImportCode.vue'
 import Modal from './Modal.vue'
 import PalettePreview from './PalettePreview.vue'
@@ -76,12 +88,14 @@ export default {
   data: function () {
     return {
       codeModalOpen: false,
+      extractModalOpen: false,
       importModalOpen: false
     }
   },
   computed: {
     ...mapGetters({
-      canAddColour: 'palette/canAddColour'
+      canAddColour: 'palette/canAddColour',
+      canExtractColours: 'image/hasImage'
     }),
     palette () {
       return this.$store.state.palette
@@ -90,6 +104,7 @@ export default {
   components: {
     ColourList,
     GetCode,
+    ExtractColours,
     ImportCode,
     Modal,
     PalettePreview,
@@ -170,14 +185,14 @@ export default {
     clear: both;
     list-style: none;
     margin: auto;
-    width: 20rem;
+    width: 22.5rem;
     padding: 0;
     box-sizing: border-box;
 
     > li {
       display: inline-block;
       height: 4rem;
-      width: 5rem;
+      width: 4.5rem;
       border-left: @border;
       border-top: @border;
       border-bottom: @border;
@@ -189,14 +204,14 @@ export default {
       &:last-of-type {
         border-right: @border;
       }
-      .icon-button {
+      .iconbutton {
         font-size: 1.7rem;
         line-height: 3.8rem;
       }
 
       &.add {
         padding-top: 0.1rem;
-        .icon-button {
+        .iconbutton {
           font-size: 1.9rem;
         }
       }
