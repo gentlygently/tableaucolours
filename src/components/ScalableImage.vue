@@ -95,6 +95,11 @@ export default {
         1
       ).data
 
+      if (this.colour[3] === 0) {
+        this.currentColour = ''
+        return
+      }
+
       this.currentColour =
         '#' +
         this.toHex(colour[0]) +

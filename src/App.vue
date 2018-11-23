@@ -12,6 +12,7 @@
 <script>
 import ColourPalette from './components/ColourPalette.vue'
 import ImageColourPicker from './components/ImageColourPicker.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'app',
@@ -20,8 +21,11 @@ export default {
     ImageColourPicker
   },
   computed: {
+    ...mapGetters({
+      selectedColour: 'palette/selectedColour'
+    }),
     canPickColour () {
-      return !!this.$store.state.palette.selectedColour
+      return !!this.selectedColour
     }
   },
   methods: {
