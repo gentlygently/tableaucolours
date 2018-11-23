@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { EventBus } from '../eventbus.js'
+
 export default {
   name: 'ImageFileOpen',
   methods: {
@@ -21,6 +23,12 @@ export default {
     click () {
       this.$refs.label.click()
     }
+  },
+  created: function () {
+    EventBus.$on('open-image-file', this.click)
+  },
+  destroyed: function () {
+    EventBus.$off('open-image-file', this.click)
   }
 }
 </script>

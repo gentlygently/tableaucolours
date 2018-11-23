@@ -1,6 +1,11 @@
 <template>
   <div class="imagezoom">
-    <button class="iconbutton imagezoom-out fas fa-image" @click.prevent.stop="zoomOut"></button>
+    <button
+      class="iconbutton imagezoom-out fas fa-image"
+      @click.prevent.stop="zoomOut"
+      title="Zoom out (Shift + Scroll-down)"
+      :disabled="!enabled"
+    ></button>
     <input
       type="range"
       min="1"
@@ -11,7 +16,12 @@
       @mouseup="sliderActive = false"
       class="imagezoom-slider"
     >
-    <button class="iconbutton imagezoom-in fas fa-image" @click.prevent.stop="zoomIn"></button>
+    <button
+      class="iconbutton imagezoom-in fas fa-image"
+      @click.prevent.stop="zoomIn"
+      title="Zoom in (Shift + Scroll-up)"
+      :disabled="!enabled"
+    ></button>
     <div class="imagezoom-percentage">{{ percentage }}%</div>
   </div>
 </template>
@@ -127,6 +137,10 @@ export default {
     background: @tool-colour-active;
   }
 
+  .sliderTrackDisabled {
+    background: @tool-colour-disabled;
+  }
+
   .sliderThumb {
     box-shadow: none;
     border: solid 0.1rem @tool-colour;
@@ -154,8 +168,18 @@ export default {
       .sliderTrack;
     }
 
-    &:active::-webkit-slider-runnable-track {
+    &::-webkit-slider-runnable-track:active {
       .sliderTrackActive;
+    }
+    &::-moz-range-track:active {
+      .sliderTrackActive;
+    }
+
+    &:disabled::-webkit-slider-runnable-track {
+      .sliderTrackDisabled;
+    }
+    &:disabled::-moz-range-track {
+      .sliderTrackDisabled;
     }
 
     &::-webkit-slider-thumb {

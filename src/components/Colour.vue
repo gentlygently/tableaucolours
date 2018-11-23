@@ -3,7 +3,7 @@
     class="colour"
     :class="containerClasses"
     @click="click"
-    :title="colour.hex"
+    :title="colour.hex + ' (double click to edit)'"
     :style="{ 'grid-column': column, 'grid-row': row }"
   >
     <div

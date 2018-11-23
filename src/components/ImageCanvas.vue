@@ -17,6 +17,13 @@
         @colour-picked="colourPicked"
       />
     </div>
+    <div class="canvashint" v-show="!hasImage">
+      <div class="canvashint-container">
+        <div class="canvashint-text">
+          <a href="#" @click.prevent="openFile">Open</a>, paste or drop an image to get started
+        </div>
+      </div>
+    </div>
     <div class="droptarget" ref="droptarget">
       <div class="droptarget-textwrapper">
         <div class="droptarget-text">
@@ -30,6 +37,7 @@
 
 <script>
 import ScalableImage from './ScalableImage.vue'
+import { EventBus } from '../eventbus.js'
 
 export default {
   name: 'ImageCanvas',
@@ -82,6 +90,9 @@ export default {
     },
     colourPicked (colour) {
       this.$emit('colour-picked', colour)
+    },
+    openFile () {
+      EventBus.$emit('open-image-file')
     },
     preventDefaults (event) {
       event.preventDefault()
@@ -137,8 +148,39 @@ export default {
     height: 100%;
   }
   &--drop {
+    .canvashint {
+      display: none;
+    }
     .droptarget {
       display: table;
+    }
+  }
+}
+.canvashint {
+  display: table;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9996;
+  &-container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+  &-text {
+    padding: 3rem;
+    border-radius: 0.5rem;
+    margin: 0 auto;
+    color: #fff;
+    background-color: #00000077;
+    font-size: 1.5rem;
+    display: inline-block;
+    a,
+    a:visited {
+      color: #fff;
     }
   }
 }
