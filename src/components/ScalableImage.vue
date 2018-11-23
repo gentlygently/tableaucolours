@@ -73,7 +73,9 @@ export default {
         return
       }
       this.setMouseAndColour(event)
-      this.$emit('colour-picked', this.currentColour)
+      if (this.currentColour) {
+        this.$emit('colour-picked', this.currentColour)
+      }
     },
     toHex (v) {
       const s = v.toString(16).toUpperCase()
@@ -95,7 +97,7 @@ export default {
         1
       ).data
 
-      if (this.colour[3] === 0) {
+      if (colour[3] === 0) {
         this.currentColour = ''
         return
       }

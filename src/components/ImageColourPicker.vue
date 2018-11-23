@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     colourPicked (hex) {
-      this.$store.dispatch('colour-picked', hex)
+      this.$store.dispatch('palette/updateSelectedColour', { hex })
     },
     displayFirstImage (files) {
       this.$store.dispatch('image/displayFirstImage', {
