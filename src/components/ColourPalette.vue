@@ -54,7 +54,7 @@
       </li>
       <li class="add">
         <button
-          @click.prevent.stop="add"
+          @click.prevent.stop="addColour"
           class="iconbutton fas fa-plus"
           title="Add colour (+)"
           :disabled="!canAddColour"
@@ -111,14 +111,8 @@ export default {
     PaletteTypes
   },
   methods: {
-    add () {
+    addColour () {
       this.$store.dispatch('palette/addColour')
-    },
-    nameChanged (e) {
-      this.$store.commit('palette/setName', { name: e.target.value })
-    },
-    typeSelected (type) {
-      this.$store.commit('palette/setType', { type })
     },
     discard () {
       if (confirm('Are you sure you want to discard this palette?')) {
@@ -126,12 +120,33 @@ export default {
       }
     },
     keyUp (event) {
-      if (event.target.tagName.toLowerCase() === 'body' && event.key === '+') {
-        this.add()
+      if (event.target.tagName.toLowerCase() !== 'body') {
+        return
       }
+      switch (event.key) {
+        case '+':
+          this.addColour()
+          return
+
+        case 'Backspace':
+        case 'Delete':
+          this.removeSelectedColour()
+      }
+    },
+    nameChanged (e) {
+      this.$store.commit('palette/setName', { name: e.target.value })
+    },
+    removeSelectedColour () {
+      console.log(this.$store.getters)
+      this.$store.commit('palette/removeColour', {
+        colour: this.$store.getters['palette/selectedColour']
+      })
+    },
+    typeSelected (type) {
+      this.$store.commit('palette/setType', { type })
     }
   },
-  created: function () {
+  created () {
     window.addEventListener('keyup', this.keyUp, false)
   },
   destroyed () {

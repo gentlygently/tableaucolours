@@ -17,11 +17,15 @@
         @colour-picked="colourPicked"
       />
     </div>
-    <div class="canvashint" v-show="!hasImage">
+    <div class="canvashint" v-show="!hasImage || !canPickColour">
       <div class="canvashint-container">
-        <div class="canvashint-text">
+        <div class="canvashint-text" v-show="!hasImage">
           <a href="#" @click.prevent="openFile">Open</a>, paste or drop an image to get started
         </div>
+        <div
+          class="canvashint-text"
+          v-show="hasImage && !canPickColour"
+        >Select a colour in the palette to pick colours from the image</div>
       </div>
     </div>
     <div class="droptarget" ref="droptarget">

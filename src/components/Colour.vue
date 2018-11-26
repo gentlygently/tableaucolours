@@ -11,7 +11,7 @@
       :style="{ 'background-color': colour.hex }"
       @dblclick="isPickerOpen=true"
     ></div>
-    <div class="colour-remove" @click.prevent.stop="remove">
+    <div class="colour-remove" @click.prevent.stop="remove" title="Delete colour (Delete)">
       <span class="fas fa-times"></span>
     </div>
     <colour-picker
