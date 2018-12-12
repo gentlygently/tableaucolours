@@ -8,6 +8,7 @@
         tabindex="1"
         placeholder="Enter a palette name"
         @input="nameChanged"
+        autocomplete="off"
       >
     </div>
     <div class="colourpalette-type">

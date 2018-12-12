@@ -1,7 +1,7 @@
 <template>
   <div class="imagefileopen">
     <label ref="label" for="selectImage">
-      <input id="selectImage" type="file" style="display:none;" @input="input">
+      <input id="selectImage" type="file" accept="image/*" style="display:none;" @input="input">
       <button
         class="imagefileopen--button iconbutton fas fa-folder-open"
         title="Open image..."
