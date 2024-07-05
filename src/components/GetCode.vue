@@ -15,6 +15,8 @@
 
 <script>
 import he from 'he'
+import { mapState } from 'pinia'
+import { usePaletteStore } from '@/stores/palette'
 
 export default {
   name: 'GetCode',
@@ -24,13 +26,13 @@ export default {
     }
   },
   computed: {
+    ...mapState(usePaletteStore, { paletteColours: 'colours', paletteName: 'name', paletteType: 'type' }),
     xml () {
-      const palette = this.$store.state.palette
-      let x = `<color-palette name="${he.encode(palette.name, {
+      let x = `<color-palette name="${he.encode(this.paletteName, {
         useNamedReferences: true
-      })}" type="${palette.type}">\n`
+      })}" type="${this.paletteType}">\n`
 
-      palette.colours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
+      this.paletteColours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
 
       return x + '</color-palette>'
     }

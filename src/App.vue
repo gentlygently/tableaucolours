@@ -12,7 +12,8 @@
 <script>
 import ColourPalette from './components/ColourPalette.vue'
 import ImageColourPicker from './components/ImageColourPicker.vue'
-import { mapGetters } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { usePaletteStore } from './stores/palette'
 
 export default {
   name: 'app',
@@ -21,16 +22,15 @@ export default {
     ImageColourPicker
   },
   computed: {
-    ...mapGetters({
-      selectedColour: 'palette/selectedColour'
-    }),
+    ...mapState(usePaletteStore, ['selectedColour']),
     canPickColour () {
       return !!this.selectedColour
     }
   },
   methods: {
+    ...mapActions(usePaletteStore, ['updateSelectedColour']),
     colourPicked (hex) {
-      this.$store.dispatch('palette/updateSelectedColour', { hex })
+      this.updateSelectedColour(hex)
     }
   }
 }

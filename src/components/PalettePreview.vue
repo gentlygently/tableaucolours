@@ -6,24 +6,28 @@
 export default {
   name: 'PalettePreview',
   props: {
-    palette: {
-      type: Object,
+    type: {
+      type: String,
+      required: true
+    },
+    colours: {
+      type: Array,
       required: true
     }
   },
   computed: {
     backgroundStyle () {
-      switch (this.palette.type) {
+      switch (this.type) {
         case 'regular':
-          const width = 100 / this.palette.colours.length
+          const width = 100 / this.colours.length
           let position = 0
-          return `linear-gradient(to right, ${this.palette.colours
+          return `linear-gradient(to right, ${this.colours
             .map(x => `${x.hex} ${position}%, ${x.hex} ${(position += width)}%`)
             .join(', ')})`
 
         case 'ordered-diverging':
         case 'ordered-sequential':
-          return `linear-gradient(to right, ${this.palette.colours
+          return `linear-gradient(to right, ${this.colours
             .map(x => x.hex)
             .join(', ')})`
       }

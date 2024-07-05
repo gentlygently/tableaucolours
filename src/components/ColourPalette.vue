@@ -4,23 +4,22 @@
       <input
         type="text"
         id="name"
-        :value="palette.name"
+        v-model="paletteName"
         tabindex="1"
         placeholder="Enter a palette name"
-        @input="nameChanged"
         autocomplete="off"
       >
     </div>
     <div class="colourpalette-type">
       <palette-types
-        :selected-type-name="palette.type"
+        :selected-type-name="paletteType"
         :tab-index="2"
         @type-selected="typeSelected"
       />
     </div>
     <colour-list class="colourpalette-colours"/>
     <div class="colourpalette-preview">
-      <palette-preview :palette="palette"/>
+      <palette-preview :type="paletteType" :colours="paletteColours" />
     </div>
     <ul class="colourpalette-actions">
       <!-- TODO: Put these in a separate component? -->
@@ -31,7 +30,8 @@
           title="Extract colours from image (magic!)"
           :disabled="!canExtractColours"
         ></button>
-      </li><li class="import">
+      </li>
+      <li class="import">
         <button
           @click.prevent.stop="importModalOpen = true"
           class="iconbutton fas fa-file-import"
@@ -81,7 +81,9 @@ import ImportCode from './ImportCode.vue'
 import Modal from './Modal.vue'
 import PalettePreview from './PalettePreview.vue'
 import PaletteTypes from './PaletteTypes.vue'
-import { mapGetters } from 'vuex'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { usePaletteStore } from '../stores/palette'
+import { useImageStore } from '../stores/image'
 
 export default {
   name: 'ColourPalette',
@@ -93,13 +95,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      canAddColour: 'palette/canAddColour',
-      canExtractColours: 'image/hasImage'
-    }),
-    palette () {
-      return this.$store.state.palette
-    }
+    ...mapState(useImageStore, {canExtractColours: 'hasImage' }),
+    ...mapState(usePaletteStore, ['canAddColour', 'selectedColour']),
+    ...mapState(usePaletteStore, { paletteColours: 'colours'}),
+    ...mapWritableState(usePaletteStore, { paletteName: 'name', paletteType: 'type' })
   },
   components: {
     ColourList,
@@ -111,12 +110,10 @@ export default {
     PaletteTypes
   },
   methods: {
-    addColour () {
-      this.$store.dispatch('palette/addColour')
-    },
+    ...mapActions(usePaletteStore, ['addColour', 'reset', 'removeColour']),
     discard () {
       if (confirm('Are you sure you want to discard this palette?')) {
-        this.$store.commit('palette/reset')
+        this.reset()
       }
     },
     keyUp (event) {
@@ -133,17 +130,11 @@ export default {
           this.removeSelectedColour()
       }
     },
-    nameChanged (e) {
-      this.$store.commit('palette/setName', { name: e.target.value })
-    },
     removeSelectedColour () {
-      console.log(this.$store.getters)
-      this.$store.commit('palette/removeColour', {
-        colour: this.$store.getters['palette/selectedColour']
-      })
+      this.removeColour(this.selectedColour)
     },
     typeSelected (type) {
-      this.$store.commit('palette/setType', { type })
+      this.paletteType = type;
     }
   },
   created () {

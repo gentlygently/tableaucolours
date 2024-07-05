@@ -26,6 +26,8 @@
 
 <script>
 import ColourPicker from './ColourPicker.vue'
+import { mapActions } from 'pinia'
+import { usePaletteStore } from '../stores/palette'
 
 export default {
   name: 'Colour',
@@ -62,14 +64,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions(usePaletteStore, ['selectColour', 'updateColour', 'removeColour']),
     click () {
-      this.$store.commit('palette/selectColour', { colour: this.colour })
+      this.selectColour(this.colour)
     },
     colourPicked (hex) {
-      this.$store.commit('palette/updateColour', { colour: this.colour, hex })
+      this.updateColour(this.colour, hex)
     },
     remove () {
-      this.$store.commit('palette/removeColour', { colour: this.colour })
+      this.removeColour(this.colour)
     }
   }
 }

@@ -26,6 +26,9 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia'
+import { usePaletteStore } from '../stores/palette'
+
 const xmlParser = new DOMParser()
 const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i
 
@@ -61,13 +64,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(usePaletteStore, ['import']),
     invalid (message) {
       this.isValid = false
       this.validationMessage = message
       this.palette = {}
     },
     importXml (event) {
-      this.$store.commit('palette/import', this.palette)
+      this.import(this.palette.name, this.palette.type, this.palette.colours)
       this.$emit('close')
     }
   },

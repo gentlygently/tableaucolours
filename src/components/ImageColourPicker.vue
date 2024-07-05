@@ -28,7 +28,9 @@
 import ImageCanvas from './ImageCanvas.vue'
 import ImageFileOpen from './ImageFileOpen.vue'
 import ImageZoom from './ImageZoom.vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { usePaletteStore } from '../stores/palette'
+import { useImageStore } from '../stores/image'
 
 export default {
   name: 'ImageColourPicker',
@@ -36,14 +38,8 @@ export default {
     canPickColour: Boolean
   },
   computed: {
-    ...mapGetters({
-      hasImage: 'image/hasImage'
-    }),
-    ...mapState({
-      image: state => state.image.image,
-      scale: state => state.image.scale,
-      zoomRange: state => state.image.zoomRange
-    })
+    ...mapState(useImageStore, ['hasImage', 'image', 'scale', 'zoomRange']),
+    ...mapWritableState(useImageStore, ['zoom'])
   },
   components: {
     ImageCanvas,
@@ -51,15 +47,17 @@ export default {
     ImageZoom
   },
   methods: {
+    ...mapActions(usePaletteStore, ['updateSelectedColour']),
+    ...mapActions(useImageStore, { displayFirstImageOnCanvas: 'displayFirstImage'}),
+
     colourPicked (hex) {
-      this.$store.dispatch('palette/updateSelectedColour', { hex })
+      this.updateSelectedColour(hex)
     },
+
     displayFirstImage (files) {
-      this.$store.dispatch('image/displayFirstImage', {
-        files,
-        canvas: this.$refs.canvas
-      })
+      this.displayFirstImageOnCanvas(files, this.$refs.canvas)
     },
+
     fileSelected (files) {
       this.displayFirstImage([...files])
     },
@@ -78,9 +76,6 @@ export default {
         .map(i => i.getAsFile())
 
       this.displayFirstImage(files)
-    },
-    zoom (scale) {
-      this.$store.commit('image/zoom', { scale })
     }
   },
   created () {

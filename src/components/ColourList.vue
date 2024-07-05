@@ -20,6 +20,8 @@
 <script>
 import Colour from './Colour.vue'
 import draggable from 'vuedraggable'
+import { mapActions, mapState } from 'pinia'
+import { usePaletteStore } from '../stores/palette'
 
 export default {
   name: 'ColourList',
@@ -28,9 +30,10 @@ export default {
     draggable
   },
   computed: {
+    ...mapState(usePaletteStore, { paletteColours: 'colours' }),
     colours: {
       get () {
-        return this.$store.state.palette.colours
+        return this.paletteColours
       },
       set (newValue) {
         // ignore
@@ -41,6 +44,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions(usePaletteStore, ['moveColour', 'selectColour']),
+
     getColour (index) {
       if (index < 0 || index >= this.colours.length) {
         return null
@@ -69,14 +74,14 @@ export default {
     },
     select (colour) {
       if (colour) {
-        this.$store.commit('palette/selectColour', { colour })
+        this.selectColour(colour)
       }
     },
     selectByIndex (index) {
       this.select(this.getColour(index))
     },
     move (colour, newIndex) {
-      this.$store.commit('palette/moveColour', { colour, newIndex })
+      this.moveColour(colour, newIndex)
     },
     moveSelectedColourToIndex (index) {
       if (index < 0) {

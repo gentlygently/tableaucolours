@@ -71,7 +71,9 @@
 
 <script>
 import ColorThief from '@mariotacke/color-thief'
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { usePaletteStore } from '../stores/palette'
+import { useImageStore } from '../stores/image'
 
 export default {
   name: 'ExtractColours',
@@ -83,16 +85,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      canAddColours: 'palette/canAddColour',
-      hasImage: 'image/hasImage'
-    }),
-
-    ...mapState({
-      image: state => state.image.image,
-      colours: state => state.palette.colours,
-      maximumColours: state => state.palette.maximumColours
-    }),
+    ...mapState(usePaletteStore, ['colours', 'maximumColours']),
+    ...mapState(usePaletteStore, {canAddColours: 'canAddColour' }),
+    ...mapState(useImageStore, ['hasImage', 'image']),
 
     action: {
       get () {
@@ -139,7 +134,10 @@ export default {
       }
     }
   },
+
   methods: {
+    ...mapActions(usePaletteStore, ['addColours', 'replaceColours']),
+
     extract () {
       const colours = new ColorThief().getPalette(
         this.image,
@@ -148,9 +146,15 @@ export default {
       const hexes = colours.map(
         x => '#' + this.toHex(x[0]) + this.toHex(x[1]) + this.toHex(x[2])
       )
-      const mutator = 'palette/' + this.action
-
-      this.$store.commit(mutator, { hexes })
+      switch (this.action)
+      {
+        case 'addColours':
+          this.addColours(hexes)
+          break
+        case 'replaceColours':
+          this.replaceColours(hexes)
+          break
+      }
       this.$emit('close')
     },
     toHex (v) {
