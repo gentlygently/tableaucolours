@@ -9,7 +9,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
-    "@mariotacke/color-thief": "^3.0.1",
+    "colorthief": "^2.4.0",
     "eslint": "^8.57.0",
     "he": "^1.2.0",
     "pinia": "^2.1.7",

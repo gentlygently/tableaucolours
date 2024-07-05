@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import ColorThief from '@mariotacke/color-thief'
+import ColorThief from  'colorthief'
 import { mapActions, mapState } from 'pinia'
 import { usePaletteStore } from '../stores/palette'
 import { useImageStore } from '../stores/image'
