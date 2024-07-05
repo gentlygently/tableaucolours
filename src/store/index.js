@@ -5,7 +5,7 @@ import palette from './modules/palette'
 
 Vue.use(Vuex)
 
-const debug = process.env.NODE_EBV !== 'production'
+const debug = import.meta.env.NODE_EBV !== 'production'
 
 export default new Vuex.Store({
   modules: {

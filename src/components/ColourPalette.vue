@@ -31,8 +31,7 @@
           title="Extract colours from image (magic!)"
           :disabled="!canExtractColours"
         ></button>
-      </li>
-      <li class="import">
+      </li><li class="import">
         <button
           @click.prevent.stop="importModalOpen = true"
           class="iconbutton fas fa-file-import"
