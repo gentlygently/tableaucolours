@@ -1,5 +1,5 @@
 <template>
-  <div class="imagecolourswatch" v-bind:style="swatchStyle">&nbsp;</div>
+  <div class="imagecolourswatch" :style="swatchStyle">&nbsp;</div>
 </template>
 
 <script>
@@ -8,22 +8,22 @@ export default {
   props: {
     colour: {
       type: String,
-      required: true
+      required: true,
     },
     mousePosition: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    swatchStyle () {
+    swatchStyle() {
       return {
         'background-color': this.colour,
         top: this.mousePosition.y - 40 + 'px',
-        left: this.mousePosition.x + 10 + 'px'
+        left: this.mousePosition.x + 10 + 'px',
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -8,32 +8,33 @@ export default {
   props: {
     type: {
       type: String,
-      required: true
+      required: true,
     },
     colours: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    backgroundStyle () {
+    backgroundStyle() {
+      function regular(colours) {
+        const width = 100 / colours.length
+        let position = 0
+        return `linear-gradient(to right, ${colours
+          .map(x => `${x.hex} ${position}%, ${x.hex} ${(position += width)}%`)
+          .join(', ')})`
+      }
       switch (this.type) {
         case 'regular':
-          const width = 100 / this.colours.length
-          let position = 0
-          return `linear-gradient(to right, ${this.colours
-            .map(x => `${x.hex} ${position}%, ${x.hex} ${(position += width)}%`)
-            .join(', ')})`
+          return regular(this.colours)
 
         case 'ordered-diverging':
         case 'ordered-sequential':
-          return `linear-gradient(to right, ${this.colours
-            .map(x => x.hex)
-            .join(', ')})`
+          return `linear-gradient(to right, ${this.colours.map(x => x.hex).join(', ')})`
       }
       return ''
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="imagecolourpicker">
-    <div class="imagecolourpicker-canvas" ref="canvas">
+    <div ref="canvas" class="imagecolourpicker-canvas">
       <image-canvas
         :image="image"
         :scale="scale"
@@ -14,10 +14,10 @@
       <!--  TODO: Put these in a separate component -->
       <ul class="controls">
         <li class="zoomImage">
-          <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom"/>
+          <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom" />
         </li>
         <li class="selectFile">
-          <image-file-open @file-selected="fileSelected"/>
+          <image-file-open @file-selected="fileSelected" />
         </li>
       </ul>
     </div>
@@ -35,33 +35,33 @@ import { useImageStore } from '../stores/image'
 export default {
   name: 'ImageColourPicker',
   props: {
-    canPickColour: Boolean
+    canPickColour: Boolean,
   },
   computed: {
     ...mapState(useImageStore, ['hasImage', 'image', 'scale', 'zoomRange']),
-    ...mapWritableState(useImageStore, ['zoom'])
+    ...mapWritableState(useImageStore, ['zoom']),
   },
   components: {
     ImageCanvas,
     ImageFileOpen,
-    ImageZoom
+    ImageZoom,
   },
   methods: {
     ...mapActions(usePaletteStore, ['updateSelectedColour']),
-    ...mapActions(useImageStore, { displayFirstImageOnCanvas: 'displayFirstImage'}),
+    ...mapActions(useImageStore, { displayFirstImageOnCanvas: 'displayFirstImage' }),
 
-    colourPicked (hex) {
+    colourPicked(hex) {
       this.updateSelectedColour(hex)
     },
 
-    displayFirstImage (files) {
+    displayFirstImage(files) {
       this.displayFirstImageOnCanvas(files, this.$refs.canvas)
     },
 
-    fileSelected (files) {
+    fileSelected(files) {
       this.displayFirstImage([...files])
     },
-    paste (event) {
+    paste(event) {
       if (
         !event.clipboardData ||
         !event.clipboardData.items ||
@@ -71,19 +71,17 @@ export default {
         return
       }
 
-      const files = [...event.clipboardData.items]
-        .filter(i => i.kind === 'file')
-        .map(i => i.getAsFile())
+      const files = [...event.clipboardData.items].filter(i => i.kind === 'file').map(i => i.getAsFile())
 
       this.displayFirstImage(files)
-    }
+    },
   },
-  created () {
+  created() {
     window.addEventListener('paste', this.paste, false)
   },
-  destroyed () {
+  destroyed() {
     window.removeEventListener('paste', this.paste)
-  }
+  },
 }
 </script>
 

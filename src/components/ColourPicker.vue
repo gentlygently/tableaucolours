@@ -1,11 +1,6 @@
 <template>
   <div class="colourpicker" @keyup.enter="done" @click.stop.prevent>
-    <sketch-colour-picker
-      :disable-alpha="true"
-      :value="hex"
-      @input="colourPicked"
-      :presetColors="[]"
-    />
+    <sketch-colour-picker :disable-alpha="true" :value="hex" :preset-colors="[]" @input="colourPicked" />
     <div class="colourpicker-buttons">
       <button class="colourpicker-done" @click.stop.prevent="done">Done</button>
     </div>
@@ -17,31 +12,31 @@ import { Sketch } from 'vue-color'
 
 export default {
   name: 'ColourPIcker',
+  components: {
+    'sketch-colour-picker': Sketch,
+  },
   props: {
     hex: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  components: {
-    'sketch-colour-picker': Sketch
+  created() {
+    window.addEventListener('click', this.done, false)
+  },
+  destroyed() {
+    window.removeEventListener('click', this.done)
   },
   methods: {
-    colourPicked (value) {
+    colourPicked(value) {
       if (value && value.hex) {
         this.$emit('colour-picked', value.hex)
       }
     },
-    done () {
+    done() {
       this.$emit('done')
-    }
+    },
   },
-  created () {
-    window.addEventListener('click', this.done, false)
-  },
-  destroyed () {
-    window.removeEventListener('click', this.done)
-  }
 }
 </script>
 

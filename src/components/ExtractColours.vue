@@ -2,75 +2,69 @@
   <div class="extractcolours">
     <div class="extractcolours-fields">
       <div class="extractcolours-field extractcolours-number">
-        <label
-          for="numberOfColours"
-          class="extractcolours-numberlabel"
-        >Number of colours to extract from image</label>
+        <label for="numberOfColours" class="extractcolours-numberlabel">Number of colours to extract from image</label>
         <div class="extractcolours-numbercontrol" :class="numberControlClass">
           <button
             class="iconbutton extractcolours-numberstep extractcolours-numberstep--down fas fa-minus"
-            @click="numberOfColoursToExtract--"
             :disabled="numberOfColoursToExtract <= 1"
+            @click="numberOfColoursToExtract--"
           ></button>
           <input
             id="numberofcolours"
+            ref="number"
+            v-model="numberOfColoursToExtract"
             type="number"
             min="1"
             :max="maximumColoursToExtract"
             class="extractcolours-numberinput"
-            v-model="numberOfColoursToExtract"
-            ref="number"
             tabindex="100"
-            @focus="numberHasFocus=true"
-            @blur="numberHasFocus=false"
-          >
+            @focus="numberHasFocus = true"
+            @blur="numberHasFocus = false"
+          />
           <button
             class="iconbutton extractcolours-numberstep extractcolours-numberstep--up fas fa-plus"
-            @click="numberOfColoursToExtract++"
             :disabled="numberOfColoursToExtract >= maximumColoursToExtract"
+            @click="numberOfColoursToExtract++"
           ></button>
         </div>
       </div>
       <div class="extractcolours-field extractcolours-action">
         <input
+          id="replaceColours"
+          v-model="action"
           type="radio"
           name="action"
-          id="replaceColours"
           value="replaceColours"
           class="extractcolours-actioninput"
-          v-model="action"
           tabindex="101"
-        >
+        />
         <label for="replaceColours" class="extractcolours-actionlabel">
           <span class="extractcolours-radio"></span>Replace existing colours
         </label>
       </div>
       <div class="extractcolours-field extractcolours-action" :class="addColoursClass">
         <input
+          id="addColours"
+          v-model="action"
           type="radio"
           name="action"
-          id="addColours"
           value="addColours"
-          v-model="action"
           class="extractcolours-actioninput"
           :disabled="!canAddColours"
           tabinex="101"
-        >
+        />
         <label for="addColours" class="extractcolours-actionlabel" :title="addColoursTitle">
           <span class="extractcolours-radio"></span>Add to existing colours
         </label>
       </div>
     </div>
     <button class="extractcolours-button extractcolours-button--extract" @click="extract">Extract</button>
-    <button
-      class="extractcolours-button extractcolours-button--cancel"
-      @click="$emit('close')"
-    >Cancel</button>
+    <button class="extractcolours-button extractcolours-button--cancel" @click="$emit('close')">Cancel</button>
   </div>
 </template>
 
 <script>
-import ColorThief from  'colorthief'
+import ColorThief from 'colorthief'
 import { mapActions, mapState } from 'pinia'
 import { usePaletteStore } from '../stores/palette'
 import { useImageStore } from '../stores/image'
@@ -81,73 +75,61 @@ export default {
     return {
       replaceExisting: true,
       numberHasFocus: false,
-      numberOfColours: 4
+      numberOfColours: 4,
     }
   },
   computed: {
     ...mapState(usePaletteStore, ['colours', 'maximumColours']),
-    ...mapState(usePaletteStore, {canAddColours: 'canAddColour' }),
+    ...mapState(usePaletteStore, { canAddColours: 'canAddColour' }),
     ...mapState(useImageStore, ['hasImage', 'image']),
 
     action: {
-      get () {
-        return !this.canAddColours || this.replaceExisting
-          ? 'replaceColours'
-          : 'addColours'
+      get() {
+        return !this.canAddColours || this.replaceExisting ? 'replaceColours' : 'addColours'
       },
-      set (newValue) {
+      set(newValue) {
         this.replaceExisting = newValue === 'replaceColours'
-      }
+      },
     },
 
-    addColoursClass () {
+    addColoursClass() {
       return this.canAddColours ? '' : 'extractcolours-field--disabled'
     },
 
-    addColoursTitle () {
+    addColoursTitle() {
       return this.canAddColours ? '' : 'The colour palette is already full'
     },
 
-    maximumColoursToExtract () {
-      return this.action === 'replaceColours'
-        ? this.maximumColours
-        : this.maximumColours - this.colours.length
+    maximumColoursToExtract() {
+      return this.action === 'replaceColours' ? this.maximumColours : this.maximumColours - this.colours.length
     },
 
-    numberControlClass () {
+    numberControlClass() {
       return this.numberHasFocus ? 'extractcolours-numbercontrol--focus' : ''
     },
 
     numberOfColoursToExtract: {
-      get () {
-        return this.numberOfColours > this.maximumColoursToExtract
-          ? this.maximumColoursToExtract
-          : this.numberOfColours
+      get() {
+        return this.numberOfColours > this.maximumColoursToExtract ? this.maximumColoursToExtract : this.numberOfColours
       },
-      set (newValue) {
+      set(newValue) {
         if (newValue > this.maximumColoursToExtract) {
           newValue = this.maximumColoursToExtract
         } else if (newValue < 1) {
           newValue = 1
         }
         this.numberOfColours = newValue
-      }
-    }
+      },
+    },
   },
 
   methods: {
     ...mapActions(usePaletteStore, ['addColours', 'replaceColours']),
 
-    extract () {
-      const colours = new ColorThief().getPalette(
-        this.image,
-        this.numberOfColoursToExtract
-      )
-      const hexes = colours.map(
-        x => '#' + this.toHex(x[0]) + this.toHex(x[1]) + this.toHex(x[2])
-      )
-      switch (this.action)
-      {
+    extract() {
+      const colours = new ColorThief().getPalette(this.image, this.numberOfColoursToExtract)
+      const hexes = colours.map(x => '#' + this.toHex(x[0]) + this.toHex(x[1]) + this.toHex(x[2]))
+      switch (this.action) {
         case 'addColours':
           this.addColours(hexes)
           break
@@ -157,14 +139,14 @@ export default {
       }
       this.$emit('close')
     },
-    toHex (v) {
+    toHex(v) {
       const s = v.toString(16).toUpperCase()
       return s.length === 1 ? '0' + s : s
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.$refs.number.focus()
-  }
+  },
 }
 </script>
 

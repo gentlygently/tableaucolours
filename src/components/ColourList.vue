@@ -3,10 +3,10 @@
     <draggable
       v-model="colours"
       class="colourlist-draggable"
-      @change="colourMoved"
       :options="{ chosenClass: 'colour--dragging', delay: 25 }"
+      @change="colourMoved"
     >
-      <Colour
+      <colour-swatch
         v-for="(colour, index) in colours"
         :key="colour.id"
         :colour="colour"
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Colour from './Colour.vue'
+import ColourSwatch from './ColourSwatch.vue'
 import draggable from 'vuedraggable'
 import { mapActions, mapState } from 'pinia'
 import { usePaletteStore } from '../stores/palette'
@@ -26,33 +26,39 @@ import { usePaletteStore } from '../stores/palette'
 export default {
   name: 'ColourList',
   components: {
-    Colour,
-    draggable
+    ColourSwatch,
+    draggable,
   },
   computed: {
     ...mapState(usePaletteStore, { paletteColours: 'colours' }),
     colours: {
-      get () {
+      get() {
         return this.paletteColours
       },
-      set (newValue) {
+      set() {
         // ignore
-      }
+      },
     },
-    selectedColourIndex () {
+    selectedColourIndex() {
       return this.colours.findIndex(x => x.isSelected)
-    }
+    },
+  },
+  created: function () {
+    window.addEventListener('keyup', this.keyUp, false)
+  },
+  destroyed() {
+    window.removeEventListener('keyup', this.keyUp)
   },
   methods: {
     ...mapActions(usePaletteStore, ['moveColour', 'selectColour']),
 
-    getColour (index) {
+    getColour(index) {
       if (index < 0 || index >= this.colours.length) {
         return null
       }
       return this.colours[index]
     },
-    getValidColumnIndex (currentIndex, increment) {
+    getValidColumnIndex(currentIndex, increment) {
       const newIndex = currentIndex + increment
       if (newIndex < 0 || newIndex >= this.colours.length) {
         return -1
@@ -62,7 +68,7 @@ export default {
 
       return newColumn === currentColumn ? newIndex : -1
     },
-    getValidRowIndex (currentIndex, increment) {
+    getValidRowIndex(currentIndex, increment) {
       const newIndex = currentIndex + increment
       if (newIndex < 0 || newIndex >= this.colours.length) {
         return -1
@@ -72,33 +78,31 @@ export default {
 
       return newRow === currentRow ? newIndex : -1
     },
-    select (colour) {
+    select(colour) {
       if (colour) {
         this.selectColour(colour)
       }
     },
-    selectByIndex (index) {
+    selectByIndex(index) {
       this.select(this.getColour(index))
     },
-    move (colour, newIndex) {
+    move(colour, newIndex) {
       this.moveColour(colour, newIndex)
     },
-    moveSelectedColourToIndex (index) {
+    moveSelectedColourToIndex(index) {
       if (index < 0) {
         return
       }
       this.move(this.colours[this.selectedColourIndex], index)
     },
-    colourMoved (event) {
+    colourMoved(event) {
       this.move(this.colours[event.moved.oldIndex], event.moved.newIndex)
     },
-    keyUp (event) {
+    keyUp(event) {
       if (event.target.tagName.toLowerCase() !== 'body') {
         return
       }
-      const action = event.getModifierState('Shift')
-        ? this.moveSelectedColourToIndex
-        : this.selectByIndex
+      const action = event.getModifierState('Shift') ? this.moveSelectedColourToIndex : this.selectByIndex
       switch (event.key) {
         case 'Down':
         case 'ArrowDown':
@@ -119,14 +123,8 @@ export default {
         case 'ArrowRight':
           action(this.getValidRowIndex(this.selectedColourIndex, 5))
       }
-    }
+    },
   },
-  created: function () {
-    window.addEventListener('keyup', this.keyUp, false)
-  },
-  destroyed () {
-    window.removeEventListener('keyup', this.keyUp)
-  }
 }
 </script>
 

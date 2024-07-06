@@ -1,7 +1,7 @@
 <template>
   <div class="scalableimage">
     <div class="scalableimage-hackyverticalspacer">&nbsp;</div>
-    <div class="scalableimage-image" :class="{'scalableimage-image--active': canPickColour}">
+    <div class="scalableimage-image" :class="{ 'scalableimage-image--active': canPickColour }">
       <image-colour-swatch
         v-show="canPickColour && currentColour"
         :colour="currentColour"
@@ -25,38 +25,51 @@ const defaultMousePosition = { x: 0, y: 0 }
 
 export default {
   name: 'ScalableImage',
+  components: {
+    ImageColourSwatch,
+  },
   props: {
     canPickColour: {
-      type: Boolean
+      type: Boolean,
     },
     image: {
       type: HTMLImageElement,
-      required: true
+      required: true,
     },
     scale: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data: function () {
     return {
       currentColour: '',
-      mousePosition: defaultMousePosition
+      mousePosition: defaultMousePosition,
     }
   },
   computed: {
-    height () {
+    height() {
       return this.image.height * this.scale
     },
-    width () {
+    width() {
       return this.image.width * this.scale
     },
-    activeClass () {
+    activeClass() {
       return this.canPickColour ? 'active' : ''
-    }
+    },
+  },
+  watch: {
+    image() {
+      this.resetMouseAndColour()
+      this.drawImage()
+    },
+    scale() {
+      this.resetMouseAndColour()
+      this.drawImage()
+    },
   },
   methods: {
-    drawImage () {
+    drawImage() {
       let canvas = this.$refs.image
       const drawingContext = this.getDrawingContext()
 
@@ -65,10 +78,10 @@ export default {
       drawingContext.scale(this.scale, this.scale)
       drawingContext.drawImage(this.image, 0, 0)
     },
-    getDrawingContext () {
+    getDrawingContext() {
       return this.$refs.image.getContext('2d')
     },
-    click (event) {
+    click(event) {
       if (!this.canPickColour) {
         return
       }
@@ -77,54 +90,32 @@ export default {
         this.$emit('colour-picked', this.currentColour)
       }
     },
-    toHex (v) {
+    toHex(v) {
       const s = v.toString(16).toUpperCase()
       return s.length === 1 ? '0' + s : s
     },
-    setMouseAndColour (event) {
+    setMouseAndColour(event) {
       this.setCurrentColour(event)
       this.setMousePosition(event)
     },
-    resetMouseAndColour () {
+    resetMouseAndColour() {
       this.currentColour = ''
       this.mousePosition = defaultMousePosition
     },
-    setCurrentColour (event) {
-      const colour = this.getDrawingContext().getImageData(
-        event.offsetX,
-        event.offsetY,
-        1,
-        1
-      ).data
+    setCurrentColour(event) {
+      const colour = this.getDrawingContext().getImageData(event.offsetX, event.offsetY, 1, 1).data
 
       if (colour[3] === 0) {
         this.currentColour = ''
         return
       }
 
-      this.currentColour =
-        '#' +
-        this.toHex(colour[0]) +
-        this.toHex(colour[1]) +
-        this.toHex(colour[2])
+      this.currentColour = '#' + this.toHex(colour[0]) + this.toHex(colour[1]) + this.toHex(colour[2])
     },
-    setMousePosition (event) {
+    setMousePosition(event) {
       this.mousePosition = { x: event.offsetX, y: event.offsetY }
-    }
-  },
-  watch: {
-    image () {
-      this.resetMouseAndColour()
-      this.drawImage()
     },
-    scale () {
-      this.resetMouseAndColour()
-      this.drawImage()
-    }
   },
-  components: {
-    ImageColourSwatch
-  }
 }
 </script>
 

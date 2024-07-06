@@ -2,25 +2,18 @@
   <div class="importcode">
     <div class="importcode-codecontainer">
       <textarea
+        ref="code"
+        v-model.trim="xml"
         class="importcode-code"
         :class="codeClasses"
-        v-model.trim="xml"
         placeholder="Paste a &lt;color-palette&gt;"
         autocorrect="off"
         autocapitalize="off"
         spellcheck="false"
-        ref="code"
       ></textarea>
-      <div
-        class="importcode-validationmessage"
-        v-show="hasValidationMessage"
-      >{{ validationMessage }}</div>
+      <div v-show="hasValidationMessage" class="importcode-validationmessage">{{ validationMessage }}</div>
     </div>
-    <button
-      class="importcode-button importcode-button--import"
-      @click="importXml"
-      :disabled="!isValid"
-    >Import</button>
+    <button class="importcode-button importcode-button--import" :disabled="!isValid" @click="importXml">Import</button>
     <button class="importcode-button importcode-button--cancel" @click="$emit('close')">Cancel</button>
   </div>
 </template>
@@ -39,17 +32,17 @@ export default {
       xml: '',
       isValid: false,
       validationMessage: '',
-      palette: {}
+      palette: {},
     }
   },
   computed: {
-    hasCode () {
+    hasCode() {
       return !!this.xml
     },
-    hasValidationMessage () {
+    hasValidationMessage() {
       return !!this.validationMessage
     },
-    codeClasses () {
+    codeClasses() {
       let classes = []
 
       if (this.hasCode && !this.isValid) {
@@ -61,22 +54,10 @@ export default {
       }
 
       return classes
-    }
-  },
-  methods: {
-    ...mapActions(usePaletteStore, ['import']),
-    invalid (message) {
-      this.isValid = false
-      this.validationMessage = message
-      this.palette = {}
     },
-    importXml (event) {
-      this.import(this.palette.name, this.palette.type, this.palette.colours)
-      this.$emit('close')
-    }
   },
   watch: {
-    xml (newValue) {
+    xml(newValue) {
       if (!newValue) {
         return this.invalid('')
       }
@@ -92,9 +73,7 @@ export default {
         return this.invalid('Expected a root element of <color-palette>')
       }
 
-      const colours = [...root.children]
-        .filter(x => x.tagName === 'color')
-        .map(x => x.innerHTML.trim())
+      const colours = [...root.children].filter(x => x.tagName === 'color').map(x => x.innerHTML.trim())
 
       if (!colours.length) {
         return this.invalid('Expected one or more <color> elements')
@@ -115,13 +94,25 @@ export default {
       this.palette = {
         name: root.getAttribute('name'),
         type: root.getAttribute('type'),
-        colours: colours
+        colours: colours,
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.$refs.code.focus()
-  }
+  },
+  methods: {
+    ...mapActions(usePaletteStore, ['import']),
+    invalid(message) {
+      this.isValid = false
+      this.validationMessage = message
+      this.palette = {}
+    },
+    importXml() {
+      this.import(this.palette.name, this.palette.type, this.palette.colours)
+      this.$emit('close')
+    },
+  },
 }
 </script>
 

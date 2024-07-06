@@ -2,8 +2,8 @@
   <transition name="modal">
     <div class="modal-mask">
       <div
-        class="modal-wrapper"
         ref="wrapper"
+        class="modal-wrapper"
         @mousedown.self="wrapperMouseDown"
         @mouseup.self="wrapperMouseUp"
         @mouseleave="wrapperMouseLeave"
@@ -19,45 +19,43 @@
 
 <script>
 export default {
-  name: 'Modal',
+  name: 'ModalPanel',
   props: {
     width: {
-      type: String
-    }
+      type: String,
+      required: true,
+    },
   },
   data: function () {
     return {
-      isMouseDownOnWrapper: false
+      isMouseDownOnWrapper: false,
     }
   },
+  created() {
+    window.addEventListener('keyup', this.keyUp, false)
+  },
+  destroyed() {
+    window.removeEventListener('keyup', this.keyUp)
+  },
   methods: {
-    keyUp (event) {
-      if (
-        event.target.tagName.toLowerCase() !== 'input' &&
-        event.key === 'Escape'
-      ) {
+    keyUp(event) {
+      if (event.target.tagName.toLowerCase() !== 'input' && event.key === 'Escape') {
         this.$emit('close')
       }
     },
-    wrapperMouseDown () {
+    wrapperMouseDown() {
       this.isMouseDownOnWrapper = true
     },
-    wrapperMouseLeave () {
+    wrapperMouseLeave() {
       this.isMouseDownOnWrapper = false
     },
-    wrapperMouseUp () {
+    wrapperMouseUp() {
       if (this.isMouseDownOnWrapper) {
         this.isMouseDownOnWrapper = false
         this.$emit('close')
       }
-    }
+    },
   },
-  created () {
-    window.addEventListener('keyup', this.keyUp, false)
-  },
-  destroyed () {
-    window.removeEventListener('keyup', this.keyUp)
-  }
 }
 </script>
 

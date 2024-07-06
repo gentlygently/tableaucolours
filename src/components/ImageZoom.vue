@@ -2,25 +2,25 @@
   <div class="imagezoom">
     <button
       class="iconbutton imagezoom-out fas fa-image"
-      @click.prevent.stop="zoomOut"
       title="Zoom out (Shift + Scroll-down)"
       :disabled="!enabled"
+      @click.prevent.stop="zoomOut"
     ></button>
     <input
+      v-model="sliderValue"
       type="range"
       min="1"
       max="100"
       :disabled="!enabled"
-      v-model="sliderValue"
+      class="imagezoom-slider"
       @mousedown="sliderActive = true"
       @mouseup="sliderActive = false"
-      class="imagezoom-slider"
-    >
+    />
     <button
       class="iconbutton imagezoom-in fas fa-image"
-      @click.prevent.stop="zoomIn"
       title="Zoom in (Shift + Scroll-up)"
       :disabled="!enabled"
+      @click.prevent.stop="zoomIn"
     ></button>
     <div class="imagezoom-percentage">{{ percentage }}%</div>
   </div>
@@ -30,23 +30,23 @@
 export default {
   name: 'ImageZoom',
   props: {
-    scale: Number,
-    range: Object,
-    enabled: Boolean
+    scale: { type: Number, required: true },
+    range: { type: Object, required: true },
+    enabled: Boolean,
   },
   data: function () {
     return {
       sliderValue: 50,
-      sliderActive: false
+      sliderActive: false,
     }
   },
   computed: {
-    percentage () {
+    percentage() {
       return Math.round(100 * this.scale)
-    }
+    },
   },
   watch: {
-    scale (newValue) {
+    scale(newValue) {
       if (this.sliderActive) {
         return
       }
@@ -55,30 +55,30 @@ export default {
           ? ((newValue - this.range.min) * 49) / (1 - this.range.min) + 1
           : ((newValue - 1) * 50) / (this.range.max - 1) + 50
     },
-    sliderValue (newValue) {
+    sliderValue(newValue) {
       const scale =
         newValue < 50
           ? ((newValue - 1) * (1 - this.range.min)) / 49 + this.range.min
           : ((newValue - 50) * (this.range.max - 1)) / 50 + 1
 
       this.$emit('zoom', scale)
-    }
+    },
   },
   methods: {
-    input (event, value) {
+    input(event) {
       this.sliderValue = event.target.value
     },
-    zoomIn () {
+    zoomIn() {
       if (this.enabled) {
         this.$emit('zoom', this.scale * 1.1)
       }
     },
-    zoomOut () {
+    zoomOut() {
       if (this.enabled) {
         this.$emit('zoom', this.scale * 0.9)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -127,7 +127,9 @@ export default {
     width: 100%;
     height: 0.2rem;
     cursor: pointer;
-    box-shadow: 0 0 0.1rem #000000, 0 0 0 #0d0d0d;
+    box-shadow:
+      0 0 0.1rem #000000,
+      0 0 0 #0d0d0d;
     background: @tool-colour;
     border-radius: 0;
     border: 0;

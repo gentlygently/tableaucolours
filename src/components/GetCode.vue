@@ -1,11 +1,11 @@
 <template>
   <div class="getcode">
     <div class="getcode-codecontainer">
-      <pre class="getcode-code" ref="code">{{ xml }}</pre>
+      <pre ref="code" class="getcode-code">{{ xml }}</pre>
     </div>
     <transition>
-      <button class="getcode-copy" @click.stop.prevent="copy" v-if="!copied">Copy to clipboard</button>
-      <button class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy" v-if="copied">
+      <button v-if="!copied" class="getcode-copy" @click.stop.prevent="copy">Copy to clipboard</button>
+      <button v-if="copied" class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy">
         Copied
         <span class="fas fa-check"></span>
       </button>
@@ -22,23 +22,26 @@ export default {
   name: 'GetCode',
   data: function () {
     return {
-      copied: false
+      copied: false,
     }
   },
   computed: {
     ...mapState(usePaletteStore, { paletteColours: 'colours', paletteName: 'name', paletteType: 'type' }),
-    xml () {
+    xml() {
       let x = `<color-palette name="${he.encode(this.paletteName, {
-        useNamedReferences: true
+        useNamedReferences: true,
       })}" type="${this.paletteType}">\n`
 
       this.paletteColours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
 
       return x + '</color-palette>'
-    }
+    },
+  },
+  created: function () {
+    this.copied = false
   },
   methods: {
-    copy () {
+    copy() {
       if (document.body.createTextRange) {
         const range = document.body.createTextRange()
         range.moveToElementText(this.$refs.code)
@@ -55,15 +58,12 @@ export default {
       document.execCommand('copy')
       this.copied = true
     },
-    xmlEscape (s) {
+    xmlEscape(s) {
       let el = document.createElement('textarea')
       el.value = s
       return el.innerHTML
-    }
+    },
   },
-  created: function () {
-    this.copied = false
-  }
 }
 </script>
 

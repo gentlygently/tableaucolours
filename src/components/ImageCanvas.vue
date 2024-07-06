@@ -1,8 +1,8 @@
 <template>
   <div
+    ref="container"
     class="imagecanvas"
     :class="dropClass"
-    ref="container"
     @dragenter.prevent="dragEnter"
     @dragover.prevent="dragEnter"
     @dragleave.prevent="dragLeave"
@@ -17,22 +17,21 @@
         @colour-picked="colourPicked"
       />
     </div>
-    <div class="canvashint" v-show="!hasImage || !canPickColour">
+    <div v-show="!hasImage || !canPickColour" class="canvashint">
       <div class="canvashint-container">
-        <div class="canvashint-text" v-show="!hasImage">
+        <div v-show="!hasImage" class="canvashint-text">
           <a href="#" @click.prevent="openFile">Open</a>, paste or drop an image to get started
         </div>
-        <div
-          class="canvashint-text"
-          v-show="hasImage && !canPickColour"
-        >Select a colour in the palette to pick colours from the image</div>
+        <div v-show="hasImage && !canPickColour" class="canvashint-text">
+          Select a colour in the palette to pick colours from the image
+        </div>
       </div>
     </div>
-    <div class="droptarget" ref="droptarget">
+    <div ref="droptarget" class="droptarget">
       <div class="droptarget-textwrapper">
         <div class="droptarget-text">
           <span class="droptarget-icon fas fa-hand-point-down"></span>
-          <br>Drop image here
+          <br />Drop image here
         </div>
       </div>
     </div>
@@ -45,70 +44,26 @@ import { EventBus } from '../eventbus.js'
 
 export default {
   name: 'ImageCanvas',
+  components: {
+    ScalableImage,
+  },
   props: {
     canPickColour: Boolean,
     image: HTMLImageElement,
-    scale: Number
+    scale: Number,
   },
   data: function () {
     return {
-      isDropHighlightActive: false
+      isDropHighlightActive: false,
     }
-  },
-  components: {
-    ScalableImage
   },
   computed: {
-    hasImage () {
+    hasImage() {
       return this.image.width && this.image.height
     },
-    dropClass () {
+    dropClass() {
       return this.isDropHighlightActive ? 'imagecanvas--drop' : ''
-    }
-  },
-  methods: {
-    dragEnter (event) {
-      if (
-        event.dataTransfer.files.length ||
-        [...event.dataTransfer.items].find(
-          x => x.kind === 'file' && x.type.indexOf('image/' > -1)
-        )
-      ) {
-        this.isDropHighlightActive = true
-        event.dataTransfer.dropEffect = 'copy'
-      }
     },
-    dragLeave (event) {
-      if (event.target === this.$refs.droptarget) {
-        this.isDropHighlightActive = false
-      }
-    },
-    drop (event) {
-      this.isDropHighlightActive = false
-
-      if (!event.dataTransfer || !event.dataTransfer.files) {
-        return
-      }
-
-      this.$emit('file-dropped', event.dataTransfer.files)
-    },
-    colourPicked (colour) {
-      this.$emit('colour-picked', colour)
-    },
-    openFile () {
-      EventBus.$emit('open-image-file')
-    },
-    preventDefaults (event) {
-      event.preventDefault()
-      event.stopPropagation()
-    },
-    wheel (event) {
-      if (!event.deltaY) {
-        return
-      }
-      this.preventDefaults(event)
-      this.$emit('zoom', this.scale * (event.deltaY > 0 ? 0.9 : 1.1))
-    }
   },
   created: function () {
     window.addEventListener('dragover', this.preventDefaults, false)
@@ -117,7 +72,49 @@ export default {
   destroyed: function () {
     window.removeEventListener('dragover', this.preventDefaults)
     window.removeEventListener('drop', this.preventDefaults)
-  }
+  },
+  methods: {
+    dragEnter(event) {
+      if (
+        event.dataTransfer.files.length ||
+        [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/' > -1))
+      ) {
+        this.isDropHighlightActive = true
+        event.dataTransfer.dropEffect = 'copy'
+      }
+    },
+    dragLeave(event) {
+      if (event.target === this.$refs.droptarget) {
+        this.isDropHighlightActive = false
+      }
+    },
+    drop(event) {
+      this.isDropHighlightActive = false
+
+      if (!event.dataTransfer || !event.dataTransfer.files) {
+        return
+      }
+
+      this.$emit('file-dropped', event.dataTransfer.files)
+    },
+    colourPicked(colour) {
+      this.$emit('colour-picked', colour)
+    },
+    openFile() {
+      EventBus.$emit('open-image-file')
+    },
+    preventDefaults(event) {
+      event.preventDefault()
+      event.stopPropagation()
+    },
+    wheel(event) {
+      if (!event.deltaY) {
+        return
+      }
+      this.preventDefaults(event)
+      this.$emit('zoom', this.scale * (event.deltaY > 0 ? 0.9 : 1.1))
+    },
+  },
 }
 </script>
 
@@ -130,21 +127,11 @@ export default {
   &-canvas {
     box-sizing: border-box;
     background-color: #fff;
-    background-image: linear-gradient(
-        45deg,
-        #ddd 26%,
-        transparent 25%,
-        transparent 75%,
-        #ddd 75%
-      ),
-      linear-gradient(
-        45deg,
-        #ddd 26%,
-        transparent 25%,
-        transparent 75%,
-        #ddd 75%
-      );
-    background-position: 0 0, 1.5rem 1.5rem;
+    background-image: linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%),
+      linear-gradient(45deg, #ddd 26%, transparent 25%, transparent 75%, #ddd 75%);
+    background-position:
+      0 0,
+      1.5rem 1.5rem;
     background-size: 3rem 3rem;
     overflow: auto;
     position: relative;

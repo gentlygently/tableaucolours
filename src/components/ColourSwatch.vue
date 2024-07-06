@@ -2,16 +2,12 @@
   <li
     class="colour"
     :class="containerClasses"
-    @click="click"
     :title="colour.hex + ' (double click to edit)'"
     :style="{ 'grid-column': column, 'grid-row': row }"
+    @click="click"
   >
-    <div
-      class="colour-swatch"
-      :style="{ 'background-color': colour.hex }"
-      @dblclick="isPickerOpen=true"
-    ></div>
-    <div class="colour-remove" @click.prevent.stop="remove" title="Delete colour (Delete)">
+    <div class="colour-swatch" :style="{ 'background-color': colour.hex }" @dblclick="isPickerOpen = true"></div>
+    <div class="colour-remove" title="Delete colour (Delete)" @click.prevent.stop="remove">
       <span class="fas fa-times"></span>
     </div>
     <colour-picker
@@ -19,7 +15,7 @@
       class="colour-picker"
       :hex="colour.hex"
       @colour-picked="colourPicked"
-      @done="isPickerOpen=false"
+      @done="isPickerOpen = false"
     />
   </li>
 </template>
@@ -30,51 +26,51 @@ import { mapActions } from 'pinia'
 import { usePaletteStore } from '../stores/palette'
 
 export default {
-  name: 'Colour',
+  name: 'ColourSwatch',
+  components: {
+    ColourPicker,
+  },
   props: {
     colour: {
       type: Object,
-      required: true
+      required: true,
     },
     index: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data: function () {
     return {
-      isPickerOpen: false
+      isPickerOpen: false,
     }
   },
-  components: {
-    ColourPicker
-  },
   computed: {
-    containerClasses () {
+    containerClasses() {
       let classes = []
       if (this.colour.isSelected) classes.push('colour--selected')
       if (this.isPickerOpen) classes.push('colour--pickeropen')
       return classes
     },
-    column () {
+    column() {
       return Math.floor(this.index / 5) + 1
     },
-    row () {
+    row() {
       return (this.index % 5) + 1
-    }
+    },
   },
   methods: {
     ...mapActions(usePaletteStore, ['selectColour', 'updateColour', 'removeColour']),
-    click () {
+    click() {
       this.selectColour(this.colour)
     },
-    colourPicked (hex) {
+    colourPicked(hex) {
       this.updateColour(this.colour, hex)
     },
-    remove () {
+    remove() {
       this.removeColour(this.colour)
-    }
-  }
+    },
+  },
 }
 </script>
 
