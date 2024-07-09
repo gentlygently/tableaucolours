@@ -1,21 +1,18 @@
+<script setup>
+const props = defineProps({
+  type: {
+    type: Object,
+    required: true,
+  },
+})
+</script>
+
 <template>
-  <div class="palettetype" :class="'palettetype--' + type.classModifier">
-    <div :class="'palettetype-example--' + type.classModifier">&nbsp;</div>
-    <label class="palettetype-label">{{ type.displayName }}</label>
+  <div class="palettetype" :class="'palettetype--' + props.type.classModifier">
+    <div :class="'palettetype-example--' + props.type.classModifier">&nbsp;</div>
+    <label class="palettetype-label">{{ props.type.displayName }}</label>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'PaletteType',
-  props: {
-    type: {
-      type: Object,
-      required: true,
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
