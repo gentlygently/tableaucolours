@@ -1,40 +1,26 @@
+<script setup>
+import { computed } from 'vue'
+import ColourPalette from '@/components/ColourPalette.vue'
+import ImageColourPicker from '@/components/ImageColourPicker.vue'
+import { usePaletteStore } from '@/stores/palette'
+
+const store = usePaletteStore()
+
+const canPickColour = computed(() => !!store.selectedColour)
+
+const colourPicked = hex => store.updateSelectedColour(hex)
+</script>
+
 <template>
   <main id="app">
     <section id="palettesection">
-      <colour-palette/>
+      <ColourPalette />
     </section>
     <section id="imagesection">
-      <image-colour-picker :can-pick-colour="canPickColour" @colour-picked="colourPicked"/>
+      <ImageColourPicker :can-pick-colour="canPickColour" @colour-picked="colourPicked" />
     </section>
   </main>
 </template>
-
-<script>
-import ColourPalette from './components/ColourPalette.vue'
-import ImageColourPicker from './components/ImageColourPicker.vue'
-import { mapActions, mapState } from 'pinia'
-import { usePaletteStore } from './stores/palette'
-
-export default {
-  name: 'app',
-  components: {
-    ColourPalette,
-    ImageColourPicker
-  },
-  computed: {
-    ...mapState(usePaletteStore, ['selectedColour']),
-    canPickColour () {
-      return !!this.selectedColour
-    }
-  },
-  methods: {
-    ...mapActions(usePaletteStore, ['updateSelectedColour']),
-    colourPicked (hex) {
-      this.updateSelectedColour(hex)
-    }
-  }
-}
-</script>
 
 <style lang="less">
 @import './variables.less';
