@@ -1,9 +1,66 @@
+<script setup>
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import ColourList from './ColourList.vue'
+import GetCode from './GetCode.vue'
+import ExtractColours from './ExtractColours.vue'
+import ImportCode from './ImportCode.vue'
+import ModalPanel from './ModalPanel.vue'
+import PalettePreview from './PalettePreview.vue'
+import PaletteTypes from './PaletteTypes.vue'
+import { usePaletteStore } from '@/stores/palette'
+import { useImageStore } from '@/stores/image'
+
+const imageStore = useImageStore()
+const paletteStore = usePaletteStore()
+const canAddColour = computed(() => paletteStore.canAddColour)
+const canExtractColours = computed(() => imageStore.hasImage)
+const codeModalOpen = ref(false)
+const extractModalOpen = ref(false)
+const importModalOpen = ref(false)
+
+function discard() {
+  if (confirm('Are you sure you want to discard this palette?')) {
+    paletteStore.reset()
+  }
+}
+
+function addColour() {
+  paletteStore.addColour()
+}
+
+function keyUp(event) {
+  if (event.target.tagName.toLowerCase() !== 'body') {
+    return
+  }
+  switch (event.key) {
+    case '+':
+      paletteStore.addColour()
+      return
+
+    case 'Backspace':
+    case 'Delete':
+      removeSelectedColour()
+  }
+}
+
+function removeSelectedColour() {
+  paletteStore.removeColour(paletteStore.selectedColour)
+}
+
+function typeSelected(type) {
+  paletteStore.type = type
+}
+
+onMounted(() => window.addEventListener('keyup', keyUp, false))
+onUnmounted(() => window.removeEventListener('keyup', keyUp))
+</script>
+
 <template>
   <div class="colourpalette">
     <div class="colourpalette-name">
       <input
         id="name"
-        v-model="paletteName"
+        v-model="paletteStore.name"
         type="text"
         tabindex="1"
         placeholder="Enter a palette name"
@@ -11,11 +68,11 @@
       />
     </div>
     <div class="colourpalette-type">
-      <palette-types :selected-type-name="paletteType" :tab-index="2" @type-selected="typeSelected" />
+      <PaletteTypes :selected-type-name="paletteStore.type" :tab-index="2" @type-selected="typeSelected" />
     </div>
-    <colour-list class="colourpalette-colours" />
+    <ColourList class="colourpalette-colours" />
     <div class="colourpalette-preview">
-      <palette-preview :type="paletteType" :colours="paletteColours" />
+      <PalettePreview :type="paletteStore.type" :colours="paletteStore.colours" />
     </div>
     <ul class="colourpalette-actions">
       <!-- TODO: Put these in a separate component? -->
@@ -49,90 +106,17 @@
         ></button>
       </li>
     </ul>
-    <modal-panel v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
-      <get-code />
-    </modal-panel>
-    <modal-panel v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
-      <import-code @close="importModalOpen = false" />
-    </modal-panel>
-    <modal-panel v-if="extractModalOpen" width="54rem" @close="extractModalOpen = false">
-      <extract-colours @close="extractModalOpen = false" />
-    </modal-panel>
+    <ModalPanel v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
+      <GetCode />
+    </ModalPanel>
+    <ModalPanel v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
+      <ImportCode @close="importModalOpen = false" />
+    </ModalPanel>
+    <ModalPanel v-if="extractModalOpen" width="54rem" @close="extractModalOpen = false">
+      <ExtractColours @close="extractModalOpen = false" />
+    </ModalPanel>
   </div>
 </template>
-
-<script>
-import ColourList from './ColourList.vue'
-import GetCode from './GetCode.vue'
-import ExtractColours from './ExtractColours.vue'
-import ImportCode from './ImportCode.vue'
-import ModalPanel from './ModalPanel.vue'
-import PalettePreview from './PalettePreview.vue'
-import PaletteTypes from './PaletteTypes.vue'
-import { mapActions, mapState, mapWritableState } from 'pinia'
-import { usePaletteStore } from '../stores/palette'
-import { useImageStore } from '../stores/image'
-
-export default {
-  name: 'ColourPalette',
-  data: function () {
-    return {
-      codeModalOpen: false,
-      extractModalOpen: false,
-      importModalOpen: false,
-    }
-  },
-  computed: {
-    ...mapState(useImageStore, { canExtractColours: 'hasImage' }),
-    ...mapState(usePaletteStore, ['canAddColour', 'selectedColour']),
-    ...mapState(usePaletteStore, { paletteColours: 'colours' }),
-    ...mapWritableState(usePaletteStore, { paletteName: 'name', paletteType: 'type' }),
-  },
-  components: {
-    ColourList,
-    GetCode,
-    ExtractColours,
-    ImportCode,
-    ModalPanel,
-    PalettePreview,
-    PaletteTypes,
-  },
-  methods: {
-    ...mapActions(usePaletteStore, ['addColour', 'reset', 'removeColour']),
-    discard() {
-      if (confirm('Are you sure you want to discard this palette?')) {
-        this.reset()
-      }
-    },
-    keyUp(event) {
-      if (event.target.tagName.toLowerCase() !== 'body') {
-        return
-      }
-      switch (event.key) {
-        case '+':
-          this.addColour()
-          return
-
-        case 'Backspace':
-        case 'Delete':
-          this.removeSelectedColour()
-      }
-    },
-    removeSelectedColour() {
-      this.removeColour(this.selectedColour)
-    },
-    typeSelected(type) {
-      this.paletteType = type
-    },
-  },
-  created() {
-    window.addEventListener('keyup', this.keyUp, false)
-  },
-  destroyed() {
-    window.removeEventListener('keyup', this.keyUp)
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
