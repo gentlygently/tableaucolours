@@ -1,9 +1,57 @@
+<script setup>
+import { computed, ref, watch } from 'vue'
+
+const props = defineProps({
+  scale: { type: Number, required: true },
+  range: { type: Object, required: true },
+  enabled: Boolean,
+})
+
+const emit = defineEmits(['zoom'])
+
+const scale = computed(() => props.scale)
+const sliderValue = ref(50)
+const sliderActive = ref(false)
+const percentage = computed(() => Math.round(100 * props.scale))
+
+function zoomIn() {
+  if (props.enabled) {
+    emit('zoom', props.scale * 1.1)
+  }
+}
+
+function zoomOut() {
+  if (props.enabled) {
+    emit('zoom', props.scale * 0.9)
+  }
+}
+
+watch(scale, newValue => {
+  if (sliderActive.value) {
+    return
+  }
+  sliderValue.value =
+    newValue < 1
+      ? ((newValue - props.range.min) * 49) / (1 - props.range.min) + 1
+      : ((newValue - 1) * 50) / (props.range.max - 1) + 50
+})
+
+watch(sliderValue, newValue => {
+  const value =
+    newValue < 50
+      ? ((newValue - 1) * (1 - props.range.min)) / 49 + props.range.min
+      : ((newValue - 50) * (props.range.max - 1)) / 50 + 1
+
+  emit('zoom', value)
+})
+</script>
+
 <template>
   <div class="imagezoom">
     <button
       class="iconbutton imagezoom-out fas fa-image"
       title="Zoom out (Shift + Scroll-down)"
-      :disabled="!enabled"
+      :disabled="!props.enabled"
       @click.prevent.stop="zoomOut"
     ></button>
     <input
@@ -11,7 +59,7 @@
       type="range"
       min="1"
       max="100"
-      :disabled="!enabled"
+      :disabled="!props.enabled"
       class="imagezoom-slider"
       @mousedown="sliderActive = true"
       @mouseup="sliderActive = false"
@@ -19,68 +67,12 @@
     <button
       class="iconbutton imagezoom-in fas fa-image"
       title="Zoom in (Shift + Scroll-up)"
-      :disabled="!enabled"
+      :disabled="!props.enabled"
       @click.prevent.stop="zoomIn"
     ></button>
     <div class="imagezoom-percentage">{{ percentage }}%</div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'ImageZoom',
-  props: {
-    scale: { type: Number, required: true },
-    range: { type: Object, required: true },
-    enabled: Boolean,
-  },
-  data: function () {
-    return {
-      sliderValue: 50,
-      sliderActive: false,
-    }
-  },
-  computed: {
-    percentage() {
-      return Math.round(100 * this.scale)
-    },
-  },
-  watch: {
-    scale(newValue) {
-      if (this.sliderActive) {
-        return
-      }
-      this.sliderValue =
-        newValue < 1
-          ? ((newValue - this.range.min) * 49) / (1 - this.range.min) + 1
-          : ((newValue - 1) * 50) / (this.range.max - 1) + 50
-    },
-    sliderValue(newValue) {
-      const scale =
-        newValue < 50
-          ? ((newValue - 1) * (1 - this.range.min)) / 49 + this.range.min
-          : ((newValue - 50) * (this.range.max - 1)) / 50 + 1
-
-      this.$emit('zoom', scale)
-    },
-  },
-  methods: {
-    input(event) {
-      this.sliderValue = event.target.value
-    },
-    zoomIn() {
-      if (this.enabled) {
-        this.$emit('zoom', this.scale * 1.1)
-      }
-    },
-    zoomOut() {
-      if (this.enabled) {
-        this.$emit('zoom', this.scale * 0.9)
-      }
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
