@@ -1,3 +1,22 @@
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { EventBus } from '@/eventbus.js'
+
+const emit = defineEmits(['file-selected'])
+const label = ref(null)
+
+function input(event) {
+  emit('file-selected', event.target.files)
+}
+
+function click() {
+  label.value.click()
+}
+
+onMounted(() => EventBus.$on('open-image-file', click))
+onUnmounted(() => EventBus.$off('open-image-file', click))
+</script>
+
 <template>
   <div class="imagefileopen">
     <label ref="label" for="selectImage">
@@ -10,28 +29,6 @@
     </label>
   </div>
 </template>
-
-<script>
-import { EventBus } from '../eventbus.js'
-
-export default {
-  name: 'ImageFileOpen',
-  created: function () {
-    EventBus.$on('open-image-file', this.click)
-  },
-  destroyed: function () {
-    EventBus.$off('open-image-file', this.click)
-  },
-  methods: {
-    input(event) {
-      this.$emit('file-selected', event.target.files)
-    },
-    click() {
-      this.$refs.label.click()
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 .imagefileopen {
