@@ -1,42 +1,45 @@
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  type: {
+    type: String,
+    required: true,
+  },
+  colours: {
+    type: Array,
+    required: true,
+  },
+})
+
+const backgroundStyle = computed(() => {
+  switch (props.type) {
+    case 'regular':
+      return regular(props.colours)
+
+    case 'ordered-diverging':
+    case 'ordered-sequential':
+      return ordered(props.colours)
+  }
+  return ''
+})
+
+function regular(colours) {
+  const width = 100 / colours.length
+  let position = 0
+  return `linear-gradient(to right, ${colours
+    .map(x => `${x.hex} ${position}%, ${x.hex} ${(position += width)}%`)
+    .join(', ')})`
+}
+
+function ordered(colours) {
+  return `linear-gradient(to right, ${colours.map(x => x.hex).join(', ')})`
+}
+</script>
+
 <template>
   <div class="palettepreview" :style="{ background: backgroundStyle }">&nbsp;</div>
 </template>
-
-<script>
-export default {
-  name: 'PalettePreview',
-  props: {
-    type: {
-      type: String,
-      required: true,
-    },
-    colours: {
-      type: Array,
-      required: true,
-    },
-  },
-  computed: {
-    backgroundStyle() {
-      function regular(colours) {
-        const width = 100 / colours.length
-        let position = 0
-        return `linear-gradient(to right, ${colours
-          .map(x => `${x.hex} ${position}%, ${x.hex} ${(position += width)}%`)
-          .join(', ')})`
-      }
-      switch (this.type) {
-        case 'regular':
-          return regular(this.colours)
-
-        case 'ordered-diverging':
-        case 'ordered-sequential':
-          return `linear-gradient(to right, ${this.colours.map(x => x.hex).join(', ')})`
-      }
-      return ''
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
