@@ -1,3 +1,47 @@
+<script setup>
+import { computed, ref } from 'vue'
+import ColourPicker from './ColourPicker.vue'
+import { usePaletteStore } from '@/stores/palette'
+
+const store = usePaletteStore()
+
+const props = defineProps({
+  colour: {
+    type: Object,
+    required: true,
+  },
+  index: {
+    type: Number,
+    required: true,
+  },
+})
+
+const colour = ref(props.colour)
+const isPickerOpen = ref(false)
+
+const containerClasses = computed(() => {
+  let classes = []
+  if (colour.value.isSelected) classes.push('colour--selected')
+  if (isPickerOpen.value) classes.push('colour--pickeropen')
+  return classes
+})
+
+const column = computed(() => Math.floor(props.index / 5) + 1)
+const row = computed(() => (props.index % 5) + 1)
+
+function click() {
+  store.selectColour(colour.value)
+}
+
+function colourPicked(hex) {
+  store.updateColour(colour.value, hex)
+}
+
+function remove() {
+  store.removeColour(colour.value)
+}
+</script>
+
 <template>
   <li
     class="colour"
@@ -19,60 +63,6 @@
     />
   </li>
 </template>
-
-<script>
-import ColourPicker from './ColourPicker.vue'
-import { mapActions } from 'pinia'
-import { usePaletteStore } from '../stores/palette'
-
-export default {
-  name: 'ColourSwatch',
-  components: {
-    ColourPicker,
-  },
-  props: {
-    colour: {
-      type: Object,
-      required: true,
-    },
-    index: {
-      type: Number,
-      required: true,
-    },
-  },
-  data: function () {
-    return {
-      isPickerOpen: false,
-    }
-  },
-  computed: {
-    containerClasses() {
-      let classes = []
-      if (this.colour.isSelected) classes.push('colour--selected')
-      if (this.isPickerOpen) classes.push('colour--pickeropen')
-      return classes
-    },
-    column() {
-      return Math.floor(this.index / 5) + 1
-    },
-    row() {
-      return (this.index % 5) + 1
-    },
-  },
-  methods: {
-    ...mapActions(usePaletteStore, ['selectColour', 'updateColour', 'removeColour']),
-    click() {
-      this.selectColour(this.colour)
-    },
-    colourPicked(hex) {
-      this.updateColour(this.colour, hex)
-    },
-    remove() {
-      this.removeColour(this.colour)
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
