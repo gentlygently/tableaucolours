@@ -1,3 +1,42 @@
+<script setup>
+import { onMounted, onUnmounted, ref } from 'vue'
+
+const props = defineProps({
+  width: {
+    type: String,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['close'])
+
+const isMouseDownOnWrapper = ref(false)
+
+const close = () => emit('close')
+
+function keyUp(event) {
+  if (event.target.tagName.toLowerCase() !== 'input' && event.key === 'Escape') {
+    close()
+  }
+}
+
+function wrapperMouseDown() {
+  isMouseDownOnWrapper.value = true
+}
+function wrapperMouseLeave() {
+  isMouseDownOnWrapper.value = false
+}
+function wrapperMouseUp() {
+  if (isMouseDownOnWrapper.value) {
+    isMouseDownOnWrapper.value = false
+    close()
+  }
+}
+
+onMounted(() => window.addEventListener('keyup', keyUp, false))
+onUnmounted(() => window.removeEventListener('keyup', keyUp))
+</script>
+
 <template>
   <transition name="modal">
     <div class="modal-mask">
@@ -8,56 +47,14 @@
         @mouseup.self="wrapperMouseUp"
         @mouseleave="wrapperMouseLeave"
       >
-        <div class="modal-container" :style="{ width: width }" @click.stop>
-          <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="$emit('close')"></button>
+        <div class="modal-container" :style="{ width: props.width }" @click.stop>
+          <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="close"></button>
           <slot></slot>
         </div>
       </div>
     </div>
   </transition>
 </template>
-
-<script>
-export default {
-  name: 'ModalPanel',
-  props: {
-    width: {
-      type: String,
-      required: true,
-    },
-  },
-  data: function () {
-    return {
-      isMouseDownOnWrapper: false,
-    }
-  },
-  created() {
-    window.addEventListener('keyup', this.keyUp, false)
-  },
-  destroyed() {
-    window.removeEventListener('keyup', this.keyUp)
-  },
-  methods: {
-    keyUp(event) {
-      if (event.target.tagName.toLowerCase() !== 'input' && event.key === 'Escape') {
-        this.$emit('close')
-      }
-    },
-    wrapperMouseDown() {
-      this.isMouseDownOnWrapper = true
-    },
-    wrapperMouseLeave() {
-      this.isMouseDownOnWrapper = false
-    },
-    wrapperMouseUp() {
-      if (this.isMouseDownOnWrapper) {
-        this.isMouseDownOnWrapper = false
-        this.$emit('close')
-      }
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
