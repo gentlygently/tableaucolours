@@ -1,3 +1,80 @@
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+import ColorThief from 'colorthief'
+import { usePaletteStore } from '@/stores/palette'
+import { useImageStore } from '@/stores/image'
+
+const emit = defineEmits(['close'])
+
+const imageStore = useImageStore()
+const paletteStore = usePaletteStore()
+
+const replaceExisting = ref(true)
+const numberHasFocus = ref(false)
+const numberInput = ref(null)
+const numberOfColours = ref(4)
+
+const canAddColours = computed(() => paletteStore.canAddColour)
+const addColoursClass = computed(() => (canAddColours.value ? '' : 'extractcolours-field--disabled'))
+const addColoursTitle = computed(() => (canAddColours.value ? '' : 'The colour palette is already full'))
+
+const action = computed({
+  get() {
+    return !canAddColours.value || replaceExisting.value ? 'replaceColours' : 'addColours'
+  },
+  set(newValue) {
+    replaceExisting.value = newValue === 'replaceColours'
+  },
+})
+
+const maximumColoursToExtract = computed(() =>
+  action.value === 'replaceColours'
+    ? paletteStore.maximumColours
+    : paletteStore.maximumColours - paletteStore.colours.length
+)
+
+const numberControlClass = computed(() => (numberHasFocus.value ? 'extractcolours-numbercontrol--focus' : ''))
+
+const numberOfColoursToExtract = computed({
+  get() {
+    return numberOfColours.value > maximumColoursToExtract.value ? maximumColoursToExtract.value : numberOfColours.value
+  },
+  set(newValue) {
+    if (newValue > maximumColoursToExtract.value) {
+      newValue = maximumColoursToExtract.value
+    } else if (newValue < 1) {
+      newValue = 1
+    }
+    numberOfColours.value = newValue
+  },
+})
+
+function close() {
+  emit('close')
+}
+
+function extract() {
+  const colours = new ColorThief().getPalette(imageStore.image, numberOfColoursToExtract.value)
+  const hexes = colours.map(x => '#' + toHex(x[0]) + toHex(x[1]) + toHex(x[2]))
+  switch (action.value) {
+    case 'addColours':
+      paletteStore.addColours(hexes)
+      break
+    case 'replaceColours':
+      paletteStore.replaceColours(hexes)
+      break
+  }
+  close()
+}
+
+function toHex(v) {
+  const s = v.toString(16).toUpperCase()
+  return s.length === 1 ? '0' + s : s
+}
+
+onMounted(() => numberInput.value.focus())
+</script>
+
 <template>
   <div class="extractcolours">
     <div class="extractcolours-fields">
@@ -11,7 +88,7 @@
           ></button>
           <input
             id="numberofcolours"
-            ref="number"
+            ref="numberInput"
             v-model="numberOfColoursToExtract"
             type="number"
             min="1"
@@ -59,96 +136,9 @@
       </div>
     </div>
     <button class="extractcolours-button extractcolours-button--extract" @click="extract">Extract</button>
-    <button class="extractcolours-button extractcolours-button--cancel" @click="$emit('close')">Cancel</button>
+    <button class="extractcolours-button extractcolours-button--cancel" @click="close">Cancel</button>
   </div>
 </template>
-
-<script>
-import ColorThief from 'colorthief'
-import { mapActions, mapState } from 'pinia'
-import { usePaletteStore } from '../stores/palette'
-import { useImageStore } from '../stores/image'
-
-export default {
-  name: 'ExtractColours',
-  data: function () {
-    return {
-      replaceExisting: true,
-      numberHasFocus: false,
-      numberOfColours: 4,
-    }
-  },
-  computed: {
-    ...mapState(usePaletteStore, ['colours', 'maximumColours']),
-    ...mapState(usePaletteStore, { canAddColours: 'canAddColour' }),
-    ...mapState(useImageStore, ['hasImage', 'image']),
-
-    action: {
-      get() {
-        return !this.canAddColours || this.replaceExisting ? 'replaceColours' : 'addColours'
-      },
-      set(newValue) {
-        this.replaceExisting = newValue === 'replaceColours'
-      },
-    },
-
-    addColoursClass() {
-      return this.canAddColours ? '' : 'extractcolours-field--disabled'
-    },
-
-    addColoursTitle() {
-      return this.canAddColours ? '' : 'The colour palette is already full'
-    },
-
-    maximumColoursToExtract() {
-      return this.action === 'replaceColours' ? this.maximumColours : this.maximumColours - this.colours.length
-    },
-
-    numberControlClass() {
-      return this.numberHasFocus ? 'extractcolours-numbercontrol--focus' : ''
-    },
-
-    numberOfColoursToExtract: {
-      get() {
-        return this.numberOfColours > this.maximumColoursToExtract ? this.maximumColoursToExtract : this.numberOfColours
-      },
-      set(newValue) {
-        if (newValue > this.maximumColoursToExtract) {
-          newValue = this.maximumColoursToExtract
-        } else if (newValue < 1) {
-          newValue = 1
-        }
-        this.numberOfColours = newValue
-      },
-    },
-  },
-
-  methods: {
-    ...mapActions(usePaletteStore, ['addColours', 'replaceColours']),
-
-    extract() {
-      const colours = new ColorThief().getPalette(this.image, this.numberOfColoursToExtract)
-      const hexes = colours.map(x => '#' + this.toHex(x[0]) + this.toHex(x[1]) + this.toHex(x[2]))
-      switch (this.action) {
-        case 'addColours':
-          this.addColours(hexes)
-          break
-        case 'replaceColours':
-          this.replaceColours(hexes)
-          break
-      }
-      this.$emit('close')
-    },
-    toHex(v) {
-      const s = v.toString(16).toUpperCase()
-      return s.length === 1 ? '0' + s : s
-    },
-  },
-  mounted() {
-    this.$refs.number.focus()
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
