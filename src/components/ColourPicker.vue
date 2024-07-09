@@ -1,44 +1,39 @@
+<script setup>
+import { onMounted, onUnmounted } from 'vue'
+import { Sketch as SketchColourPicker } from 'vue-color'
+
+const props = defineProps({
+  hex: {
+    type: String,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['colour-picked', 'done'])
+
+function colourPicked(value) {
+  if (value && value.hex) {
+    emit('colour-picked', value.hex)
+  }
+}
+
+function done() {
+  emit('done')
+}
+
+onMounted(() => window.addEventListener('click', done, false))
+
+onUnmounted(() => window.removeEventListener('click', done))
+</script>
+
 <template>
   <div class="colourpicker" @keyup.enter="done" @click.stop.prevent>
-    <sketch-colour-picker :disable-alpha="true" :value="hex" :preset-colors="[]" @input="colourPicked" />
+    <SketchColourPicker :disable-alpha="true" :value="props.hex" :preset-colors="[]" @input="colourPicked" />
     <div class="colourpicker-buttons">
       <button class="colourpicker-done" @click.stop.prevent="done">Done</button>
     </div>
   </div>
 </template>
-
-<script>
-import { Sketch } from 'vue-color'
-
-export default {
-  name: 'ColourPIcker',
-  components: {
-    'sketch-colour-picker': Sketch,
-  },
-  props: {
-    hex: {
-      type: String,
-      required: true,
-    },
-  },
-  created() {
-    window.addEventListener('click', this.done, false)
-  },
-  destroyed() {
-    window.removeEventListener('click', this.done)
-  },
-  methods: {
-    colourPicked(value) {
-      if (value && value.hex) {
-        this.$emit('colour-picked', value.hex)
-      }
-    },
-    done() {
-      this.$emit('done')
-    },
-  },
-}
-</script>
 
 <style lang="less">
 @import '../variables.less';
