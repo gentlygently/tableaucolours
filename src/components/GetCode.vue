@@ -1,7 +1,46 @@
+<script setup>
+import { ref } from 'vue'
+import he from 'he'
+import { usePaletteStore } from '@/stores/palette'
+
+const store = usePaletteStore()
+
+const copied = ref(false)
+const code = ref(null)
+
+function copy() {
+  if (document.body.createTextRange) {
+    const range = document.body.createTextRange()
+    range.moveToElementText(code.value)
+    range.select()
+  } else if (window.getSelection) {
+    const selection = window.getSelection()
+    const range = document.createRange()
+    range.selectNodeContents(code.value)
+    selection.removeAllRanges()
+    selection.addRange(range)
+  } else {
+    console.log('Text selection not supported')
+  }
+  document.execCommand('copy')
+  copied.value = true
+}
+
+function xml() {
+  let x = `<color-palette name="${he.encode(store.name, {
+    useNamedReferences: true,
+  })}" type="${store.type}">\n`
+
+  store.colours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
+
+  return x + '</color-palette>'
+}
+</script>
+
 <template>
   <div class="getcode">
     <div class="getcode-codecontainer">
-      <pre ref="code" class="getcode-code">{{ xml }}</pre>
+      <pre ref="code" class="getcode-code">{{ xml() }}</pre>
     </div>
     <transition>
       <button v-if="!copied" class="getcode-copy" @click.stop.prevent="copy">Copy to clipboard</button>
@@ -12,60 +51,6 @@
     </transition>
   </div>
 </template>
-
-<script>
-import he from 'he'
-import { mapState } from 'pinia'
-import { usePaletteStore } from '@/stores/palette'
-
-export default {
-  name: 'GetCode',
-  data: function () {
-    return {
-      copied: false,
-    }
-  },
-  computed: {
-    ...mapState(usePaletteStore, { paletteColours: 'colours', paletteName: 'name', paletteType: 'type' }),
-    xml() {
-      let x = `<color-palette name="${he.encode(this.paletteName, {
-        useNamedReferences: true,
-      })}" type="${this.paletteType}">\n`
-
-      this.paletteColours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
-
-      return x + '</color-palette>'
-    },
-  },
-  created: function () {
-    this.copied = false
-  },
-  methods: {
-    copy() {
-      if (document.body.createTextRange) {
-        const range = document.body.createTextRange()
-        range.moveToElementText(this.$refs.code)
-        range.select()
-      } else if (window.getSelection) {
-        const selection = window.getSelection()
-        const range = document.createRange()
-        range.selectNodeContents(this.$refs.code)
-        selection.removeAllRanges()
-        selection.addRange(range)
-      } else {
-        console.log('Text selection not supported')
-      }
-      document.execCommand('copy')
-      this.copied = true
-    },
-    xmlEscape(s) {
-      let el = document.createElement('textarea')
-      el.value = s
-      return el.innerHTML
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
