@@ -1,3 +1,91 @@
+<script setup>
+import { computed, onMounted, ref, watch } from 'vue'
+import { usePaletteStore } from '@/stores/palette'
+
+const store = usePaletteStore()
+
+const emit = defineEmits(['close'])
+
+const xmlParser = new DOMParser()
+const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i
+
+const code = ref(null)
+const xml = ref('')
+const isValid = ref(false)
+const validationMessage = ref('')
+const palette = ref({})
+
+const hasCode = computed(() => !!xml.value)
+const hasValidationMessage = computed(() => !!validationMessage.value)
+const codeClasses = computed(() => {
+  let classes = []
+
+  if (hasCode.value && !isValid.value) {
+    classes.push('importcode-code--invalid')
+  }
+
+  if (hasValidationMessage.value) {
+    classes.push('importcode-code--validationmessage')
+  }
+
+  return classes
+})
+
+function invalid(message) {
+  isValid.value = false
+  validationMessage.value = message
+  palette.value = {}
+}
+
+function importXml() {
+  store.import(palette.value.name, palette.value.type, palette.value.colours)
+  emit('close')
+}
+
+watch(xml, newValue => {
+  if (!newValue) {
+    return invalid('')
+  }
+
+  const doc = xmlParser.parseFromString(newValue, 'application/xml')
+  const root = doc.documentElement
+
+  if (root.getElementsByTagName('parsererror').length) {
+    return invalid('Unable to parse XML')
+  }
+
+  if (root.tagName !== 'color-palette') {
+    return invalid('Expected a root element of <color-palette>')
+  }
+
+  const colours = [...root.children].filter(x => x.tagName === 'color').map(x => x.innerHTML.trim())
+
+  if (!colours.length) {
+    return invalid('Expected one or more <color> elements')
+  }
+
+  if (colours.filter(x => !x).length > 0) {
+    return invalid('All <color> elements must contain a valid colour')
+  }
+
+  const invalidColour = colours.find(x => !colourPattern.test(x))
+
+  if (invalidColour) {
+    return invalid(`'${invalidColour}' is not a valid colour`)
+  }
+
+  isValid.value = true
+  validationMessage.value = ''
+  palette.value = {
+    name: root.getAttribute('name'),
+    type: root.getAttribute('type'),
+    colours: colours,
+  }
+})
+
+onMounted(() => code.value.focus())
+</script>
+
 <template>
   <div class="importcode">
     <div class="importcode-codecontainer">
@@ -17,104 +105,6 @@
     <button class="importcode-button importcode-button--cancel" @click="$emit('close')">Cancel</button>
   </div>
 </template>
-
-<script>
-import { mapActions } from 'pinia'
-import { usePaletteStore } from '../stores/palette'
-
-const xmlParser = new DOMParser()
-const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i
-
-export default {
-  name: 'ImportCode',
-  data: function () {
-    return {
-      xml: '',
-      isValid: false,
-      validationMessage: '',
-      palette: {},
-    }
-  },
-  computed: {
-    hasCode() {
-      return !!this.xml
-    },
-    hasValidationMessage() {
-      return !!this.validationMessage
-    },
-    codeClasses() {
-      let classes = []
-
-      if (this.hasCode && !this.isValid) {
-        classes.push('importcode-code--invalid')
-      }
-
-      if (this.hasValidationMessage) {
-        classes.push('importcode-code--validationmessage')
-      }
-
-      return classes
-    },
-  },
-  watch: {
-    xml(newValue) {
-      if (!newValue) {
-        return this.invalid('')
-      }
-
-      const doc = xmlParser.parseFromString(newValue, 'application/xml')
-      const root = doc.documentElement
-
-      if (root.getElementsByTagName('parsererror').length) {
-        return this.invalid('Unable to parse XML')
-      }
-
-      if (root.tagName !== 'color-palette') {
-        return this.invalid('Expected a root element of <color-palette>')
-      }
-
-      const colours = [...root.children].filter(x => x.tagName === 'color').map(x => x.innerHTML.trim())
-
-      if (!colours.length) {
-        return this.invalid('Expected one or more <color> elements')
-      }
-
-      if (colours.filter(x => !x).length > 0) {
-        return this.invalid('All <color> elements must contain a valid colour')
-      }
-
-      const invalidColour = colours.find(x => !colourPattern.test(x))
-
-      if (invalidColour) {
-        return this.invalid(`'${invalidColour}' is not a valid colour`)
-      }
-
-      this.isValid = true
-      this.validationMessage = ''
-      this.palette = {
-        name: root.getAttribute('name'),
-        type: root.getAttribute('type'),
-        colours: colours,
-      }
-    },
-  },
-  mounted() {
-    this.$refs.code.focus()
-  },
-  methods: {
-    ...mapActions(usePaletteStore, ['import']),
-    invalid(message) {
-      this.isValid = false
-      this.validationMessage = message
-      this.palette = {}
-    },
-    importXml() {
-      this.import(this.palette.name, this.palette.type, this.palette.colours)
-      this.$emit('close')
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';

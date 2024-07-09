@@ -51,8 +51,8 @@ export const usePaletteStore = defineStore('palette', {
     },
 
     import(name, type, colours) {
-      this.name = name
-      this.type = type
+      this.name = name || ''
+      this.type = type || 'regular'
       this.colours = createColours(colours)
     },
 
@@ -61,7 +61,6 @@ export const usePaletteStore = defineStore('palette', {
       const oldIndex = colours.indexOf(colour)
       colours.splice(newIndex, 0, colours.splice(oldIndex, 1)[0])
       this.colours = colours
-      console.debug(`old: ${oldIndex} new: ${newIndex}`)
     },
 
     removeColour(colour) {
