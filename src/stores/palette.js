@@ -61,6 +61,7 @@ export const usePaletteStore = defineStore('palette', {
       const oldIndex = colours.indexOf(colour)
       colours.splice(newIndex, 0, colours.splice(oldIndex, 1)[0])
       this.colours = colours
+      console.debug(`old: ${oldIndex} new: ${newIndex}`)
     },
 
     removeColour(colour) {
