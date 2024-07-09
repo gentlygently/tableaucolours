@@ -1,3 +1,80 @@
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import ScalableImage from './ScalableImage.vue'
+import { EventBus } from '@/eventbus.js'
+
+const props = defineProps({
+  canPickColour: Boolean,
+  image: HTMLImageElement,
+  scale: { type: Number, default: 1 },
+})
+
+const emit = defineEmits(['file-dropped', 'colour-picked', 'zoom'])
+
+const dropTarget = ref(null)
+const isDropHighlightActive = ref(false)
+
+const hasImage = computed(() => props.image.width && props.image.height)
+const dropClass = computed(() => (isDropHighlightActive.value ? 'imagecanvas--drop' : ''))
+
+function dragEnter(event) {
+  if (
+    event.dataTransfer.files.length ||
+    [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/' > -1))
+  ) {
+    isDropHighlightActive.value = true
+    event.dataTransfer.dropEffect = 'copy'
+  }
+}
+
+function dragLeave(event) {
+  if (event.target === dropTarget.value) {
+    isDropHighlightActive.value = false
+  }
+}
+
+function drop(event) {
+  isDropHighlightActive.value = false
+
+  if (!event.dataTransfer || !event.dataTransfer.files) {
+    return
+  }
+
+  emit('file-dropped', event.dataTransfer.files)
+}
+
+function colourPicked(colour) {
+  emit('colour-picked', colour)
+}
+
+function openFile() {
+  EventBus.$emit('open-image-file')
+}
+
+function wheel(event) {
+  if (!event.deltaY) {
+    return
+  }
+  preventDefaults(event)
+  emit('zoom', props.scale * (event.deltaY > 0 ? 0.9 : 1.1))
+}
+
+onMounted(() => {
+  window.addEventListener('dragover', preventDefaults, false)
+  window.addEventListener('drop', preventDefaults, false)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('dragover', preventDefaults)
+  window.removeEventListener('drop', preventDefaults)
+})
+
+function preventDefaults(event) {
+  event.preventDefault()
+  event.stopPropagation()
+}
+</script>
+
 <template>
   <div
     ref="container"
@@ -9,11 +86,11 @@
     @drop.stop.prevent="drop"
   >
     <div class="imagecanvas-canvas" @wheel.shift="wheel">
-      <scalable-image
+      <ScalableImage
         v-show="hasImage"
-        :can-pick-colour="canPickColour"
-        :image="image"
-        :scale="scale"
+        :can-pick-colour="props.canPickColour"
+        :image="props.image"
+        :scale="props.scale"
         @colour-picked="colourPicked"
       />
     </div>
@@ -22,7 +99,7 @@
         <div v-show="!hasImage" class="canvashint-text">
           <a href="#" @click.prevent="openFile">Open</a>, paste or drop an image to get started
         </div>
-        <div v-show="hasImage && !canPickColour" class="canvashint-text">
+        <div v-show="hasImage && !props.canPickColour" class="canvashint-text">
           Select a colour in the palette to pick colours from the image
         </div>
       </div>
@@ -37,86 +114,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import ScalableImage from './ScalableImage.vue'
-import { EventBus } from '../eventbus.js'
-
-export default {
-  name: 'ImageCanvas',
-  components: {
-    ScalableImage,
-  },
-  props: {
-    canPickColour: Boolean,
-    image: HTMLImageElement,
-    scale: Number,
-  },
-  data: function () {
-    return {
-      isDropHighlightActive: false,
-    }
-  },
-  computed: {
-    hasImage() {
-      return this.image.width && this.image.height
-    },
-    dropClass() {
-      return this.isDropHighlightActive ? 'imagecanvas--drop' : ''
-    },
-  },
-  created: function () {
-    window.addEventListener('dragover', this.preventDefaults, false)
-    window.addEventListener('drop', this.preventDefaults, false)
-  },
-  destroyed: function () {
-    window.removeEventListener('dragover', this.preventDefaults)
-    window.removeEventListener('drop', this.preventDefaults)
-  },
-  methods: {
-    dragEnter(event) {
-      if (
-        event.dataTransfer.files.length ||
-        [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/' > -1))
-      ) {
-        this.isDropHighlightActive = true
-        event.dataTransfer.dropEffect = 'copy'
-      }
-    },
-    dragLeave(event) {
-      if (event.target === this.$refs.droptarget) {
-        this.isDropHighlightActive = false
-      }
-    },
-    drop(event) {
-      this.isDropHighlightActive = false
-
-      if (!event.dataTransfer || !event.dataTransfer.files) {
-        return
-      }
-
-      this.$emit('file-dropped', event.dataTransfer.files)
-    },
-    colourPicked(colour) {
-      this.$emit('colour-picked', colour)
-    },
-    openFile() {
-      EventBus.$emit('open-image-file')
-    },
-    preventDefaults(event) {
-      event.preventDefault()
-      event.stopPropagation()
-    },
-    wheel(event) {
-      if (!event.deltaY) {
-        return
-      }
-      this.preventDefaults(event)
-      this.$emit('zoom', this.scale * (event.deltaY > 0 ? 0.9 : 1.1))
-    },
-  },
-}
-</script>
 
 <style scoped lang="less">
 .imagecanvas {
