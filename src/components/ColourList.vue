@@ -6,7 +6,14 @@ import { usePaletteStore } from '../stores/palette'
 
 const store = usePaletteStore()
 
-const colours = computed(() => store.colours)
+const colours = computed({
+  get() {
+    return store.colours
+  },
+  set() {
+    // Do nothing (we handle the change in colourMoved)
+  },
+})
 
 const selectedColourIndex = computed(() => store.colours.findIndex(x => x.isSelected))
 
