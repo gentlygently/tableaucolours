@@ -1,89 +1,79 @@
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import ImageCanvas from './ImageCanvas.vue'
+import ImageFileOpen from './ImageFileOpen.vue'
+import ImageZoom from './ImageZoom.vue'
+import { usePaletteStore } from '@/stores/palette'
+import { useImageStore } from '@/stores/image'
+
+const props = defineProps({ canPickColour: Boolean })
+
+const imageStore = useImageStore()
+const paletteStore = usePaletteStore()
+
+const canvas = ref(null)
+
+function colourPicked(hex) {
+  paletteStore.updateSelectedColour(hex)
+}
+
+function displayFirstImage(files) {
+  imageStore.displayFirstImage(files, canvas.value)
+}
+
+function fileSelected(files) {
+  displayFirstImage([...files])
+}
+
+function paste(event) {
+  if (
+    !event.clipboardData ||
+    !event.clipboardData.items ||
+    event.target.tagName === 'INPUT' ||
+    event.target.tagName === 'TEXTAREA'
+  ) {
+    return
+  }
+
+  const files = [...event.clipboardData.items].filter(i => i.kind === 'file').map(i => i.getAsFile())
+
+  displayFirstImage(files)
+}
+
+onMounted(() => window.addEventListener('paste', paste, false))
+onUnmounted(() => window.removeEventListener('paste', paste))
+</script>
+
 <template>
   <div class="imagecolourpicker">
     <div ref="canvas" class="imagecolourpicker-canvas">
-      <image-canvas
-        :image="image"
-        :scale="scale"
-        :can-pick-colour="canPickColour"
+      <ImageCanvas
+        :image="imageStore.image"
+        :scale="imageStore.scale"
+        :can-pick-colour="props.canPickColour"
         @colour-picked="colourPicked"
         @file-dropped="fileSelected"
-        @zoom="zoom"
+        @zoom="imageStore.zoom"
       />
     </div>
     <div class="imagecolourpicker-toolbar">
       <!--  TODO: Put these in a separate component -->
       <ul class="controls">
         <li class="zoomImage">
-          <image-zoom :scale="scale" :range="zoomRange" :enabled="hasImage" @zoom="zoom" />
+          <ImageZoom
+            :scale="imageStore.scale"
+            :range="imageStore.zoomRange"
+            :enabled="imageStore.hasImage"
+            @zoom="imageStore.zoom"
+          />
         </li>
         <li class="selectFile">
-          <image-file-open @file-selected="fileSelected" />
+          <ImageFileOpen @file-selected="fileSelected" />
         </li>
       </ul>
     </div>
   </div>
 </template>
-
-<script>
-import ImageCanvas from './ImageCanvas.vue'
-import ImageFileOpen from './ImageFileOpen.vue'
-import ImageZoom from './ImageZoom.vue'
-import { mapActions, mapState, mapWritableState } from 'pinia'
-import { usePaletteStore } from '../stores/palette'
-import { useImageStore } from '../stores/image'
-
-export default {
-  name: 'ImageColourPicker',
-  props: {
-    canPickColour: Boolean,
-  },
-  computed: {
-    ...mapState(useImageStore, ['hasImage', 'image', 'scale', 'zoomRange']),
-    ...mapWritableState(useImageStore, ['zoom']),
-  },
-  components: {
-    ImageCanvas,
-    ImageFileOpen,
-    ImageZoom,
-  },
-  methods: {
-    ...mapActions(usePaletteStore, ['updateSelectedColour']),
-    ...mapActions(useImageStore, { displayFirstImageOnCanvas: 'displayFirstImage' }),
-
-    colourPicked(hex) {
-      this.updateSelectedColour(hex)
-    },
-
-    displayFirstImage(files) {
-      this.displayFirstImageOnCanvas(files, this.$refs.canvas)
-    },
-
-    fileSelected(files) {
-      this.displayFirstImage([...files])
-    },
-    paste(event) {
-      if (
-        !event.clipboardData ||
-        !event.clipboardData.items ||
-        event.target.tagName === 'INPUT' ||
-        event.target.tagName === 'TEXTAREA'
-      ) {
-        return
-      }
-
-      const files = [...event.clipboardData.items].filter(i => i.kind === 'file').map(i => i.getAsFile())
-
-      this.displayFirstImage(files)
-    },
-  },
-  created() {
-    window.addEventListener('paste', this.paste, false)
-  },
-  destroyed() {
-    window.removeEventListener('paste', this.paste)
-  },
-}
-</script>
 
 <style scoped lang="less">
 @import '../variables.less';
