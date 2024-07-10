@@ -42,9 +42,9 @@ function xml() {
     <div class="getcode-codecontainer">
       <pre ref="code" class="getcode-code">{{ xml() }}</pre>
     </div>
-    <transition>
+    <transition mode="out-in">
       <button v-if="!copied" class="getcode-copy" @click.stop.prevent="copy">Copy to clipboard</button>
-      <button v-if="copied" class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy">
+      <button v-else-if="copied" class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy">
         Copied
         <span class="fas fa-check"></span>
       </button>

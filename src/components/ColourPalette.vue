@@ -106,13 +106,13 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         ></button>
       </li>
     </ul>
-    <ModalPanel v-if="codeModalOpen" width="54rem" @close="codeModalOpen = false">
+    <ModalPanel :show="codeModalOpen" width="54rem" @close="codeModalOpen = false">
       <GetCode />
     </ModalPanel>
-    <ModalPanel v-if="importModalOpen" width="54rem" @close="importModalOpen = false">
+    <ModalPanel :show="importModalOpen" width="54rem" @close="importModalOpen = false">
       <ImportCode @close="importModalOpen = false" />
     </ModalPanel>
-    <ModalPanel v-if="extractModalOpen" width="54rem" @close="extractModalOpen = false">
+    <ModalPanel :show="extractModalOpen" width="54rem" @close="extractModalOpen = false">
       <ExtractColours @close="extractModalOpen = false" />
     </ModalPanel>
   </div>

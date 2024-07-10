@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
-import { Sketch as SketchColourPicker } from 'vue-color'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { Sketch as SketchColourPicker } from '@ckpack/vue-color'
 
 const props = defineProps({
   hex: {
@@ -11,15 +11,17 @@ const props = defineProps({
 
 const emit = defineEmits(['colour-picked', 'done'])
 
-function colourPicked(value) {
-  if (value && value.hex) {
-    emit('colour-picked', value.hex)
-  }
-}
+const colour = ref({ hex: props.hex })
 
 function done() {
   emit('done')
 }
+
+watch(colour, newValue => {
+  if (newValue.hex) {
+    emit('colour-picked', newValue.hex)
+  }
+})
 
 onMounted(() => window.addEventListener('click', done, false))
 
@@ -28,7 +30,7 @@ onUnmounted(() => window.removeEventListener('click', done))
 
 <template>
   <div class="colourpicker" @keyup.enter="done" @click.stop.prevent>
-    <SketchColourPicker :disable-alpha="true" :value="props.hex" :preset-colors="[]" @input="colourPicked" />
+    <SketchColourPicker :disable-alpha="true" v-model="colour" :preset-colors="[]" />
     <div class="colourpicker-buttons">
       <button class="colourpicker-done" @click.stop.prevent="done">Done</button>
     </div>

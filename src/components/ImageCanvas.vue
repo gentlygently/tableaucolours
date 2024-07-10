@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import ScalableImage from './ScalableImage.vue'
-import { EventBus } from '@/eventbus.js'
+import { eventBus } from '@/EventBus'
 
 const props = defineProps({
   canPickColour: Boolean,
@@ -48,7 +48,7 @@ function colourPicked(colour) {
 }
 
 function openFile() {
-  EventBus.$emit('open-image-file')
+  eventBus.emit('open-image-file')
 }
 
 function wheel(event) {

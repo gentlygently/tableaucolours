@@ -14,6 +14,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  draggingActive: Boolean,
 })
 
 const colour = ref(props.colour)
@@ -23,6 +24,7 @@ const containerClasses = computed(() => {
   let classes = []
   if (colour.value.isSelected) classes.push('colour--selected')
   if (isPickerOpen.value) classes.push('colour--pickeropen')
+  if (props.draggingActive) classes.push('colour--dragging')
   return classes
 })
 

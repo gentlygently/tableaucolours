@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({
+  show: Boolean,
   width: {
     type: String,
     required: true,
@@ -39,7 +40,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
 <template>
   <transition name="modal">
-    <div class="modal-mask">
+    <div v-if="props.show" class="modal-mask">
       <div
         ref="wrapper"
         class="modal-wrapper"
@@ -106,7 +107,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     * these styles.
     */
 
-  &-enter {
+  &-enter-from {
     opacity: 0;
   }
 
@@ -114,7 +115,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     opacity: 0;
   }
 
-  &-enter .modal-container,
+  &-enter-from .modal-container,
   &-leave-active .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);

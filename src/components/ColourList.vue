@@ -1,10 +1,11 @@
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourSwatch from './ColourSwatch.vue'
-import draggable from 'vuedraggable'
+import { VueDraggable } from 'vue-draggable-plus'
 import { usePaletteStore } from '../stores/palette'
 
 const store = usePaletteStore()
+const draggingActive = ref(false)
 
 const colours = computed({
   get() {
@@ -68,7 +69,7 @@ function moveSelectedColourToIndex(index) {
 }
 
 function colourMoved(event) {
-  move(store.colours[event.moved.oldIndex], event.moved.newIndex)
+  move(store.colours[event.oldIndex], event.newIndex)
 }
 
 function keyUp(event) {
@@ -105,20 +106,23 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
 <template>
   <ul class="colourlist">
-    <draggable
+    <VueDraggable
       v-model="colours"
       class="colourlist-draggable"
-      :options="{ chosenClass: 'colour--dragging', delay: 25 }"
-      @change="colourMoved"
+      :options="{ delay: 25 }"
+      @update="colourMoved"
+      @start="draggingActive = true"
+      @end="draggingActive = false"
     >
       <ColourSwatch
         v-for="(colour, index) in colours"
         :key="colour.id"
         :colour="colour"
         :index="index"
+        :draggingActive="draggingActive"
         class="colourlist-colour"
       />
-    </draggable>
+    </VueDraggable>
   </ul>
 </template>
 

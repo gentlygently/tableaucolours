@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { EventBus } from '@/eventbus.js'
+import { eventBus } from '@/EventBus'
 
 const emit = defineEmits(['file-selected'])
 const label = ref(null)
@@ -13,8 +13,8 @@ function click() {
   label.value.click()
 }
 
-onMounted(() => EventBus.$on('open-image-file', click))
-onUnmounted(() => EventBus.$off('open-image-file', click))
+onMounted(() => eventBus.on('open-image-file', click))
+onUnmounted(() => eventBus.off('open-image-file', click))
 </script>
 
 <template>

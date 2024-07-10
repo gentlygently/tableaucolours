@@ -1,34 +1,36 @@
 {
   "name": "vue",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "vite preview",
+    "preview": "vite preview",
     "build": "vite build",
     "dev": "vite",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
-    "format": "prettier .  --write"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "colorthief": "^2.4.0",
     "he": "^1.2.0",
+    "mitt": "^3.0.1",
     "pinia": "^2.1.7",
-    "vue": "^2.7.0",
-    "vue-color": "^2.8.1",
-    "vuedraggable": "^2.16.0"
+    "vue": "^3.4.31",
+    "@ckpack/vue-color": "^1.5.0",
+    "vue-draggable-plus": "^0.5.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue2": "^2.3.1",
+    "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-standard": "^8.0.1",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.27.0",
-    "less": "^3.0.4",
+    "eslint-plugin-vue": "^9.23.0",
+    "less": "^4.2.0",
     "postcss": "^8.4.39",
-    "prettier": "3.3.2",
-    "vite": "^5.3.3",
-    "vite-plugin-eslint": "^1.8.1"
+    "prettier": "^3.3.2",
+    "vite": "^5.3.1",
+    "vite-plugin-vue-devtools": "^7.3.1"
   },
   "browserslist": [
     "> 1%",

@@ -12,14 +12,12 @@ const colourPicked = hex => store.updateSelectedColour(hex)
 </script>
 
 <template>
-  <main id="app">
-    <section id="palettesection">
-      <ColourPalette />
-    </section>
-    <section id="imagesection">
-      <ImageColourPicker :can-pick-colour="canPickColour" @colour-picked="colourPicked" />
-    </section>
-  </main>
+  <section id="palettesection">
+    <ColourPalette />
+  </section>
+  <section id="imagesection">
+    <ImageColourPicker :can-pick-colour="canPickColour" @colour-picked="colourPicked" />
+  </section>
 </template>
 
 <style lang="less">
