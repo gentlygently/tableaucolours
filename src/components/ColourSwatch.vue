@@ -120,6 +120,7 @@ function remove() {
     line-height: 1.9rem;
     text-align: center;
     padding-left: 0.1rem;
+    padding-top: 0.1rem;
     color: #fff;
     background-color: #e94544;
     box-sizing: border-box;

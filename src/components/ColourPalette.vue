@@ -152,7 +152,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   }
   &-colours {
     padding: 1rem;
-    padding-top: 0;
+    padding-top: 0.75rem;
   }
   &-preview {
     padding: 1rem;
