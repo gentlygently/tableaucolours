@@ -10,6 +10,8 @@ import PaletteTypes from './PaletteTypes.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 
+const props = defineProps({ tpsEditorOpen: Boolean })
+
 const imageStore = useImageStore()
 const paletteStore = usePaletteStore()
 const canAddColour = computed(() => paletteStore.canAddColour)
@@ -17,6 +19,8 @@ const canExtractColours = computed(() => imageStore.hasImage)
 const codeModalOpen = ref(false)
 const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
+
+const emit = defineEmits(['open-tps-editor-click'])
 
 function discard() {
   if (confirm('Are you sure you want to discard this palette?')) {
@@ -49,6 +53,10 @@ function removeSelectedColour() {
 
 function typeSelected(type) {
   paletteStore.type = type
+}
+
+function openTpsEditor() {
+  emit('open-tps-editor-click')
 }
 
 onMounted(() => window.addEventListener('keyup', keyUp, false))
@@ -106,6 +114,16 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         ></button>
       </li>
     </ul>
+    <div class="colourpalette-tps">
+      <button
+        class="colourpalette-openeditor"
+        title="Open TPS editor"
+        :disabled="props.tpsEditorOpen"
+        @click.prevent.stop="openTpsEditor"
+      >
+        <span class="fas fa-file-code"></span> Edit TPS File
+      </button>
+    </div>
     <ModalPanel :show="codeModalOpen" width="54rem" @close="codeModalOpen = false">
       <GetCode />
     </ModalPanel>
@@ -192,6 +210,32 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         .iconbutton {
           font-size: 1.9rem;
         }
+      }
+    }
+  }
+  &-tps {
+    padding: 1rem;
+  }
+  &-openeditor {
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    margin-left: 0.25rem;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: @button-colour;
+    text-align: center;
+    width: 22.5rem;
+
+    &:hover {
+      background-color: @button-colour-hover;
+    }
+
+    &--copied {
+      background-color: @button-special-colour;
+
+      &:hover {
+        background-color: @button-special-colour-hover;
       }
     }
   }

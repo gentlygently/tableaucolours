@@ -1,19 +1,26 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import ColourPalette from '@/components/ColourPalette.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
+import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()
 
+const tpsEditorOpen = ref(false)
 const canPickColour = computed(() => !!store.selectedColour)
 
 const colourPicked = hex => store.updateSelectedColour(hex)
 </script>
 
 <template>
+  <Transition name="tps">
+    <section id="tpssection" v-if="tpsEditorOpen">
+      <TpsEditor @closed="tpsEditorOpen = false" />
+    </section>
+  </Transition>
   <section id="palettesection">
-    <ColourPalette />
+    <ColourPalette :tpsEditorOpen="tpsEditorOpen" @open-tps-editor-click="tpsEditorOpen = true" />
   </section>
   <section id="imagesection">
     <ImageColourPicker :can-pick-colour="canPickColour" @colour-picked="colourPicked" />
@@ -49,6 +56,15 @@ textarea {
   height: 100%;
   box-sizing: border-box;
   position: relative;
+}
+#tpssection {
+  width: 25rem;
+  height: 100%;
+  position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
+  background-color: @background-colour;
+  border-right: @border;
 }
 #palettesection {
   width: 25rem;
@@ -89,6 +105,18 @@ textarea {
 
   &:active {
     color: @tool-colour-active;
+  }
+}
+.tps-enter-active,
+.tps-leave-active {
+  animation: slide-in 0.5s;
+}
+@keyframes slide-in {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 25rem;
   }
 }
 </style>
