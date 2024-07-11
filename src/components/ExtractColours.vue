@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import ColorThief from 'colorthief'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
+import { converter, formatHex, useMode, modeLch, modeRgb, parse } from 'culori/fn'
 
 const emit = defineEmits(['close'])
 
@@ -12,7 +13,7 @@ const paletteStore = usePaletteStore()
 const replaceExisting = ref(true)
 const numberHasFocus = ref(false)
 const numberInput = ref(null)
-const numberOfColours = ref(4)
+const numberOfColours = ref(8)
 
 const canAddColours = computed(() => paletteStore.canAddColour)
 const addColoursClass = computed(() => (canAddColours.value ? '' : 'extractcolours-field--disabled'))
@@ -54,8 +55,11 @@ function close() {
 }
 
 function extract() {
-  const colours = new ColorThief().getPalette(imageStore.image, numberOfColoursToExtract.value)
-  const hexes = colours.map(x => '#' + toHex(x[0]) + toHex(x[1]) + toHex(x[2]))
+  const colours = new ColorThief()
+    .getPalette(imageStore.image, numberOfColoursToExtract.value)
+    .map(x => createColour(x[0], x[1], x[2]))
+  colours.sort(compareColours)
+  const hexes = colours.map(x => x.hex)
   switch (action.value) {
     case 'addColours':
       paletteStore.addColours(hexes)
@@ -67,9 +71,50 @@ function extract() {
   close()
 }
 
-function toHex(v) {
-  const s = v.toString(16).toUpperCase()
-  return s.length === 1 ? '0' + s : s
+useMode(modeLch)
+useMode(modeRgb)
+const lchConverter = converter('lch')
+
+function createColour(r, g, b) {
+  const rgb = parse(`rgb(${r} ${g} ${b})`)
+  const lch = lchConverter(rgb)
+  return {
+    luminance: lch.l,
+    chroma: lch.c,
+    hue: lch.h,
+    hex: formatHex(rgb).toUpperCase(),
+  }
+}
+
+// Adapted from https://www.ckdsn.com/sorting-by-color-in-the-lch-color-space/
+function compareColours(a, b) {
+  // Sort greys to the end
+  if (a.chroma < 4.1 && b.chroma >= 4.1) {
+    return 1
+  }
+  if (b.chroma < 4.1 && a.chroma >= 4.1) {
+    return -1
+  }
+
+  const aHue = Math.ceil(a.hue / 20) * 20
+  const bHue = Math.ceil(b.hue / 20) * 20
+
+  if (aHue !== bHue) {
+    return aHue > bHue ? 1 : -1
+  }
+
+  const aLum = Math.round(a.luminance / 15) * 15
+  const bLum = Math.round(b.luminance / 15) * 15
+
+  if (aLum !== bLum) {
+    return aLum > bLum ? -1 : 1
+  }
+
+  if (a.chroma === b.chroma) {
+    return 0
+  }
+
+  return a.chroma > b.chroma ? 1 : -1
 }
 
 onMounted(() => numberInput.value.focus())
