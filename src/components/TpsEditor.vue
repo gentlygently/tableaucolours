@@ -5,14 +5,13 @@ import TpsFileOpen from './TpsFileOpen.vue'
 const fileSelector = ref(null)
 const selectedFileName = ref('')
 
-/*
-const emit = defineEmits(['closed'])
-
+const emit = defineEmits(['close'])
 
 function close() {
-  emit('closed')
+  selectedFileName.value = ''
+  emit('close')
 }
-  */
+
 function selectFile() {
   fileSelector.value.selectFile()
 }
@@ -29,6 +28,13 @@ defineExpose({ selectFile })
 
 <template>
   <div class="tpseditor">
+    <div class="tpseditor-toolbar">
+      <button
+        class="tpseditor-close iconbutton fas fa-times"
+        title="Close TPS file"
+        @click.prevent.stop="close"
+      ></button>
+    </div>
     <div class="tpseditor-file">
       <TpsFileOpen ref="fileSelector" :selectedFileName="selectedFileName" @file-selected="fileSelected" />
     </div>
@@ -36,7 +42,21 @@ defineExpose({ selectFile })
 </template>
 
 <style scoped lang="less">
+@import '../variables.less';
+
 .tpseditor {
+  &-toolbar {
+    height: 4rem;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: @border;
+    padding: 1rem;
+  }
+  &-close {
+    font-size: 2rem;
+    vertical-align: middle;
+    position: relative;
+  }
   &-file {
     padding: 1rem;
   }

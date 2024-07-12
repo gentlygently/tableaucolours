@@ -65,6 +65,14 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
 <template>
   <div class="colourpalette">
+    <div class="colourpalette-toolbar">
+      <button
+        class="colourpalette-openeditor iconbutton fas fa-file-code"
+        title="Open TPS file..."
+        :disabled="props.tpsEditorOpen"
+        @click.prevent.stop="openTpsEditor"
+      ></button>
+    </div>
     <div class="colourpalette-name">
       <input
         id="name"
@@ -114,16 +122,6 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         ></button>
       </li>
     </ul>
-    <div class="colourpalette-tps">
-      <button
-        class="colourpalette-openeditor"
-        title="Open TPS editor"
-        :disabled="props.tpsEditorOpen"
-        @click.prevent.stop="openTpsEditor"
-      >
-        <span class="fas fa-file-code"></span> Edit TPS File
-      </button>
-    </div>
     <ModalPanel :show="codeModalOpen" width="54rem" @close="codeModalOpen = false">
       <GetCode />
     </ModalPanel>
@@ -140,6 +138,13 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 @import '../variables.less';
 
 .colourpalette {
+  &-toolbar {
+    height: 4rem;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: @border;
+    padding: 1rem;
+  }
   &-name {
     padding: 1rem;
     box-sizing: border-box;
@@ -213,31 +218,10 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       }
     }
   }
-  &-tps {
-    padding: 1rem;
-  }
   &-openeditor {
-    border: none;
-    outline: none;
-    padding: 0.5rem;
-    margin-left: 0.25rem;
-    font-size: 1.5rem;
-    color: #fff;
-    background-color: @button-colour;
-    text-align: center;
-    width: 22.5rem;
-
-    &:hover {
-      background-color: @button-colour-hover;
-    }
-
-    &--copied {
-      background-color: @button-special-colour;
-
-      &:hover {
-        background-color: @button-special-colour-hover;
-      }
-    }
+    font-size: 2rem;
+    vertical-align: middle;
+    position: relative;
   }
 }
 </style>

@@ -26,7 +26,7 @@ function openTpsFile() {
     </section>
     <Transition name="tps">
       <section id="tpssection" v-show="tpsEditorOpen">
-        <TpsEditor ref="tpsEditor" @closed="tpsEditorOpen = false" />
+        <TpsEditor ref="tpsEditor" @close="tpsEditorOpen = false" />
       </section>
     </Transition>
   </section>

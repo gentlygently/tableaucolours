@@ -46,18 +46,7 @@ onUnmounted(() => window.removeEventListener('paste', paste))
 
 <template>
   <div class="imagecolourpicker">
-    <div ref="canvas" class="imagecolourpicker-canvas">
-      <ImageCanvas
-        :image="imageStore.image"
-        :scale="imageStore.scale"
-        :can-pick-colour="props.canPickColour"
-        @colour-picked="colourPicked"
-        @file-dropped="fileSelected"
-        @zoom="imageStore.zoom"
-      />
-    </div>
     <div class="imagecolourpicker-toolbar">
-      <!--  TODO: Put these in a separate component -->
       <ul class="controls">
         <li class="zoomImage">
           <ImageZoom
@@ -71,6 +60,16 @@ onUnmounted(() => window.removeEventListener('paste', paste))
           <ImageFileOpen @file-selected="fileSelected" />
         </li>
       </ul>
+    </div>
+    <div ref="canvas" class="imagecolourpicker-canvas">
+      <ImageCanvas
+        :image="imageStore.image"
+        :scale="imageStore.scale"
+        :can-pick-colour="props.canPickColour"
+        @colour-picked="colourPicked"
+        @file-dropped="fileSelected"
+        @zoom="imageStore.zoom"
+      />
     </div>
   </div>
 </template>
@@ -98,7 +97,7 @@ onUnmounted(() => window.removeEventListener('paste', paste))
     width: 100%;
     box-sizing: border-box;
     background-color: @background-colour;
-    border-top: @border;
+    border-bottom: @border;
     flex-shrink: 0;
     flex-grow: 0;
   }
