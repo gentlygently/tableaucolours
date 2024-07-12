@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { eventBus } from '@/EventBus'
 
 const props = defineProps({ selectedFileName: String })
 const emit = defineEmits(['file-selected'])
@@ -12,6 +13,9 @@ function click() {
 function input(event) {
   emit('file-selected', event.target.files)
 }
+
+onMounted(() => eventBus.on('open-tps-file', click))
+onUnmounted(() => eventBus.off('open-tps-file', click))
 
 defineExpose({ selectFile: click })
 </script>

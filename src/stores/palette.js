@@ -25,15 +25,28 @@ export const usePaletteStore = defineStore('palette', {
     type: defaultType,
     maximumColours: 20,
     colours: createColours(null, true),
+    isOpen: false,
   }),
 
   getters: {
     canAddColour: state => state.colours.length < state.maximumColours,
 
+    canPickColour(state) {
+      return state.isOpen && !!this.selectedColour
+    },
+
     selectedColour: state => state.colours.find(x => x.isSelected),
   },
 
   actions: {
+    open() {
+      this.isOpen = true
+    },
+
+    close() {
+      this.isOpen = false
+    },
+
     addColour() {
       if (this.colours.length >= this.maximumColours) {
         return

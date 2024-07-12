@@ -6,6 +6,7 @@ import { eventBus } from '@/EventBus'
 const props = defineProps({
   canPickColour: Boolean,
   image: HTMLImageElement,
+  isPaletteOpen: Boolean,
   scale: { type: Number, default: 1 },
 })
 
@@ -47,8 +48,12 @@ function colourPicked(colour) {
   emit('colour-picked', colour)
 }
 
-function openFile() {
+function openImageFile() {
   eventBus.emit('open-image-file')
+}
+
+function openTpsFile() {
+  eventBus.emit('open-tps-file')
 }
 
 function wheel(event) {
@@ -58,6 +63,14 @@ function wheel(event) {
   preventDefaults(event)
   emit('zoom', props.scale * (event.deltaY > 0 ? 0.9 : 1.1))
 }
+
+const messageType = computed(() => {
+  if (!props.isPaletteOpen) return 'tps'
+  else if (!hasImage.value) return 'image'
+  else if (!props.canPickColour) return 'colour'
+  return null
+})
+const hasMessage = computed(() => messageType.value !== null)
 
 onMounted(() => {
   window.addEventListener('dragover', preventDefaults, false)
@@ -94,12 +107,15 @@ function preventDefaults(event) {
         @colour-picked="colourPicked"
       />
     </div>
-    <div v-show="!hasImage || !canPickColour" class="canvashint">
+    <div v-show="hasMessage" class="canvashint">
       <div class="canvashint-container">
-        <div v-show="!hasImage" class="canvashint-text">
-          <a href="#" @click.prevent="openFile">Open</a>, paste or drop an image to get started
+        <div v-show="messageType === 'tps'" class="canvashint-text">
+          <a href="#" @click.prevent="openTpsFile">Open a TPS file</a> to get started
         </div>
-        <div v-show="hasImage && !props.canPickColour" class="canvashint-text">
+        <div v-show="messageType === 'image'" class="canvashint-text">
+          <a href="#" @click.prevent="openImageFile">Open</a>, paste or drop an image to get started
+        </div>
+        <div v-show="messageType == 'colour'" class="canvashint-text">
           Select a colour in the palette to pick colours from the image
         </div>
       </div>

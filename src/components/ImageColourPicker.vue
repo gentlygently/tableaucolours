@@ -1,17 +1,18 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import ImageCanvas from './ImageCanvas.vue'
 import ImageFileOpen from './ImageFileOpen.vue'
 import ImageZoom from './ImageZoom.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 
-const props = defineProps({ canPickColour: Boolean })
-
 const imageStore = useImageStore()
 const paletteStore = usePaletteStore()
 
 const canvas = ref(null)
+
+const { canPickColour, isOpen: isPaletteOpen } = storeToRefs(paletteStore)
 
 function colourPicked(hex) {
   paletteStore.updateSelectedColour(hex)
@@ -65,7 +66,8 @@ onUnmounted(() => window.removeEventListener('paste', paste))
       <ImageCanvas
         :image="imageStore.image"
         :scale="imageStore.scale"
-        :can-pick-colour="props.canPickColour"
+        :is-palette-open="isPaletteOpen"
+        :can-pick-colour="canPickColour"
         @colour-picked="colourPicked"
         @file-dropped="fileSelected"
         @zoom="imageStore.zoom"

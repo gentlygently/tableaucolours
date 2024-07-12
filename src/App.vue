@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import ColourPalette from '@/components/ColourPalette.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
@@ -7,33 +7,22 @@ import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()
 
-const paletteOpen = ref(false)
-const canPickColour = computed(() => paletteOpen.value && !!store.selectedColour)
-
-const colourPicked = hex => store.updateSelectedColour(hex)
-
-function openColourPalette() {
-  paletteOpen.value = true
-}
-
-function closeColourPalette() {
-  paletteOpen.value = false
-}
+const isPaletteOpen = computed(() => store.isOpen)
 </script>
 
 <template>
   <section id="sidebar">
     <section id="tpssection">
-      <TpsEditor ref="tpsEditor" @open-palette-click="openColourPalette" />
+      <TpsEditor ref="tpsEditor" />
     </section>
     <Transition name="palette">
-      <section id="palettesection" v-show="paletteOpen">
-        <ColourPalette @close="closeColourPalette" />
+      <section id="palettesection" v-show="isPaletteOpen">
+        <ColourPalette />
       </section>
     </Transition>
   </section>
   <section id="imagesection">
-    <ImageColourPicker :can-pick-colour="canPickColour" @colour-picked="colourPicked" />
+    <ImageColourPicker />
   </section>
 </template>
 

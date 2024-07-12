@@ -1,18 +1,13 @@
 <script setup>
-import { ref } from 'Vue'
+import { ref } from 'vue'
 import TpsFileOpen from './TpsFileOpen.vue'
+import { usePaletteStore } from '@/stores/palette'
 
-const fileSelector = ref(null)
+const store = usePaletteStore()
 const selectedFileName = ref('')
 
-const emit = defineEmits(['open-palette-click'])
-
 function openPaletteClick() {
-  emit('open-palette-click')
-}
-
-function selectFile() {
-  fileSelector.value.selectFile()
+  store.open()
 }
 
 function fileSelected(files) {
@@ -21,15 +16,13 @@ function fileSelected(files) {
   }
   selectedFileName.value = files[0].name
 }
-
-defineExpose({ selectFile })
 </script>
 
 <template>
   <div class="tpseditor">
     <div class="tpseditor-toolbar"></div>
     <div class="tpseditor-file">
-      <TpsFileOpen ref="fileSelector" :selectedFileName="selectedFileName" @file-selected="fileSelected" />
+      <TpsFileOpen :selectedFileName="selectedFileName" @file-selected="fileSelected" />
     </div>
     <div class="tpseditor-standalone">
       <button class="openpalette" @click.stop.prevent="openPaletteClick">Create standalone palette</button>

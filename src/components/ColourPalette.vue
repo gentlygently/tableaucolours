@@ -18,10 +18,8 @@ const codeModalOpen = ref(false)
 const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
 
-const emit = defineEmits(['close'])
-
 function close() {
-  emit('close')
+  paletteStore.close()
 }
 
 function discard() {
