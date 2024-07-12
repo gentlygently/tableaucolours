@@ -7,20 +7,28 @@ import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()
 
+const tpsEditor = ref(null)
 const tpsEditorOpen = ref(false)
 const canPickColour = computed(() => !!store.selectedColour)
 
 const colourPicked = hex => store.updateSelectedColour(hex)
+
+function openTpsFile() {
+  tpsEditorOpen.value = true
+  tpsEditor.value.selectFile()
+}
 </script>
 
 <template>
-  <Transition name="tps">
-    <section id="tpssection" v-if="tpsEditorOpen">
-      <TpsEditor @closed="tpsEditorOpen = false" />
+  <section id="sidebar">
+    <section id="palettesection">
+      <ColourPalette :tpsEditorOpen="tpsEditorOpen" @open-tps-editor-click="openTpsFile" />
     </section>
-  </Transition>
-  <section id="palettesection">
-    <ColourPalette :tpsEditorOpen="tpsEditorOpen" @open-tps-editor-click="tpsEditorOpen = true" />
+    <Transition name="tps">
+      <section id="tpssection" v-show="tpsEditorOpen">
+        <TpsEditor ref="tpsEditor" @closed="tpsEditorOpen = false" />
+      </section>
+    </Transition>
   </section>
   <section id="imagesection">
     <ImageColourPicker :can-pick-colour="canPickColour" @colour-picked="colourPicked" />
@@ -57,23 +65,38 @@ textarea {
   box-sizing: border-box;
   position: relative;
 }
-#tpssection {
-  width: 25rem;
-  height: 100%;
+#sidebar {
   position: relative;
   flex-shrink: 0;
   flex-grow: 0;
-  background-color: @background-colour;
-  border-right: @border;
 }
+#sidebar,
+#tpssection,
 #palettesection {
   width: 25rem;
   height: 100%;
-  position: relative;
-  flex-shrink: 0;
-  flex-grow: 0;
   background-color: @background-colour;
   border-right: @border;
+}
+#tpssection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 200;
+}
+.tps-enter-active {
+  animation: slide-in 0.3s;
+}
+.tps-leave-active {
+  animation: slide-in 0.3s reverse;
+}
+@keyframes slide-in {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
 }
 #imagesection {
   height: 100%;
@@ -105,18 +128,6 @@ textarea {
 
   &:active {
     color: @tool-colour-active;
-  }
-}
-.tps-enter-active,
-.tps-leave-active {
-  animation: slide-in 0.5s;
-}
-@keyframes slide-in {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 25rem;
   }
 }
 </style>
