@@ -10,8 +10,6 @@ import PaletteTypes from './PaletteTypes.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 
-const props = defineProps({ tpsEditorOpen: Boolean })
-
 const imageStore = useImageStore()
 const paletteStore = usePaletteStore()
 const canAddColour = computed(() => paletteStore.canAddColour)
@@ -19,8 +17,6 @@ const canExtractColours = computed(() => imageStore.hasImage)
 const codeModalOpen = ref(false)
 const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
-
-const emit = defineEmits(['open-tps-editor-click'])
 
 function discard() {
   if (confirm('Are you sure you want to discard this palette?')) {
@@ -55,24 +51,12 @@ function typeSelected(type) {
   paletteStore.type = type
 }
 
-function openTpsEditor() {
-  emit('open-tps-editor-click')
-}
-
 onMounted(() => window.addEventListener('keyup', keyUp, false))
 onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
   <div class="colourpalette">
-    <div class="colourpalette-toolbar">
-      <button
-        class="colourpalette-openeditor iconbutton fas fa-file-code"
-        title="Open TPS file..."
-        :disabled="props.tpsEditorOpen"
-        @click.prevent.stop="openTpsEditor"
-      ></button>
-    </div>
     <div class="colourpalette-name">
       <input
         id="name"
@@ -138,11 +122,9 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 @import '../variables.less';
 
 .colourpalette {
-  &-toolbar {
-    height: 4rem;
+  &-menu {
+    align-self: flex-end;
     width: 100%;
-    box-sizing: border-box;
-    border-bottom: @border;
     padding: 1rem;
   }
   &-name {
@@ -217,11 +199,6 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         }
       }
     }
-  }
-  &-openeditor {
-    font-size: 2rem;
-    vertical-align: middle;
-    position: relative;
   }
 }
 </style>

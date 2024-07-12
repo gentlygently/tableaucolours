@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import ColourPalette from '@/components/ColourPalette.vue'
+import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
@@ -22,7 +22,7 @@ function openTpsFile() {
 <template>
   <section id="sidebar">
     <section id="palettesection">
-      <ColourPalette :tpsEditorOpen="tpsEditorOpen" @open-tps-editor-click="openTpsFile" />
+      <ColourPaletteEditor :tpsEditorOpen="tpsEditorOpen" @open-tps-editor-click="openTpsFile" />
     </section>
     <Transition name="tps">
       <section id="tpssection" v-show="tpsEditorOpen">
