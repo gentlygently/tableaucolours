@@ -18,6 +18,12 @@ const codeModalOpen = ref(false)
 const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
 
+const emit = defineEmits(['close'])
+
+function close() {
+  emit('close')
+}
+
 function discard() {
   if (confirm('Are you sure you want to discard this palette?')) {
     paletteStore.reset()
@@ -57,6 +63,13 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
 <template>
   <div class="colourpalette">
+    <div class="colourpalette-toolbar">
+      <button
+        class="back iconbutton fas fa-arrow-left"
+        title="Back to file editor"
+        @click.prevent.stop="close"
+      ></button>
+    </div>
     <div class="colourpalette-name">
       <input
         id="name"
@@ -122,10 +135,16 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 @import '../variables.less';
 
 .colourpalette {
-  &-menu {
-    align-self: flex-end;
+  &-toolbar {
     width: 100%;
-    padding: 1rem;
+    height: 4rem;
+
+    .back {
+      font-size: 2rem;
+      vertical-align: middle;
+      position: relative;
+      margin: 1.2rem;
+    }
   }
   &-name {
     padding: 1rem;

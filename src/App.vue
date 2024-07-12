@@ -1,32 +1,34 @@
 <script setup>
 import { computed, ref } from 'vue'
-import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
+import ColourPalette from '@/components/ColourPalette.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()
 
-const tpsEditor = ref(null)
-const tpsEditorOpen = ref(false)
-const canPickColour = computed(() => !!store.selectedColour)
+const paletteOpen = ref(false)
+const canPickColour = computed(() => paletteOpen.value && !!store.selectedColour)
 
 const colourPicked = hex => store.updateSelectedColour(hex)
 
-function openTpsFile() {
-  tpsEditorOpen.value = true
-  tpsEditor.value.selectFile()
+function openColourPalette() {
+  paletteOpen.value = true
+}
+
+function closeColourPalette() {
+  paletteOpen.value = false
 }
 </script>
 
 <template>
   <section id="sidebar">
-    <section id="palettesection">
-      <ColourPaletteEditor :tpsEditorOpen="tpsEditorOpen" @open-tps-editor-click="openTpsFile" />
+    <section id="tpssection">
+      <TpsEditor ref="tpsEditor" @open-palette-click="openColourPalette" />
     </section>
-    <Transition name="tps">
-      <section id="tpssection" v-show="tpsEditorOpen">
-        <TpsEditor ref="tpsEditor" @close="tpsEditorOpen = false" />
+    <Transition name="palette">
+      <section id="palettesection" v-show="paletteOpen">
+        <ColourPalette @close="closeColourPalette" />
       </section>
     </Transition>
   </section>
@@ -78,18 +80,20 @@ textarea {
   background-color: @background-colour;
   border-right: @border;
 }
-#tpssection {
+#palettesection {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 200;
 }
-.tps-enter-active {
+
+.palette-enter-active {
   animation: slide-in 0.3s;
 }
-.tps-leave-active {
+.palette-leave-active {
   animation: slide-in 0.3s reverse;
 }
+
 @keyframes slide-in {
   0% {
     top: 100%;
@@ -98,6 +102,7 @@ textarea {
     top: 0;
   }
 }
+
 #imagesection {
   height: 100%;
   box-sizing: border-box;
