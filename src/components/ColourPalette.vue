@@ -179,6 +179,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   &-preview {
     padding: 1rem;
     padding-top: 0;
+    height: 3rem;
   }
   &-actions {
     display: block;

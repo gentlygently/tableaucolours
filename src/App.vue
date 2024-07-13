@@ -16,7 +16,7 @@ const isPaletteOpen = computed(() => store.isOpen)
       <TpsEditor ref="tpsEditor" />
     </section>
     <Transition name="palette">
-      <section id="palettesection" v-show="isPaletteOpen">
+      <section id="palettesection" v-if="isPaletteOpen">
         <ColourPalette />
       </section>
     </Transition>
