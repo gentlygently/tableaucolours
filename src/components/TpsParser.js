@@ -1,3 +1,5 @@
+//import { PaletteTypes } from '../PaletteTypes'
+
 const xmlParser = new DOMParser()
 const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?(?:[0-9a-f]{5})?$/i
 
@@ -84,12 +86,18 @@ function parsePaletteElement(element, requireColour) {
     return invalidPalette(`'${invalidColour}' is not a valid colour`, element)
   }
 
+  const type = element.getAttribute('type') ?? ''
+  /*
+  if (!PaletteTypes.get(type)) {
+    return invalidPalette(`'${type}' is not a valid palette type`, element)
+  }
+*/
   return {
     isValid: true,
     validationMessage: '',
     palette: {
       name: element.getAttribute('name') ?? '',
-      type: element.getAttribute('type') ?? '',
+      type: type,
       colours: colours,
     },
   }

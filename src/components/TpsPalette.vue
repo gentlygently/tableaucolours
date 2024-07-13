@@ -1,5 +1,7 @@
 <script setup>
+import { computed } from 'vue'
 import PalettePreview from './PalettePreview.vue'
+import { PaletteTypes } from '../PaletteTypes'
 
 const props = defineProps({
   palette: {
@@ -8,13 +10,20 @@ const props = defineProps({
   },
 })
 
+const typeName = computed(() => {
+  const type = PaletteTypes.get(props.palette.type)
+  return type ? type.name : props.palette.type
+})
+
+const tooltip = computed(() => `${props.palette.name}\r\n${typeName.value}\r\n(double click to edit)`)
+
 const emit = defineEmits(['selected'])
 
 const click = () => emit('selected', props.palette)
 </script>
 
 <template>
-  <li class="palette" :class="{ 'palette--selected': palette.isSelected }" @click="click">
+  <li class="palette" :title="tooltip" :class="{ 'palette--selected': palette.isSelected }" @click="click">
     <div class="details">
       {{ palette.name }}
       <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>

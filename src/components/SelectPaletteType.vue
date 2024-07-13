@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import PaletteType from './PaletteType.vue'
+import { PaletteTypes } from '@/PaletteTypes'
 
 const props = defineProps({
   selectedTypeName: {
@@ -19,9 +20,9 @@ const emit = defineEmits(['type-selected'])
 const typeSelect = ref(null)
 const isListOpen = ref(false)
 const types = ref([
-  createType('regular', 'regular', 'Regular'),
-  createType('ordered-sequential', 'sequential', 'Sequential'),
-  createType('ordered-diverging', 'diverging', 'Diverging'),
+  createType(PaletteTypes.regular.id, 'regular', PaletteTypes.regular.name),
+  createType(PaletteTypes.sequential.id, 'sequential', PaletteTypes.sequential.name),
+  createType(PaletteTypes.diverging.id, 'diverging', PaletteTypes.diverging.name),
 ])
 
 function createType(name, classModifier, displayName) {

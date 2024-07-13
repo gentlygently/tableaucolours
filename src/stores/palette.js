@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { PaletteTypes } from '../PaletteTypes'
 
 let nextColourId = 1
-const defaultType = 'regular'
+const defaultType = PaletteTypes.regular.id
 
 function createColours(colours, selectFirstColour) {
   colours = colours || ['#FFFFFF']
@@ -81,7 +82,7 @@ export const usePaletteStore = defineStore('palette', () => {
 
   function replacePalette(paletteName, paletteType, paletteColours) {
     name.value = paletteName || ''
-    type.value = paletteType || 'regular'
+    type.value = paletteType || defaultType
     replaceColours(paletteColours)
   }
 

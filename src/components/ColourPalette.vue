@@ -6,7 +6,7 @@ import ExtractColours from './ExtractColours.vue'
 import ImportCode from './ImportCode.vue'
 import ModalPanel from './ModalPanel.vue'
 import PalettePreview from './PalettePreview.vue'
-import PaletteTypes from './PaletteTypes.vue'
+import SelectPaletteType from './SelectPaletteType.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 
@@ -79,7 +79,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       />
     </div>
     <div class="colourpalette-type">
-      <PaletteTypes :selected-type-name="paletteStore.type" :tab-index="2" @type-selected="typeSelected" />
+      <SelectPaletteType :selected-type-name="paletteStore.type" :tab-index="2" @type-selected="typeSelected" />
     </div>
     <ColourList class="colourpalette-colours" />
     <div class="colourpalette-preview">

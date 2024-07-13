@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { PaletteTypes } from '../PaletteTypes'
 
 const props = defineProps({
   type: {
@@ -14,11 +15,11 @@ const props = defineProps({
 
 const backgroundStyle = computed(() => {
   switch (props.type) {
-    case 'regular':
+    case PaletteTypes.regular.id:
       return regular(props.colours)
 
-    case 'ordered-diverging':
-    case 'ordered-sequential':
+    case PaletteTypes.diverging.id:
+    case PaletteTypes.sequential.id:
       return ordered(props.colours)
   }
   return ''
