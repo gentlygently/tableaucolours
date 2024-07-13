@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 let nextColourId = 1
 const defaultType = 'regular'
@@ -19,93 +20,99 @@ function createColour(hex, isSelected) {
   }
 }
 
-export const usePaletteStore = defineStore('palette', {
-  state: () => ({
-    name: '',
-    type: defaultType,
-    maximumColours: 20,
-    colours: createColours(null, true),
-    isOpen: false,
-  }),
+export const usePaletteStore = defineStore('palette', () => {
+  const name = ref('')
+  const type = ref(defaultType)
+  const maximumColours = ref(20)
+  const colours = ref(createColours(null, true))
+  const isOpen = ref(false)
 
-  getters: {
-    canAddColour: state => state.colours.length < state.maximumColours,
+  const canAddColour = computed(() => colours.value.length < maximumColours.value)
 
-    canPickColour(state) {
-      return state.isOpen && !!this.selectedColour
-    },
+  const canPickColour = computed(() => isOpen.value && !!selectedColour.value)
 
-    selectedColour: state => state.colours.find(x => x.isSelected),
-  },
+  const selectedColour = computed(() => colours.value.find(x => x.isSelected))
 
-  actions: {
-    open() {
-      this.isOpen = true
-    },
+  const open = () => (isOpen.value = true)
 
-    close() {
-      this.isOpen = false
-    },
+  const close = () => (isOpen.value = false)
 
-    addColour() {
-      if (this.colours.length >= this.maximumColours) {
-        return
-      }
-      this.colours.push(createColour('#FFFFFF'))
-      this.selectColour(this.colours[this.colours.length - 1])
-    },
+  function selectColour(colour) {
+    colours.value.forEach(x => {
+      x.isSelected = x === colour
+    })
+  }
 
-    addColours(hexes) {
-      const colourCapacity = this.maximumColours - this.colours.length
-      if (hexes.length > colourCapacity) {
-        hexes = hexes.slice(0, colourCapacity)
-      }
-      hexes.forEach(x => this.colours.push(createColour(x)))
-    },
+  function addColour() {
+    if (colours.value.length >= maximumColours.value) {
+      return
+    }
+    colours.value.push(createColour('#FFFFFF'))
+    selectColour(colours.value[colours.value.length - 1])
+  }
 
-    import(name, type, colours) {
-      this.name = name || ''
-      this.type = type || 'regular'
-      this.colours = createColours(colours)
-    },
+  function addColours(hexes) {
+    const colourCapacity = maximumColours.value - colours.value.length
+    if (hexes.length > colourCapacity) {
+      hexes = hexes.slice(0, colourCapacity)
+    }
+    hexes.forEach(x => colours.value.push(createColour(x)))
+  }
 
-    moveColour(colour, newIndex) {
-      let colours = this.colours
-      const oldIndex = colours.indexOf(colour)
-      colours.splice(newIndex, 0, colours.splice(oldIndex, 1)[0])
-      this.colours = colours
-    },
+  function updateColour(colour, hex) {
+    colour.hex = hex
+  }
 
-    removeColour(colour) {
-      this.colours = this.colours.filter(x => x !== colour)
-    },
+  function updateSelectedColour(hex) {
+    if (selectedColour.value) {
+      updateColour(selectedColour.value, hex)
+    }
+  }
 
-    replaceColours(hexes) {
-      if (hexes.length > this.maximumColours) {
-        hexes = hexes.slice(0, this.maximumColours)
-      }
-      this.colours = createColours(hexes, true)
-    },
+  function moveColour(colour, newIndex) {
+    let c = colours.value
+    const oldIndex = c.indexOf(colour)
+    c.splice(newIndex, 0, c.splice(oldIndex, 1)[0])
+  }
 
-    reset() {
-      this.$reset()
-    },
+  function removeColour(colour) {
+    colours.value = colours.value.filter(x => x !== colour)
+  }
 
-    selectColour(colour) {
-      this.colours.forEach(x => {
-        x.isSelected = x === colour
-      })
-    },
+  function replacePalette(paletteName, paletteType, paletteColours) {
+    name.value = paletteName || ''
+    type.value = paletteType || 'regular'
+    replaceColours(paletteColours)
+  }
 
-    updateColour(colour, hex) {
-      colour.hex = hex
-    },
+  function replaceColours(hexes) {
+    if (hexes && hexes.length > maximumColours.value) {
+      hexes = hexes.slice(0, maximumColours.value)
+    }
+    colours.value = createColours(hexes, true)
+  }
 
-    updateSelectedColour(hex) {
-      const selectedColour = this.colours.find(x => x.isSelected)
-      if (selectedColour) {
-        this.updateColour(selectedColour, hex)
-      }
-    },
-  },
+  const resetPalette = () => replacePalette('', defaultType)
+
+  return {
+    name,
+    type,
+    maximumColours,
+    colours,
+    isOpen,
+    canAddColour,
+    canPickColour,
+    open,
+    close,
+    selectColour,
+    addColour,
+    addColours,
+    updateColour,
+    updateSelectedColour,
+    moveColour,
+    removeColour,
+    replacePalette,
+    replaceColours,
+    resetPalette,
+  }
 })

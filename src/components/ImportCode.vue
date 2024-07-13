@@ -30,7 +30,7 @@ const codeClasses = computed(() => {
 })
 
 function importXml() {
-  store.import(palette.value.name, palette.value.type, palette.value.colours)
+  store.replacePalette(palette.value.name, palette.value.type, palette.value.colours)
   emit('close')
 }
 
