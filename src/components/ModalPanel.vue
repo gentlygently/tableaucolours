@@ -39,22 +39,24 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
-  <transition name="modal">
-    <div v-if="props.show" class="modal-mask">
-      <div
-        ref="wrapper"
-        class="modal-wrapper"
-        @mousedown.self="wrapperMouseDown"
-        @mouseup.self="wrapperMouseUp"
-        @mouseleave="wrapperMouseLeave"
-      >
-        <div class="modal-container" :style="{ width: props.width }" @click.stop>
-          <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="close"></button>
-          <slot></slot>
+  <Teleport to="body">
+    <Transition name="modal">
+      <div v-if="props.show" class="modal-mask">
+        <div
+          ref="wrapper"
+          class="modal-wrapper"
+          @mousedown.self="wrapperMouseDown"
+          @mouseup.self="wrapperMouseUp"
+          @mouseleave="wrapperMouseLeave"
+        >
+          <div class="modal-container" :style="{ width: props.width }" @click.stop>
+            <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="close"></button>
+            <slot></slot>
+          </div>
         </div>
       </div>
-    </div>
-  </transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped lang="less">
