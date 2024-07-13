@@ -22,12 +22,12 @@ defineExpose({ selectFile: click })
 
 <template>
   <div class="tpsfileopen">
-    <input :value="props.selectedFileName" type="text" readonly />
+    <input :value="props.selectedFileName" type="text" placeholder="Select .tps file" readonly />
     <label ref="label" for="selecttps">
       <input id="selecttps" type="file" accept=".tps" style="display: none" @input="input" />
       <button
         class="tpsfileopen--button iconbutton fas fa-folder-open"
-        title="Open TPS file..."
+        title="Open .tps file..."
         @click.prevent="click"
       ></button>
     </label>

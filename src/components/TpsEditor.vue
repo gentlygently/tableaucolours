@@ -14,7 +14,16 @@ function fileSelected(files) {
   if (!files || !files.length) {
     return
   }
+
+  const reader = new FileReader()
+
   selectedFileName.value = files[0].name
+
+  reader.onload = function (event) {
+    event.target.result
+  }
+
+  reader.readAsText(files[0])
 }
 </script>
 

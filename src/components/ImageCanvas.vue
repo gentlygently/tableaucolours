@@ -110,7 +110,7 @@ function preventDefaults(event) {
     <div v-show="hasMessage" class="canvashint">
       <div class="canvashint-container">
         <div v-show="messageType === 'tps'" class="canvashint-text">
-          <a href="#" @click.prevent="openTpsFile">Open a TPS file</a> to get started
+          <a href="#" @click.prevent="openTpsFile">Open a .tps file</a> to get started
         </div>
         <div v-show="messageType === 'image'" class="canvashint-text">
           <a href="#" @click.prevent="openImageFile">Open</a>, paste or drop an image to get started

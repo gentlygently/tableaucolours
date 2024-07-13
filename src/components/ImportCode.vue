@@ -1,13 +1,11 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
+import { parsePalette } from './TpsParser'
 
 const store = usePaletteStore()
 
 const emit = defineEmits(['close'])
-
-const xmlParser = new DOMParser()
-const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i
 
 const code = ref(null)
 const xml = ref('')
@@ -31,56 +29,17 @@ const codeClasses = computed(() => {
   return classes
 })
 
-function invalid(message) {
-  isValid.value = false
-  validationMessage.value = message
-  palette.value = {}
-}
-
 function importXml() {
   store.import(palette.value.name, palette.value.type, palette.value.colours)
   emit('close')
 }
 
 watch(xml, newValue => {
-  if (!newValue) {
-    return invalid('')
-  }
+  const result = parsePalette(newValue)
 
-  const doc = xmlParser.parseFromString(newValue, 'application/xml')
-  const root = doc.documentElement
-
-  if (root.getElementsByTagName('parsererror').length) {
-    return invalid('Unable to parse XML')
-  }
-
-  if (root.tagName !== 'color-palette') {
-    return invalid('Expected a root element of <color-palette>')
-  }
-
-  const colours = [...root.children].filter(x => x.tagName === 'color').map(x => x.innerHTML.trim())
-
-  if (!colours.length) {
-    return invalid('Expected one or more <color> elements')
-  }
-
-  if (colours.filter(x => !x).length > 0) {
-    return invalid('All <color> elements must contain a valid colour')
-  }
-
-  const invalidColour = colours.find(x => !colourPattern.test(x))
-
-  if (invalidColour) {
-    return invalid(`'${invalidColour}' is not a valid colour`)
-  }
-
-  isValid.value = true
-  validationMessage.value = ''
-  palette.value = {
-    name: root.getAttribute('name'),
-    type: root.getAttribute('type'),
-    colours: colours,
-  }
+  isValid.value = result.isValid
+  validationMessage.value = result.validationMessage
+  palette.value = result.palette
 })
 
 onMounted(() => code.value.focus())
