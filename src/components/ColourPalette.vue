@@ -24,7 +24,7 @@ function close() {
 
 function discard() {
   if (confirm('Are you sure you want to discard this palette?')) {
-    paletteStore.reset()
+    paletteStore.discard()
   }
 }
 

@@ -19,7 +19,34 @@ function colourPicked(hex) {
 }
 
 function displayFirstImage(files) {
-  imageStore.displayFirstImage(files, canvas.value)
+  const file = files.find(i => i.type.indexOf('image/') > -1)
+
+  if (!file) {
+    console.log('File list did not contain image')
+    return
+  }
+
+  const reader = new FileReader()
+
+  reader.onload = function () {
+    const tempImage = new Image()
+    tempImage.onload = function () {
+      let scale = 1
+      const canvasWidth = canvas.value.clientWidth
+      const canvasHeight = canvas.value.clientHeight
+
+      if (canvasWidth < this.width || canvasHeight < this.height) {
+        let xRatio = canvasWidth / this.width
+        let yRatio = canvasHeight / this.height
+
+        scale = Math.floor(Math.min(xRatio, yRatio) * 100) / 100.0
+      }
+
+      imageStore.setImage(this, scale)
+    }
+    tempImage.src = reader.result
+  }
+  reader.readAsDataURL(file)
 }
 
 function fileSelected(files) {
