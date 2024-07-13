@@ -39,7 +39,7 @@ watch(xml, newValue => {
 
   isValid.value = result.isValid
   validationMessage.value = result.validationMessage
-  palette.value = result.palette
+  palette.value = result.isValid ? result.palette : {}
 })
 
 onMounted(() => code.value.focus())
