@@ -131,7 +131,7 @@ function remove() {
   &-picker {
     display: block;
     position: absolute;
-    z-index: 2;
+    z-index: 2000;
     top: 0.5rem;
     left: 4.5rem;
     width: 20rem;

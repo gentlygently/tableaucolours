@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
 import { parseFile } from './TpsParser'
@@ -11,10 +11,14 @@ import TpsPaletteList from './TpsPaletteList.vue'
 const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
 const parserErrors = ref(null)
+const paletteAction = ref('')
 const hasParserErrors = computed(() => parserErrors.value !== null)
 const selectedPaletteIndex = computed(() => tpsStore.palettes.findIndex(x => x.isSelected))
 
-const openPalette = palette => paletteStore.open(palette)
+function openPalette(palette) {
+  paletteAction.value = 'edit'
+  paletteStore.open(palette)
+}
 
 function openPaletteClick() {
   paletteStore.open()
@@ -43,6 +47,19 @@ function fileSelected(files) {
 
   reader.readAsText(files[0])
 }
+
+const isPaletteOpen = computed(() => paletteStore.isOpen)
+
+watch(isPaletteOpen, isOpen => {
+  if (isOpen) return
+
+  if (tpsStore.isOpen && paletteStore.hasChanges) {
+    if (paletteAction.value === 'edit')
+      tpsStore.updateSelectedPalette(paletteStore.name, paletteStore.type, paletteStore.colours)
+  }
+
+  paletteAction.value = ''
+})
 
 function selectPaletteAtIndex(index) {
   if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])

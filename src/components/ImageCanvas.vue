@@ -170,7 +170,7 @@ function preventDefaults(event) {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 9996;
+  z-index: 1000;
   &-container {
     display: table-cell;
     vertical-align: middle;
@@ -200,7 +200,7 @@ function preventDefaults(event) {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 9997;
+  z-index: 1001;
   &-textwrapper {
     display: table-cell;
     vertical-align: middle;

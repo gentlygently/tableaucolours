@@ -35,13 +35,13 @@ watch(isSelected, newValue => {
     ref="element"
     class="palette"
     :title="tooltip"
-    :class="{ 'palette--selected': palette.isSelected }"
+    :class="{ 'palette--selected': palette.isSelected, 'palette--changed': palette.hasChanges }"
     @click="click"
   >
-    <div class="details">
+    <div class="name">
       {{ palette.name }}
-      <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
     </div>
+    <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
     <div class="actions">
       <button class="iconbutton fas fa-ellipsis-h" title=""></button>
     </div>
@@ -53,8 +53,8 @@ watch(isSelected, newValue => {
 
 .palette {
   display: grid;
-  grid-template-columns: auto 2.5rem;
-  grid-template-rows: auto;
+  grid-template-columns: auto 2rem;
+  grid-template-rows: auto auto;
   box-sizing: border-box;
   height: 5rem;
   padding: 0.75rem;
@@ -72,6 +72,10 @@ watch(isSelected, newValue => {
   &--selected,
   &--selected:hover {
     box-shadow: inset 0rem 0rem 0.2rem 0.2rem @border-colour-active;
+  }
+
+  &--changed .name {
+    font-weight: bold;
   }
 
   &-remove {
@@ -106,14 +110,23 @@ watch(isSelected, newValue => {
     background-color: #fff;
   }
 }
-.details {
+.name {
   grid-column: 1 / span 1;
   grid-row: 1 / span 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.preview {
+  grid-column: 1 / span 2;
+  grid-row: 2 / span 1;
+  height: 1.5rem;
+  margin-top: 0.2rem;
 }
 .actions {
   grid-column: 2 / span 1;
   grid-row: 1 / span 1;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
 
   > button {
     font-size: 1rem;
@@ -123,9 +136,5 @@ watch(isSelected, newValue => {
     padding-top: 0;
     top: -0.3rem;
   }
-}
-.preview {
-  height: 1.5rem;
-  margin-top: 0.2rem;
 }
 </style>

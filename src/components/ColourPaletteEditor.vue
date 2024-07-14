@@ -33,8 +33,8 @@ function close() {
 }
 
 function discard() {
-  if (confirm('Are you sure you want to discard this palette?')) {
-    paletteStore.resetPalette()
+  if (confirm('Are you sure you want to delete all colours in the palette?')) {
+    paletteStore.replaceColours()
   }
 }
 
@@ -116,7 +116,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         <button class="iconbutton fas fa-code" title="Get XML" @click.prevent.stop="codeModalOpen = true"></button>
       </li>
       <li class="discard">
-        <button class="iconbutton fas fa-trash-alt" title="Delete palette" @click.prevent.stop="discard"></button>
+        <button class="iconbutton fas fa-trash-alt" title="Delete all colours" @click.prevent.stop="discard"></button>
       </li>
       <li class="add">
         <button

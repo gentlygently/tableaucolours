@@ -13,7 +13,7 @@ const emit = defineEmits(['colour-picked', 'done'])
 
 const colour = ref({ hex: props.hex })
 
-function done() {
+function done(e) {
   emit('done')
 }
 
@@ -41,6 +41,8 @@ onUnmounted(() => window.removeEventListener('click', done))
 @import '../variables.less';
 
 .colourpicker {
+  background-color: @background-colour;
+
   &-buttons {
     margin: 0.5rem 1rem 1rem 1rem;
   }
