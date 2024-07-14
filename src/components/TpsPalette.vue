@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import PalettePreview from './PalettePreview.vue'
 import { PaletteTypes } from '../PaletteTypes'
 
@@ -9,6 +9,8 @@ const props = defineProps({
     required: true,
   },
 })
+
+const element = ref(null)
 
 const typeName = computed(() => {
   const type = PaletteTypes.get(props.palette.type)
@@ -20,10 +22,22 @@ const tooltip = computed(() => `${props.palette.name}\r\n${typeName.value}\r\n(d
 const emit = defineEmits(['selected'])
 
 const click = () => emit('selected', props.palette)
+
+const isSelected = computed(() => props.palette.isSelected)
+
+watch(isSelected, newValue => {
+  if (newValue) element.value.scrollIntoView({ block: 'nearest' })
+})
 </script>
 
 <template>
-  <li class="palette" :title="tooltip" :class="{ 'palette--selected': palette.isSelected }" @click="click">
+  <li
+    ref="element"
+    class="palette"
+    :title="tooltip"
+    :class="{ 'palette--selected': palette.isSelected }"
+    @click="click"
+  >
     <div class="details">
       {{ palette.name }}
       <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
