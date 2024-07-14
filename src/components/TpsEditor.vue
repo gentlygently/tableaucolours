@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
 import { parseFile } from './TpsParser'
@@ -12,6 +12,7 @@ const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
 const parserErrors = ref(null)
 const hasParserErrors = computed(() => parserErrors.value !== null)
+const selectedPaletteIndex = computed(() => tpsStore.palettes.findIndex(x => x.isSelected))
 
 const openPalette = palette => paletteStore.open(palette)
 
@@ -42,6 +43,36 @@ function fileSelected(files) {
 
   reader.readAsText(files[0])
 }
+
+function selectPaletteAtIndex(index) {
+  if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])
+}
+
+function keyUp(event) {
+  if (paletteStore.isOpen || event.target.tagName.toLowerCase() !== 'body') {
+    return
+  }
+
+  if (tpsStore.hasSelectedPalette) {
+    switch (event.key) {
+      case 'Enter':
+        openPalette(tpsStore.selectedPalette)
+        return
+      case 'Down':
+      case 'ArrowDown':
+        selectPaletteAtIndex(selectedPaletteIndex.value + 1)
+        return
+
+      case 'Up':
+      case 'ArrowUp':
+        selectPaletteAtIndex(selectedPaletteIndex.value - 1)
+        return
+    }
+  }
+}
+
+onMounted(() => window.addEventListener('keyup', keyUp, false))
+onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>

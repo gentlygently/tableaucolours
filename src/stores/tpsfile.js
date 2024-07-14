@@ -9,7 +9,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   const fileName = ref('')
   const palettes = ref([])
   const isOpen = computed(() => !!fileName.value)
-  const hasSelectedPalette = computed(() => !!selectPalette.value)
+  const hasSelectedPalette = computed(() => !!selectedPalette.value)
   const selectedPalette = computed(() => palettes.value.find(x => x.isSelected))
 
   function open(name, parsedPalettes) {
