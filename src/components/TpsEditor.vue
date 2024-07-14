@@ -13,6 +13,8 @@ const paletteStore = usePaletteStore()
 const parserErrors = ref(null)
 const hasParserErrors = computed(() => parserErrors.value !== null)
 
+const openPalette = palette => paletteStore.open(palette)
+
 function openPaletteClick() {
   paletteStore.open()
 }
@@ -49,7 +51,7 @@ function fileSelected(files) {
       <TpsFileOpen :selectedFileName="tpsStore.fileName" @file-selected="fileSelected" />
     </div>
     <div class="palettes" v-if="tpsStore.isOpen">
-      <TpsPaletteList />
+      <TpsPaletteList @palette-double-click="openPalette" />
     </div>
     <div class="standalone">
       <button class="openpalette" @click.stop.prevent="openPaletteClick">Create standalone palette</button>

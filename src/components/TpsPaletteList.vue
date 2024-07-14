@@ -3,6 +3,13 @@ import TpsPalette from './TpsPalette.vue'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
 const tpsStore = useTpsFileStore()
+
+const emit = defineEmits(['palette-double-click'])
+
+function doubleClick(palette) {
+  tpsStore.selectPalette(palette)
+  emit('palette-double-click', palette)
+}
 </script>
 
 <template>
@@ -12,6 +19,7 @@ const tpsStore = useTpsFileStore()
       :key="palette.id"
       :palette="palette"
       @selected="tpsStore.selectPalette"
+      @dblclick="doubleClick(palette)"
     />
   </ul>
 </template>

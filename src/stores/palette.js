@@ -34,7 +34,11 @@ export const usePaletteStore = defineStore('palette', () => {
 
   const selectedColour = computed(() => colours.value.find(x => x.isSelected))
 
-  const open = () => (isOpen.value = true)
+  function open(palette) {
+    if (palette) replacePalette(palette.name, palette.type, palette.colours)
+    else resetPalette()
+    isOpen.value = true
+  }
 
   const close = () => (isOpen.value = false)
 
