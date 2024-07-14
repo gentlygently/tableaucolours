@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { PaletteTypes } from '../PaletteTypes'
 
 let nextColourId = 1
@@ -27,6 +27,7 @@ export const usePaletteStore = defineStore('palette', () => {
   const maximumColours = ref(20)
   const colours = ref(createColours(null, true))
   const isOpen = ref(false)
+  const hasChanges = ref(false)
 
   const canAddColour = computed(() => colours.value.length < maximumColours.value)
 
@@ -37,6 +38,7 @@ export const usePaletteStore = defineStore('palette', () => {
   function open(palette) {
     if (palette) replacePalette(palette.name, palette.type, palette.colours)
     else resetPalette()
+    hasChanges.value = false
     isOpen.value = true
   }
 
@@ -53,6 +55,7 @@ export const usePaletteStore = defineStore('palette', () => {
       return
     }
     colours.value.push(createColour('#FFFFFF'))
+    hasChanges.value = true
     selectColour(colours.value[colours.value.length - 1])
   }
 
@@ -61,11 +64,15 @@ export const usePaletteStore = defineStore('palette', () => {
     if (hexes.length > colourCapacity) {
       hexes = hexes.slice(0, colourCapacity)
     }
+    if (!hexes.length) return
+
     hexes.forEach(x => colours.value.push(createColour(x)))
+    hasChanges.value = true
   }
 
   function updateColour(colour, hex) {
     colour.hex = hex
+    hasChanges.value = true
   }
 
   function updateSelectedColour(hex) {
@@ -78,10 +85,12 @@ export const usePaletteStore = defineStore('palette', () => {
     let c = colours.value
     const oldIndex = c.indexOf(colour)
     c.splice(newIndex, 0, c.splice(oldIndex, 1)[0])
+    hasChanges.value = true
   }
 
   function removeColour(colour) {
     colours.value = colours.value.filter(x => x !== colour)
+    hasChanges.value = true
   }
 
   function replacePalette(paletteName, paletteType, paletteColours) {
@@ -95,15 +104,20 @@ export const usePaletteStore = defineStore('palette', () => {
       hexes = hexes.slice(0, maximumColours.value)
     }
     colours.value = createColours(hexes, true)
+    hasChanges.value = true
   }
 
   const resetPalette = () => replacePalette('', defaultType)
+
+  watch(name, () => (hasChanges.value = true))
+  watch(type, () => (hasChanges.value = true))
 
   return {
     name,
     type,
     maximumColours,
     colours,
+    hasChanges,
     isOpen,
     canAddColour,
     canPickColour,

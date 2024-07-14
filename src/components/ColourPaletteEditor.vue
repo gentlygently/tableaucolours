@@ -9,9 +9,11 @@ import PalettePreview from './PalettePreview.vue'
 import SelectPaletteType from './SelectPaletteType.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
+import { useTpsFileStore } from '@/stores/tpsfile'
 
 const imageStore = useImageStore()
 const paletteStore = usePaletteStore()
+const tpsStore = useTpsFileStore()
 const canAddColour = computed(() => paletteStore.canAddColour)
 const canExtractColours = computed(() => imageStore.hasImage)
 const codeModalOpen = ref(false)
@@ -19,6 +21,14 @@ const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
 
 function close() {
+  console.debug(paletteStore.hasChanges)
+  if (
+    !tpsStore.isOpen &&
+    paletteStore.hasChanges &&
+    !confirm('Your palette will be discarded if you return to the .tps file editor. Continue?')
+  ) {
+    return
+  }
   paletteStore.close()
 }
 
