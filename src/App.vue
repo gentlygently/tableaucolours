@@ -1,5 +1,5 @@
 <script setup>
-import ColourPalette from '@/components/ColourPalette.vue'
+import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
@@ -10,11 +10,11 @@ const paletteStore = usePaletteStore()
 <template>
   <section id="sidebar">
     <section id="tpssection">
-      <TpsEditor ref="tpsEditor" />
+      <TpsEditor />
     </section>
     <Transition name="palette">
       <section id="palettesection" v-if="paletteStore.isOpen">
-        <ColourPalette />
+        <ColourPaletteEditor />
       </section>
     </Transition>
   </section>
