@@ -7,6 +7,7 @@ const props = defineProps({
   canPickColour: Boolean,
   image: HTMLImageElement,
   isPaletteOpen: Boolean,
+  isTpsFileOpen: Boolean,
   scale: { type: Number, default: 1 },
 })
 
@@ -65,7 +66,7 @@ function wheel(event) {
 }
 
 const messageType = computed(() => {
-  if (!props.isPaletteOpen) return 'tps'
+  if (!props.isPaletteOpen) return props.isTpsFileOpen ? 'palette' : 'tps'
   else if (!hasImage.value) return 'image'
   else if (!props.canPickColour) return 'colour'
   return null
@@ -112,6 +113,7 @@ function preventDefaults(event) {
         <div v-show="messageType === 'tps'" class="canvashint-text">
           <a href="#" @click.prevent="openTpsFile">Open a .tps file</a> to get started
         </div>
+        <div v-show="messageType === 'palette'" class="canvashint-text">Double click a palette to edit</div>
         <div v-show="messageType === 'image'" class="canvashint-text">
           <a href="#" @click.prevent="openImageFile">Open</a>, paste or drop an image to get started
         </div>

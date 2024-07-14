@@ -1,15 +1,18 @@
 <script setup>
 import TpsPalette from './TpsPalette.vue'
-defineProps({ palettes: { type: Array, required: true } })
+import { useTpsFileStore } from '@/stores/tpsfile'
 
-const emit = defineEmits(['palette-selected'])
-
-const paletteSelected = palette => emit('palette-selected', palette)
+const tpsStore = useTpsFileStore()
 </script>
 
 <template>
   <ul class="palettelist">
-    <TpsPalette v-for="palette in palettes" :key="palette.id" :palette="palette" @selected="paletteSelected" />
+    <TpsPalette
+      v-for="palette in tpsStore.palettes"
+      :key="palette.id"
+      :palette="palette"
+      @selected="tpsStore.selectPalette"
+    />
   </ul>
 </template>
 

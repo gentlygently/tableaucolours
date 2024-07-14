@@ -1,28 +1,24 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
+import { useTpsFileStore } from '@/stores/tpsfile'
 import { parseFile } from './TpsParser'
 import ModalPanel from './ModalPanel.vue'
 import TpsErrors from './TpsErrors.vue'
 import TpsFileOpen from './TpsFileOpen.vue'
 import TpsPaletteList from './TpsPaletteList.vue'
 
-const store = usePaletteStore()
-const fileName = ref('')
-const palettes = ref([])
+const tpsStore = useTpsFileStore()
+const paletteStore = usePaletteStore()
 const parserErrors = ref(null)
 const hasParserErrors = computed(() => parserErrors.value !== null)
-const isFilOpen = computed(() => fileName.value.length > 0)
 
 function openPaletteClick() {
-  store.open()
+  paletteStore.open()
 }
 
-let nextPaletteId = 1
-
 function fileSelected(files) {
-  fileName.value = ''
-  palettes.value = []
+  tpsStore.close()
 
   if (!files || !files.length) {
     return
@@ -31,31 +27,29 @@ function fileSelected(files) {
   const reader = new FileReader()
 
   reader.onload = function (event) {
+    const fileName = files[0].name
     const result = parseFile(event.target.result)
 
     if (!result.isValid) {
-      parserErrors.value = { fileName: files[0].name, errors: result.validationMessages }
+      parserErrors.value = { fileName: fileName, errors: result.validationMessages }
       return
     }
 
-    fileName.value = files[0].name
-    palettes.value = result.palettes.map(x => ({ ...x, id: nextPaletteId++, isSelected: false }))
+    tpsStore.open(fileName, result.palettes)
   }
 
   reader.readAsText(files[0])
 }
-
-const paletteSelected = palette => palettes.value.forEach(x => (x.isSelected = x === palette))
 </script>
 
 <template>
   <div class="tpseditor">
     <div class="toolbar"></div>
     <div class="file">
-      <TpsFileOpen :selectedFileName="fileName" @file-selected="fileSelected" />
+      <TpsFileOpen :selectedFileName="tpsStore.fileName" @file-selected="fileSelected" />
     </div>
-    <div class="palettes" v-if="isFilOpen">
-      <TpsPaletteList :palettes="palettes" @palette-selected="paletteSelected" />
+    <div class="palettes" v-if="tpsStore.isOpen">
+      <TpsPaletteList />
     </div>
     <div class="standalone">
       <button class="openpalette" @click.stop.prevent="openPaletteClick">Create standalone palette</button>

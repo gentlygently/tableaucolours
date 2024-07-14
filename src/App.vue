@@ -1,13 +1,10 @@
 <script setup>
-import { computed } from 'vue'
 import ColourPalette from '@/components/ColourPalette.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
 
-const store = usePaletteStore()
-
-const isPaletteOpen = computed(() => store.isOpen)
+const paletteStore = usePaletteStore()
 </script>
 
 <template>
@@ -16,7 +13,7 @@ const isPaletteOpen = computed(() => store.isOpen)
       <TpsEditor ref="tpsEditor" />
     </section>
     <Transition name="palette">
-      <section id="palettesection" v-if="isPaletteOpen">
+      <section id="palettesection" v-if="paletteStore.isOpen">
         <ColourPalette />
       </section>
     </Transition>
