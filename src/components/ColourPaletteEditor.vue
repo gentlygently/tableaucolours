@@ -21,7 +21,6 @@ const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
 
 function close() {
-  console.debug(paletteStore.hasChanges)
   if (
     !tpsStore.isOpen &&
     paletteStore.hasChanges &&
@@ -221,9 +220,9 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       }
 
       &.add {
-        padding-top: 0.1rem;
+        padding-top: 0rem;
         .iconbutton {
-          font-size: 1.9rem;
+          font-size: 2rem;
         }
       }
     }

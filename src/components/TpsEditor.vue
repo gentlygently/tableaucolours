@@ -25,8 +25,6 @@ function openPaletteClick() {
 }
 
 function fileSelected(files) {
-  tpsStore.close()
-
   if (!files || !files.length) {
     return
   }
@@ -39,6 +37,7 @@ function fileSelected(files) {
 
     if (!result.isValid) {
       parserErrors.value = { fileName: fileName, errors: result.validationMessages }
+      tpsStore.close()
       return
     }
 
@@ -46,6 +45,11 @@ function fileSelected(files) {
   }
 
   reader.readAsText(files[0])
+}
+
+function close() {
+  if (tpsStore.hasChanges && !confirm('Close without saving?')) return
+  tpsStore.close()
 }
 
 const isPaletteOpen = computed(() => paletteStore.isOpen)
@@ -96,14 +100,46 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   <div class="tpseditor">
     <div class="toolbar"></div>
     <div class="file">
-      <TpsFileOpen :selectedFileName="tpsStore.fileName" @file-selected="fileSelected" />
+      <TpsFileOpen
+        :selected-file-name="tpsStore.fileName"
+        :is-file-open="tpsStore.isOpen"
+        @file-selected="fileSelected"
+      />
     </div>
-    <div class="palettes" v-if="tpsStore.isOpen">
-      <TpsPaletteList @palette-double-click="openPalette" />
-    </div>
-    <div class="standalone">
+    <template v-if="tpsStore.isOpen">
+      <div class="palettes">
+        <TpsPaletteList @palette-double-click="openPalette" />
+      </div>
+      <ul class="paletteactions">
+        <li class="paletteactions-save">
+          <button
+            class="iconbutton fas fa-save"
+            title="Save changes"
+            :disabled="!tpsStore.hasChanges"
+            @click.prevent.stop="save"
+          ></button>
+        </li>
+        <li class="paletteactions-close">
+          <button class="iconbutton fas fa-times" title="Close file" @click.prevent.stop="close"></button>
+        </li>
+        <li class="paletteactions-empty"></li>
+        <li class="paletteactions-filter">
+          <button
+            class="iconbutton fas fa-filter"
+            title="Filter palettes"
+            :disabled="!tpsStore.palettes.length"
+            @click.prevent.stop="discard"
+          ></button>
+        </li>
+        <li class="paletteactions-add">
+          <button class="iconbutton fas fa-plus" title="Add palette (+)" @click.prevent.stop="addPalette"></button>
+        </li>
+      </ul>
+    </template>
+    <div class="standalone" v-if="!tpsStore.isOpen">
       <button class="openpalette" @click.stop.prevent="openPaletteClick">Create standalone palette</button>
     </div>
+
     <ModalPanel :show="hasParserErrors" width="54rem" @close="parserErrors = null">
       <TpsErrors :errors="parserErrors.errors" :fileName="parserErrors.fileName" @close="parserErrors = null" />
     </ModalPanel>
@@ -131,6 +167,45 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 }
 .palettes {
   padding: 0 1rem;
+}
+.paletteactions {
+  display: block;
+  clear: both;
+  list-style: none;
+  margin: auto;
+  width: 22.5rem;
+  padding: 0;
+  margin-top: 1rem;
+  box-sizing: border-box;
+
+  > li {
+    display: inline-block;
+    height: 4rem;
+    width: 4.5rem;
+    border-left: @border;
+    border-top: @border;
+    border-bottom: @border;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &:last-of-type {
+      border-right: @border;
+    }
+    .iconbutton {
+      font-size: 1.7rem;
+      line-height: 3.8rem;
+    }
+    &.paletteactions-save,
+    &.paletteactions-close,
+    &.paletteactions-add {
+      padding-top: 0;
+      .iconbutton {
+        font-size: 2rem;
+      }
+    }
+  }
 }
 .openpalette {
   border: none;

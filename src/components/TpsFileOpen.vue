@@ -1,18 +1,27 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { eventBus } from '@/EventBus'
 
-const props = defineProps({ selectedFileName: String })
+const props = defineProps({ selectedFileName: String, isFileOpen: Boolean })
 const emit = defineEmits(['file-selected'])
 const label = ref(null)
+const fileInput = ref(null)
 
 function click() {
   label.value.click()
 }
 
 function input(event) {
-  emit('file-selected', event.target.files)
+  if (event.target.files.length > 0) {
+    emit('file-selected', event.target.files)
+  }
 }
+
+const isFileOpen = computed(() => props.isFileOpen)
+
+watch(isFileOpen, isOpen => {
+  if (!isOpen) fileInput.value.value = null
+})
 
 onMounted(() => eventBus.on('open-tps-file', click))
 onUnmounted(() => eventBus.off('open-tps-file', click))
@@ -24,7 +33,7 @@ defineExpose({ selectFile: click })
   <div class="tpsfileopen">
     <input :value="props.selectedFileName" type="text" placeholder="Select .tps file" readonly />
     <label ref="label" for="selecttps">
-      <input id="selecttps" type="file" accept=".tps" style="display: none" @input="input" />
+      <input ref="fileInput" id="selecttps" type="file" accept=".tps" style="display: none" @input="input" />
       <button
         class="tpsfileopen--button iconbutton fas fa-folder-open"
         title="Open .tps file..."
