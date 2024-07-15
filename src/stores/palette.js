@@ -109,8 +109,11 @@ export const usePaletteStore = defineStore('palette', () => {
 
   const resetPalette = () => replacePalette('', defaultType)
 
-  watch(name, () => (hasChanges.value = true))
-  watch(type, () => (hasChanges.value = true))
+  // We flush immediately and synchronously to make sure the watchers run immediately
+  // after resetting name and type (in open()). Using the default behaviour, the watchers
+  // run after we've set hasChanges to false.
+  watch(name, () => (hasChanges.value = true), { immediate: true, flush: 'sync' })
+  watch(type, () => (hasChanges.value = true), { immediate: true, flush: 'sync' })
 
   return {
     name,

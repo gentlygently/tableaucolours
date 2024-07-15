@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import PalettePreview from './PalettePreview.vue'
 import { PaletteTypes } from '../PaletteTypes'
 
@@ -23,11 +23,15 @@ const emit = defineEmits(['selected'])
 
 const click = () => emit('selected', props.palette)
 
-const isSelected = computed(() => props.palette.isSelected)
+const isPaletteSelected = computed(() => props.palette.isSelected)
 
-watch(isSelected, newValue => {
-  if (newValue) element.value.scrollIntoView({ block: 'nearest' })
-})
+const scrollIntoViewIfSelected = isSelected => {
+  if (isSelected) element.value.scrollIntoView({ block: 'nearest' })
+}
+
+onMounted(() => scrollIntoViewIfSelected(props.palette.isSelected))
+
+watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush: 'post' })
 </script>
 
 <template>

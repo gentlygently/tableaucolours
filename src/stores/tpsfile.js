@@ -8,7 +8,7 @@ const createPalette = (palette, isSelected) => ({
   name: palette.name,
   type: palette.type,
   colours: mapColours(palette.colours),
-  isSelected,
+  isSelected: !!isSelected,
   hasChanges: false,
 })
 
@@ -34,6 +34,14 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
 
   const selectPalette = palette => palettes.value.map(x => (x.isSelected = x === palette))
 
+  function addPalette(name, type, colours) {
+    palettes.value.push(createPalette({ name, type, colours }))
+    const palette = palettes.value.slice(-1)[0]
+    selectPalette(palette)
+    palette.hasChanges = true
+    hasChanges.value = true
+  }
+
   function updateSelectedPalette(name, type, colours) {
     const palette = selectedPalette.value
 
@@ -54,6 +62,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     open,
     close,
     selectPalette,
+    addPalette,
     updateSelectedPalette,
   }
 })

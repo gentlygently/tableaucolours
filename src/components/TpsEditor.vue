@@ -15,15 +15,6 @@ const paletteAction = ref('')
 const hasParserErrors = computed(() => parserErrors.value !== null)
 const selectedPaletteIndex = computed(() => tpsStore.palettes.findIndex(x => x.isSelected))
 
-function openPalette(palette) {
-  paletteAction.value = 'edit'
-  paletteStore.open(palette)
-}
-
-function openPaletteClick() {
-  paletteStore.open()
-}
-
 function fileSelected(files) {
   if (!files || !files.length) {
     return
@@ -58,8 +49,17 @@ watch(isPaletteOpen, isOpen => {
   if (isOpen) return
 
   if (tpsStore.isOpen && paletteStore.hasChanges) {
-    if (paletteAction.value === 'edit')
-      tpsStore.updateSelectedPalette(paletteStore.name, paletteStore.type, paletteStore.colours)
+    let action = null
+    switch (paletteAction.value) {
+      case 'add':
+        action = tpsStore.addPalette
+        break
+
+      case 'edit':
+        action = tpsStore.updateSelectedPalette
+        break
+    }
+    if (action) action(paletteStore.name, paletteStore.type, paletteStore.colours)
   }
 
   paletteAction.value = ''
@@ -69,9 +69,25 @@ function selectPaletteAtIndex(index) {
   if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])
 }
 
+function openPalette(palette) {
+  paletteAction.value = 'edit'
+  paletteStore.open(palette)
+}
+
+function addPalette() {
+  paletteAction.value = 'add'
+  paletteStore.open()
+}
+
 function keyUp(event) {
   if (paletteStore.isOpen || event.target.tagName.toLowerCase() !== 'body') {
     return
+  }
+
+  switch (event.key) {
+    case '+':
+      addPalette()
+      return
   }
 
   if (tpsStore.hasSelectedPalette) {
@@ -137,7 +153,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       </ul>
     </template>
     <div class="standalone" v-if="!tpsStore.isOpen">
-      <button class="openpalette" @click.stop.prevent="openPaletteClick">Create standalone palette</button>
+      <button class="openpalette" @click.stop.prevent="paletteStore.open">Create standalone palette</button>
     </div>
 
     <ModalPanel :show="hasParserErrors" width="54rem" @close="parserErrors = null">
