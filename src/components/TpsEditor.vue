@@ -52,6 +52,7 @@ watch(isPaletteOpen, isOpen => {
     let action = null
     switch (paletteAction.value) {
       case 'add':
+      case 'clone':
         action = tpsStore.addPalette
         break
 
@@ -87,6 +88,12 @@ function deletePalette(palette) {
   const name = palette.name ? `'${palette.name}'` : 'this palette'
 
   if (confirm(`Are you sure you want to delete ${name}?`)) tpsStore.deletePalette(palette)
+}
+
+function clonePalette(palette) {
+  paletteAction.value = 'clone'
+  paletteStore.open(palette)
+  paletteStore.name = (palette.name + ' (Copy)').trim()
 }
 
 function keyUp(event) {
@@ -140,7 +147,11 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     </div>
     <template v-if="tpsStore.isOpen">
       <div class="palettes">
-        <TpsPaletteList @double-click-palette="openPalette" @delete-palette="deletePalette" />
+        <TpsPaletteList
+          @double-click-palette="openPalette"
+          @delete-palette="deletePalette"
+          @clone-palette="clonePalette"
+        />
       </div>
       <ul class="paletteactions">
         <li class="paletteactions-save">

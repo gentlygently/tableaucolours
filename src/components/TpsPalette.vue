@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['delete'])
+const emit = defineEmits(['delete', 'clone'])
 
 const element = ref(null)
 
@@ -50,6 +50,10 @@ onMounted(() => scrollIntoViewIfSelected(props.palette.isSelected))
 watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush: 'post' })
 
 const deleteClick = () => emit('delete', props.palette)
+const cloneClick = () => {
+  moreClick()
+  emit('clone', props.palette)
+}
 </script>
 
 <template>
@@ -75,7 +79,9 @@ const deleteClick = () => emit('delete', props.palette)
     </div>
     <ul class="actions">
       <li>
-        <button class="actions-clone" title="Clone palette"><span class="fas fa-clone"></span><</button>
+        <button class="actions-clone" title="Clone palette" @click.stop.prevent="cloneClick">
+          <span class="fas fa-clone"></span><
+        </button>
       </li>
       <li>
         <button class="actions-delete" title="Delete palette" @click.stop.prevent="deleteClick">

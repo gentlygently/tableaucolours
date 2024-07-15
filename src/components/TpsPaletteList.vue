@@ -4,13 +4,14 @@ import { useTpsFileStore } from '@/stores/tpsfile'
 
 const tpsStore = useTpsFileStore()
 
-const emit = defineEmits(['double-click-palette', 'delete-palette'])
+const emit = defineEmits(['double-click-palette', 'delete-palette', 'clone-palette'])
 
 function doubleClick(palette) {
   tpsStore.selectPalette(palette)
   emit('double-click-palette', palette)
 }
 
+const clonePalette = palette => emit('clone-palette', palette)
 const deletePalette = palette => emit('delete-palette', palette)
 </script>
 
@@ -23,6 +24,7 @@ const deletePalette = palette => emit('delete-palette', palette)
       @click.stop.prevent="tpsStore.selectPalette(palette)"
       @dblclick.stop.prevent="doubleClick(palette)"
       @delete="deletePalette"
+      @clone="clonePalette"
     />
   </ul>
 </template>
