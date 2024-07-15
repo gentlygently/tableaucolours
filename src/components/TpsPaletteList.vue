@@ -18,8 +18,8 @@ function doubleClick(palette) {
       v-for="palette in tpsStore.palettes"
       :key="palette.id"
       :palette="palette"
-      @selected="tpsStore.selectPalette"
-      @dblclick="doubleClick(palette)"
+      @click.stop.prevent="tpsStore.selectPalette(palette)"
+      @dblclick.stop.prevent="doubleClick(palette)"
     />
   </ul>
 </template>
@@ -37,6 +37,7 @@ function doubleClick(palette) {
   box-sizing: border-box;
   box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
   overflow-y: scroll;
+  overflow-x: hidden;
 
   &-draggable {
     display: grid;

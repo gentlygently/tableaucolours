@@ -19,9 +19,23 @@ const typeName = computed(() => {
 
 const tooltip = computed(() => `${props.palette.name}\r\n${typeName.value}\r\n(double click to edit)`)
 
-const emit = defineEmits(['selected'])
+const showMore = ref(false)
+const moreClasses = ref([])
 
-const click = () => emit('selected', props.palette)
+function moreClick() {
+  if (showMore.value) {
+    moreClasses.value = ['palette--more-leave']
+    showMore.value = false
+  } else {
+    moreClasses.value = ['palette--more', 'palette--more-enter']
+    showMore.value = true
+  }
+}
+
+// Remove the animation classes when the animation completes (otherwise the animation only works once)
+function animated() {
+  moreClasses.value = moreClasses.value.filter(x => x === 'palette--more')
+}
 
 const isPaletteSelected = computed(() => props.palette.isSelected)
 
@@ -39,16 +53,30 @@ watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush
     ref="element"
     class="palette"
     :title="tooltip"
-    :class="{ 'palette--selected': palette.isSelected, 'palette--changed': palette.hasChanges }"
-    @click="click"
+    :class="[
+      {
+        'palette--selected': palette.isSelected,
+        'palette--changed': palette.hasChanges,
+      },
+      ...moreClasses,
+    ]"
+    @animationend="animated"
   >
     <div class="name">
       {{ palette.name }}
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
-    <div class="actions">
-      <button class="iconbutton fas fa-ellipsis-h" title=""></button>
+    <div class="more">
+      <button class="more-toggle" :title="showMore ? 'Less' : 'More'" @click.stop.prevent="moreClick">...</button>
     </div>
+    <ul class="actions">
+      <li>
+        <button class="actions-clone" title="Clone palette"><span class="fas fa-clone"></span><</button>
+      </li>
+      <li>
+        <button class="actions-delete" title="Delete palette"><span class="fas fa-trash-alt"></span></button>
+      </li>
+    </ul>
   </li>
 </template>
 
@@ -60,7 +88,7 @@ watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush
   grid-template-columns: auto 2rem;
   grid-template-rows: auto auto;
   box-sizing: border-box;
-  height: 5rem;
+  height: 5.1rem;
   padding: 0.75rem;
   padding-top: 0.4rem;
   list-style: none;
@@ -82,63 +110,120 @@ watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush
     font-weight: bold;
   }
 
-  &-remove {
-    display: none;
-    position: absolute;
-    top: -0.75rem;
-    right: -0.75rem;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    line-height: 1.9rem;
-    text-align: center;
-    padding-left: 0.1rem;
-    padding-top: 0.1rem;
-    color: #fff;
-    background-color: #e94544;
-    box-sizing: border-box;
-    box-shadow: 0rem 0rem 0.1rem 0.1rem #fff;
-    z-index: 1;
+  &--more {
+    left: -2.5rem;
   }
 
-  &-picker {
+  &--more-enter {
+    left: -2.5rem;
+    animation: slide-in 0.3s;
+  }
+
+  &--more-leave {
+    left: 0;
+    animation: slide-in 0.3s reverse;
+  }
+
+  .name {
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .preview {
+    grid-column: 1 / span 2;
+    grid-row: 2 / span 1;
+    height: 1.5rem;
+    width: 100%;
+    margin-top: 0.2rem;
+  }
+
+  .more {
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 1;
+  }
+
+  .more-toggle {
+    display: block;
+    float: right;
+    box-sizing: border-box;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 0;
+    border-radius: 50%;
+    outline: none;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 0.5rem;
+    text-align: center;
+    padding: 0;
+    padding-bottom: 0.5rem;
+    margin: 0;
+    color: #fff;
+    background-color: @tool-colour-disabled;
+
+    &:hover {
+      background-color: @tool-colour;
+    }
+  }
+
+  &--more .more-toggle {
+    background-color: @button-colour;
+
+    &:hover {
+      background-color: @button-colour-hover;
+    }
+  }
+
+  .actions {
     display: block;
     position: absolute;
-    z-index: 2;
-    top: 0.5rem;
-    left: 4.5rem;
-    width: 20rem;
-    box-sizing: border-box;
-    box-shadow: @box-shadow;
-    background-color: #fff;
+    top: 0;
+    right: -2.5rem;
+    width: 2.5rem;
+    height: 5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: @border;
+
+    button {
+      display: block;
+      width: 100%;
+      height: 2.5rem;
+      border: 0;
+      margin: 0;
+      outline: 0;
+      text-align: center;
+      color: #fff;
+      line-height: 2.2rem;
+    }
+
+    &-clone {
+      background-color: orange;
+
+      &:hover {
+        background-color: lighten(orange, 10%);
+      }
+    }
+
+    &-delete {
+      background-color: red;
+
+      &:hover {
+        background-color: lighten(red, 15%);
+      }
+    }
   }
 }
-.name {
-  grid-column: 1 / span 1;
-  grid-row: 1 / span 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.preview {
-  grid-column: 1 / span 2;
-  grid-row: 2 / span 1;
-  height: 1.5rem;
-  margin-top: 0.2rem;
-}
-.actions {
-  grid-column: 2 / span 1;
-  grid-row: 1 / span 1;
-  padding-left: 0.5rem;
-
-  > button {
-    font-size: 1rem;
-    vertical-align: middle;
-    position: relative;
-    padding: 0.5rem;
-    padding-top: 0;
-    top: -0.3rem;
+@keyframes slide-in {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -2.5rem;
   }
 }
 </style>
