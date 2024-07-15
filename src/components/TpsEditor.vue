@@ -69,6 +69,8 @@ function selectPaletteAtIndex(index) {
   if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])
 }
 
+const openPaletteEditor = () => paletteStore.open()
+
 function openPalette(palette) {
   paletteAction.value = 'edit'
   paletteStore.open(palette)
@@ -152,8 +154,9 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         </li>
       </ul>
     </template>
+
     <div class="standalone" v-if="!tpsStore.isOpen">
-      <button class="openpalette" @click.stop.prevent="paletteStore.open">Create standalone palette</button>
+      <button class="openpalette" @click.stop.prevent="openPaletteEditor">Create standalone palette</button>
     </div>
 
     <ModalPanel :show="hasParserErrors" width="54rem" @close="parserErrors = null">
@@ -166,25 +169,27 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 @import '../variables.less';
 
 .tpseditor {
-  &-close {
-    font-size: 2rem;
-    vertical-align: middle;
-    position: relative;
-  }
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 4rem 5rem minmax(0, 1fr) 7rem;
 }
 .toolbar {
-  height: 4rem;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
+  grid-row: 1 / span 1;
 }
 .file {
+  grid-row: 2 / span 1;
   padding: 1rem;
 }
 .palettes {
+  grid-row: 3 / span 1;
   padding: 0 1rem;
+  max-height: 100%;
 }
 .paletteactions {
+  grid-row: 4 / span 1;
   display: block;
   clear: both;
   list-style: none;
@@ -224,6 +229,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   }
 }
 .openpalette {
+  grid-row: 3;
   border: none;
   outline: none;
   padding: 0.5rem;

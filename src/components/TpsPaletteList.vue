@@ -28,9 +28,11 @@ function doubleClick(palette) {
 @import '../variables.less';
 
 .palettelist {
+  display: block;
   margin: 0;
   padding: 0;
-  height: 30rem;
+  min-height: 20rem;
+  max-height: 100%;
   border-radius: 0.2rem;
   box-sizing: border-box;
   box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;

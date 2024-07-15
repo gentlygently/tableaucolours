@@ -64,7 +64,7 @@ watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush
   padding: 0.75rem;
   padding-top: 0.4rem;
   list-style: none;
-  background-color: @background-colour;
+  background-color: darken(@background-colour, 2%);
   border-bottom: @border;
   position: relative;
   font-size: 1.4rem;
