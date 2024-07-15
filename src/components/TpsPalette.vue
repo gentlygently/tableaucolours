@@ -10,6 +10,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['delete'])
+
 const element = ref(null)
 
 const typeName = computed(() => {
@@ -46,6 +48,8 @@ const scrollIntoViewIfSelected = isSelected => {
 onMounted(() => scrollIntoViewIfSelected(props.palette.isSelected))
 
 watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush: 'post' })
+
+const deleteClick = () => emit('delete', props.palette)
 </script>
 
 <template>
@@ -74,7 +78,9 @@ watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush
         <button class="actions-clone" title="Clone palette"><span class="fas fa-clone"></span><</button>
       </li>
       <li>
-        <button class="actions-delete" title="Delete palette"><span class="fas fa-trash-alt"></span></button>
+        <button class="actions-delete" title="Delete palette" @click.stop.prevent="deleteClick">
+          <span class="fas fa-trash-alt"></span>
+        </button>
       </li>
     </ul>
   </li>

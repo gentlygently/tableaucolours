@@ -32,7 +32,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     palettes.value = []
   }
 
-  const selectPalette = palette => palettes.value.map(x => (x.isSelected = x === palette))
+  const selectPalette = palette => palettes.value.forEach(x => (x.isSelected = x === palette))
 
   function addPalette(name, type, colours) {
     palettes.value.push(createPalette({ name, type, colours }))
@@ -52,6 +52,18 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasChanges.value = true
   }
 
+  function deletePalette(palette) {
+    const index = palettes.value.indexOf(palette)
+
+    if (index < 0) return
+
+    palettes.value.splice(index, 1)
+    hasChanges.value = true
+
+    if (palette.isSelected && palettes.value.length > 0)
+      selectPalette(palettes.value[index >= palettes.value.length ? palettes.value.length - 1 : index])
+  }
+
   return {
     fileName,
     palettes,
@@ -64,5 +76,6 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     selectPalette,
     addPalette,
     updateSelectedPalette,
+    deletePalette,
   }
 })

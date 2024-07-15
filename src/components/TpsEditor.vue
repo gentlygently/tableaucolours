@@ -81,6 +81,14 @@ function addPalette() {
   paletteStore.open()
 }
 
+function deletePalette(palette) {
+  if (!palette) return
+
+  const name = palette.name ? `'${palette.name}'` : 'this palette'
+
+  if (confirm(`Are you sure you want to delete ${name}?`)) tpsStore.deletePalette(palette)
+}
+
 function keyUp(event) {
   if (paletteStore.isOpen || event.target.tagName.toLowerCase() !== 'body') {
     return
@@ -97,6 +105,12 @@ function keyUp(event) {
       case 'Enter':
         openPalette(tpsStore.selectedPalette)
         return
+
+      case 'Backspace':
+      case 'Delete':
+        deletePalette(tpsStore.selectedPalette)
+        return
+
       case 'Down':
       case 'ArrowDown':
         selectPaletteAtIndex(selectedPaletteIndex.value + 1)
@@ -126,7 +140,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     </div>
     <template v-if="tpsStore.isOpen">
       <div class="palettes">
-        <TpsPaletteList @palette-double-click="openPalette" />
+        <TpsPaletteList @double-click-palette="openPalette" @delete-palette="deletePalette" />
       </div>
       <ul class="paletteactions">
         <li class="paletteactions-save">
