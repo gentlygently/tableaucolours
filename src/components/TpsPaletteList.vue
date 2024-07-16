@@ -1,10 +1,22 @@
 <script setup>
+import { computed, ref } from 'vue'
 import TpsPalette from './TpsPalette.vue'
+import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
 const tpsStore = useTpsFileStore()
 
-const emit = defineEmits(['double-click-palette', 'delete-palette', 'clone-palette'])
+const emit = defineEmits(['double-click-palette', 'delete-palette', 'clone-palette', 'move-palette'])
+
+const draggingActive = ref(false)
+const palettes = computed({
+  get() {
+    return tpsStore.palettes
+  },
+  set() {
+    // Do nothing (we handle the change in paletteMoved)
+  },
+})
 
 function doubleClick(palette) {
   tpsStore.selectPalette(palette)
@@ -13,20 +25,30 @@ function doubleClick(palette) {
 
 const clonePalette = palette => emit('clone-palette', palette)
 const deletePalette = palette => emit('delete-palette', palette)
+const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIndex], event.newIndex)
 </script>
 
 <template>
-  <ul class="palettelist">
+  <VueDraggable
+    v-model="palettes"
+    class="palettelist"
+    :options="{ delay: 25 }"
+    :tag="ul"
+    @update="paletteMoved"
+    @start="draggingActive = true"
+    @end="draggingActive = false"
+  >
     <TpsPalette
-      v-for="palette in tpsStore.palettes"
+      v-for="palette in palettes"
       :key="palette.id"
       :palette="palette"
+      class="palettelist-palette"
       @click.stop.prevent="tpsStore.selectPalette(palette)"
       @dblclick.stop.prevent="doubleClick(palette)"
       @delete="deletePalette"
       @clone="clonePalette"
     />
-  </ul>
+  </VueDraggable>
 </template>
 
 <style scoped lang="less">
@@ -43,16 +65,5 @@ const deletePalette = palette => emit('delete-palette', palette)
   box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
   overflow-y: scroll;
   overflow-x: hidden;
-
-  &-draggable {
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: 5rem 5rem 5rem 5rem;
-  }
-
-  &-colour {
-    display: block;
-    position: relative;
-  }
 }
 </style>

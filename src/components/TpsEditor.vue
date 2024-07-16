@@ -171,6 +171,7 @@ onUnmounted(() => {
           @double-click-palette="openPalette"
           @delete-palette="deletePalette"
           @clone-palette="clonePalette"
+          @move-palette="tpsStore.movePalette"
         />
       </div>
       <ul class="paletteactions">

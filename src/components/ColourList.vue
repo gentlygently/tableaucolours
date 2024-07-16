@@ -105,41 +105,42 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
-  <ul class="colourlist">
-    <VueDraggable
-      v-model="colours"
-      class="colourlist-draggable"
-      :options="{ delay: 25 }"
-      @update="colourMoved"
-      @start="draggingActive = true"
-      @end="draggingActive = false"
-    >
-      <ColourSwatch
-        v-for="(colour, index) in colours"
-        :key="colour.id"
-        :colour="colour"
-        :index="index"
-        :draggingActive="draggingActive"
-        class="colourlist-colour"
-      />
-    </VueDraggable>
-  </ul>
+  <VueDraggable
+    v-model="colours"
+    class="colourlist"
+    :tag="ul"
+    :options="{ delay: 25 }"
+    dragClass="colourlist-colour--drag"
+    @update="colourMoved"
+    @start="draggingActive = true"
+    @end="draggingActive = false"
+  >
+    <ColourSwatch
+      v-for="(colour, index) in colours"
+      :key="colour.id"
+      :colour="colour"
+      :index="index"
+      :draggingActive="draggingActive"
+      class="colourlist-colour"
+    />
+  </VueDraggable>
 </template>
 
 <style scoped lang="less">
 .colourlist {
   margin: 0;
   height: 29rem;
-
-  &-draggable {
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: 5rem 5rem 5rem 5rem;
-  }
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 5rem 5rem 5rem 5rem;
 
   &-colour {
     display: block;
     position: relative;
+
+    &--drag {
+      margin: 0;
+    }
   }
 }
 </style>

@@ -94,6 +94,8 @@ function remove() {
     display: block;
   }
 
+  .colourlist-colour--drag .colour-remove,
+  .colourlist-colour--drag:hover .colour-remove,
   &--dragging .colour-remove,
   &--dragging:hover .colour-remove,
   &--pickeropen .colour-remove,
