@@ -3,7 +3,7 @@
 const xmlParser = new DOMParser()
 const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?(?:[0-9a-f]{5})?$/i
 
-function parseFile(xml) {
+function parseTpsFile(xml) {
   if (!xml) {
     return invalidFile('')
   }
@@ -41,6 +41,7 @@ function parseFile(xml) {
     isValid: true,
     validationMessage: '',
     palettes: parsedPalettes.map(x => x.palette),
+    xml: xml,
   }
 }
 
@@ -50,7 +51,7 @@ const invalidFile = messages => ({
   palettes: [],
 })
 
-function parsePalette(xml) {
+function parseColourPalette(xml) {
   if (!xml) {
     return invalidPalette('')
   }
@@ -111,4 +112,4 @@ const invalidPalette = (message, element) => ({
   },
 })
 
-export { parseFile, parsePalette }
+export { parseTpsFile, parseColourPalette }

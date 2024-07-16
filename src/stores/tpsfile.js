@@ -15,20 +15,23 @@ const createPalette = (palette, isSelected) => ({
 const mapColours = colours => colours.map(x => (typeof x === 'string' ? x : x.hex))
 
 export const useTpsFileStore = defineStore('tpsFile', () => {
-  const fileName = ref('')
+  const file = ref(null)
   const palettes = ref([])
   const hasChanges = ref(false)
-  const isOpen = computed(() => !!fileName.value)
+  const fileContents = computed(() => file.contents || '')
+  const fileName = computed(() => file.name || '')
+  const isOpen = computed(() => !!file.value)
   const hasSelectedPalette = computed(() => !!selectedPalette.value)
   const selectedPalette = computed(() => palettes.value.find(x => x.isSelected))
 
-  function open(name, parsedPalettes) {
-    fileName.value = name
+  function open(name, xml, parsedPalettes) {
+    file.value = { name, contents: xml }
     palettes.value = parsedPalettes.map((p, i) => createPalette(p, i === 0))
+    hasChanges.value = false
   }
 
   function close() {
-    fileName.value = ''
+    file.value = null
     palettes.value = []
   }
 
@@ -72,6 +75,8 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   }
 
   return {
+    file,
+    fileContents,
     fileName,
     palettes,
     hasChanges,

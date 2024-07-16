@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { parseFile } from './TpsParser'
+import { parseTpsFile } from '@/utils/TpsParser'
 import ModalPanel from './ModalPanel.vue'
 import TpsErrors from './TpsErrors.vue'
 import TpsFileOpen from './TpsFileOpen.vue'
@@ -24,7 +24,8 @@ function fileSelected(files) {
 
   reader.onload = function (event) {
     const fileName = files[0].name
-    const result = parseFile(event.target.result)
+    const fileContents = event.target.result
+    const result = parseTpsFile(fileContents)
 
     if (!result.isValid) {
       parserErrors.value = { fileName: fileName, errors: result.validationMessages }
@@ -32,7 +33,7 @@ function fileSelected(files) {
       return
     }
 
-    tpsStore.open(fileName, result.palettes)
+    tpsStore.open(fileName, fileContents, result.palettes)
   }
 
   reader.readAsText(files[0])

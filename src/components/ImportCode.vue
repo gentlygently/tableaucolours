@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
-import { parsePalette } from './TpsParser'
+import { parseColourPalette } from '@/utils/TpsParser'
 
 const store = usePaletteStore()
 
@@ -35,7 +35,7 @@ function importXml() {
 }
 
 watch(xml, newValue => {
-  const result = parsePalette(newValue)
+  const result = parseColourPalette(newValue)
 
   isValid.value = result.isValid
   validationMessage.value = result.validationMessage

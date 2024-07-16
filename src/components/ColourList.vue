@@ -132,7 +132,8 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   height: 29rem;
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 5rem 5rem 5rem 5rem;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
 
   &-colour {
     display: block;
