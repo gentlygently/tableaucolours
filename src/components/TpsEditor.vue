@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
 import { parseTpsFile } from '@/utils/TpsParser'
+import { replacePalettesInTpsXml } from '../utils/TpsWriter'
 import ModalPanel from './ModalPanel.vue'
 import TpsErrors from './TpsErrors.vue'
 import TpsFileOpen from './TpsFileOpen.vue'
@@ -37,6 +38,50 @@ function fileSelected(files) {
   }
 
   reader.readAsText(files[0])
+}
+
+async function save() {
+  const xml = replacePalettesInTpsXml(tpsStore.fileContents, tpsStore.palettes)
+
+  if (!window.showSaveFilePicker) {
+    download(tpsStore.fileName, xml)
+    return
+  }
+
+  try {
+    const fileHandle = await window.showSaveFilePicker({
+      id: 'gently-gently',
+      suggestedName: tpsStore.fileName,
+      types: [
+        {
+          description: 'Tableau settings file',
+          accept: { 'text/plain': ['.tps'] },
+        },
+      ],
+    })
+    const writable = await fileHandle.createWritable()
+    await writable.write(xml)
+    await writable.close()
+
+    const file = await fileHandle.getFile()
+
+    tpsStore.saved(file.name)
+  } catch (e) {
+    if (e.name === 'AbortError') return
+    console.error(e)
+  }
+}
+
+function download(fileName, xml) {
+  const element = document.createElement('a')
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml))
+  element.setAttribute('download', fileName)
+  element.style.display = 'none'
+  document.body.appendChild(element)
+
+  element.click()
+
+  document.body.removeChild(element)
 }
 
 function close() {

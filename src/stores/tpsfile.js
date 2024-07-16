@@ -15,12 +15,12 @@ const createPalette = (palette, isSelected) => ({
 const mapColours = colours => colours.map(x => (typeof x === 'string' ? x : x.hex))
 
 export const useTpsFileStore = defineStore('tpsFile', () => {
-  const file = ref(null)
+  const file = ref({})
   const palettes = ref([])
   const hasChanges = ref(false)
-  const fileContents = computed(() => file.contents || '')
-  const fileName = computed(() => file.name || '')
-  const isOpen = computed(() => !!file.value)
+  const fileContents = computed(() => file.value.contents || '')
+  const fileName = computed(() => file.value.name || '')
+  const isOpen = computed(() => !!file.value.name)
   const hasSelectedPalette = computed(() => !!selectedPalette.value)
   const selectedPalette = computed(() => palettes.value.find(x => x.isSelected))
 
@@ -33,6 +33,14 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   function close() {
     file.value = null
     palettes.value = []
+  }
+
+  function saved(newFileName) {
+    palettes.value.forEach(x => (x.hasChanges = false))
+
+    if (newFileName) file.value.name = newFileName
+
+    hasChanges.value = false
   }
 
   const selectPalette = palette => palettes.value.forEach(x => (x.isSelected = x === palette))
@@ -85,6 +93,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasSelectedPalette,
     open,
     close,
+    saved,
     selectPalette,
     addPalette,
     updateSelectedPalette,

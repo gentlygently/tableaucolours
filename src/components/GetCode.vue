@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import he from 'he'
 import { usePaletteStore } from '@/stores/palette'
+import { colourPaletteXml } from '@/utils/TpsWriter'
 
 const store = usePaletteStore()
 
@@ -26,15 +26,7 @@ function copy() {
   copied.value = true
 }
 
-function xml() {
-  let x = `<color-palette name="${he.encode(store.name, {
-    useNamedReferences: true,
-  })}" type="${store.type}">\n`
-
-  store.colours.forEach(c => (x += `    <color>${c.hex}</color>\n`))
-
-  return x + '</color-palette>'
-}
+const xml = () => colourPaletteXml(store.name, store.type, store.colours)
 </script>
 
 <template>

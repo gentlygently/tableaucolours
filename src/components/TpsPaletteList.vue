@@ -33,7 +33,7 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
     v-model="palettes"
     class="palettelist"
     :options="{ delay: 25 }"
-    :tag="ul"
+    tag="ul"
     @update="paletteMoved"
     @start="draggingActive = true"
     @end="draggingActive = false"

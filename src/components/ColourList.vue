@@ -108,7 +108,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   <VueDraggable
     v-model="colours"
     class="colourlist"
-    :tag="ul"
+    tag="ul"
     :options="{ delay: 25 }"
     dragClass="colourlist-colour--drag"
     @update="colourMoved"
