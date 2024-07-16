@@ -66,10 +66,6 @@ watch(isPaletteOpen, isOpen => {
   paletteAction.value = ''
 })
 
-function selectPaletteAtIndex(index) {
-  if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])
-}
-
 const openPaletteEditor = () => paletteStore.open()
 
 function openPalette(palette) {
@@ -96,10 +92,36 @@ function clonePalette(palette) {
   paletteStore.name = (palette.name + ' (Copy)').trim()
 }
 
-function keyUp(event) {
-  if (paletteStore.isOpen || event.target.tagName.toLowerCase() !== 'body') {
-    return
+function selectPaletteAtIndex(index) {
+  if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])
+}
+
+// Actions that can repeat when a key is held down
+function keyDown(event) {
+  if (!isValidKeyTarget || !tpsStore.hasSelectedPalette) return
+
+  const action = event.getModifierState('Shift')
+    ? i => tpsStore.movePalette(tpsStore.selectedPalette, i)
+    : selectPaletteAtIndex
+
+  switch (event.key) {
+    case 'Down':
+    case 'ArrowDown':
+      action(selectedPaletteIndex.value + 1)
+      event.preventDefault()
+      return
+
+    case 'Up':
+    case 'ArrowUp':
+      action(selectedPaletteIndex.value - 1)
+      event.preventDefault()
+      return
   }
+}
+
+// Actions that should only happen once per key press
+function keyUp(event) {
+  if (!isValidKeyTarget(event)) return
 
   switch (event.key) {
     case '+':
@@ -107,32 +129,30 @@ function keyUp(event) {
       return
   }
 
-  if (tpsStore.hasSelectedPalette) {
-    switch (event.key) {
-      case 'Enter':
-        openPalette(tpsStore.selectedPalette)
-        return
+  if (!tpsStore.hasSelectedPalette) return
 
-      case 'Backspace':
-      case 'Delete':
-        deletePalette(tpsStore.selectedPalette)
-        return
+  switch (event.key) {
+    case 'Enter':
+      openPalette(tpsStore.selectedPalette)
+      return
 
-      case 'Down':
-      case 'ArrowDown':
-        selectPaletteAtIndex(selectedPaletteIndex.value + 1)
-        return
-
-      case 'Up':
-      case 'ArrowUp':
-        selectPaletteAtIndex(selectedPaletteIndex.value - 1)
-        return
-    }
+    case 'Backspace':
+    case 'Delete':
+      deletePalette(tpsStore.selectedPalette)
+      return
   }
 }
 
-onMounted(() => window.addEventListener('keyup', keyUp, false))
-onUnmounted(() => window.removeEventListener('keyup', keyUp))
+const isValidKeyTarget = e => !paletteStore.isOpen && e.target.tagName.toLowerCase() === 'body'
+
+onMounted(() => {
+  window.addEventListener('keydown', keyDown, false)
+  window.addEventListener('keyup', keyUp, false)
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', keyDown)
+  window.removeEventListener('keyup', keyUp)
+})
 </script>
 
 <template>

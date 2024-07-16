@@ -57,11 +57,18 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
 
     if (index < 0) return
 
-    palettes.value.splice(index, 1)
+    const p = palettes.value
+    p.splice(index, 1)
     hasChanges.value = true
 
-    if (palette.isSelected && palettes.value.length > 0)
-      selectPalette(palettes.value[index >= palettes.value.length ? palettes.value.length - 1 : index])
+    if (palette.isSelected && p.length > 0) selectPalette(p[index >= p.length ? p.length - 1 : index])
+  }
+
+  function movePalette(palette, newIndex) {
+    const p = palettes.value
+    const oldIndex = p.indexOf(palette)
+    p.splice(newIndex, 0, p.splice(oldIndex, 1)[0])
+    hasChanges.value = true
   }
 
   return {
@@ -77,5 +84,6 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     addPalette,
     updateSelectedPalette,
     deletePalette,
+    movePalette,
   }
 })
