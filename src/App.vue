@@ -1,13 +1,24 @@
 <script setup>
+import { computed } from 'vue'
+import StartMenu from '@/components/StartMenu.vue'
 import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
+import { useTpsFileStore } from '@/stores/tpsfile'
 
 const paletteStore = usePaletteStore()
+const tpsStore = useTpsFileStore()
+
+const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
 </script>
 
 <template>
+  <Transition name="overlay">
+    <section id="startmenu" class="overlay" v-if="isStartMenuOpen">
+      <StartMenu />
+    </section>
+  </Transition>
   <section id="sidebar">
     <section id="tpssection">
       <TpsEditor />
@@ -96,6 +107,49 @@ textarea {
   flex-grow: 1;
   overflow: hidden;
 }
+
+.overlay {
+  display: flex;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  transition: opacity 0.5s ease;
+
+  &-enter-from {
+    opacity: 0;
+  }
+
+  &-leave-active {
+    opacity: 0;
+  }
+
+  &-enter-from > * {
+    transform: scale(1.1);
+  }
+
+  &-leave-active > * {
+    transform: scale(0.5);
+  }
+}
+
+button.button {
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: @button-colour;
+  text-align: center;
+
+  &:hover {
+    background-color: @button-colour-hover;
+  }
+}
+
 .iconbutton {
   color: @tool-colour;
   text-decoration: none;

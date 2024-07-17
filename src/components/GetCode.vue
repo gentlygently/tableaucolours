@@ -35,8 +35,8 @@ const xml = () => colourPaletteXml(store.name, store.type, store.colours)
       <pre ref="code" class="getcode-code">{{ xml() }}</pre>
     </div>
     <transition mode="out-in">
-      <button v-if="!copied" class="getcode-copy" @click.stop.prevent="copy">Copy to clipboard</button>
-      <button v-else-if="copied" class="getcode-copy getcode-copy--copied" @click.stop.prevent="copy">
+      <button v-if="!copied" class="button getcode-copy" @click.stop.prevent="copy">Copy to clipboard</button>
+      <button v-else-if="copied" class="button getcode-copy getcode-copy--copied" @click.stop.prevent="copy">
         Copied
         <span class="fas fa-check"></span>
       </button>
@@ -74,13 +74,6 @@ const xml = () => colourPaletteXml(store.name, store.type, store.colours)
     overflow: auto;
   }
   &-copy {
-    border: none;
-    outline: none;
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    color: #fff;
-    background-color: @button-colour;
-    text-align: center;
     width: 20rem;
     float: right;
     margin-top: 1rem;

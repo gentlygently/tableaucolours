@@ -41,7 +41,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="props.show" class="modal-mask">
+      <div v-if="props.show" class="overlay modal-mask">
         <div
           ref="wrapper"
           class="modal-wrapper"
