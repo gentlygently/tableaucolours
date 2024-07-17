@@ -78,7 +78,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   }
 
   function close() {
-    file.value = null
+    file.value = {}
     palettes.value = []
   }
 

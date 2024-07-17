@@ -2,45 +2,15 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { parseTpsFile } from '@/utils/TpsParser'
 import { replacePalettesInTpsXml } from '../utils/TpsWriter'
-import ModalPanel from './ModalPanel.vue'
-import TpsErrors from './TpsErrors.vue'
-import TpsFileOpen from './TpsFileOpen.vue'
 import TpsPaletteList from './TpsPaletteList.vue'
 import TpsPaletteFilter from './TpsPaletteFilter.vue'
 
 const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
-const parserErrors = ref(null)
 const paletteAction = ref('')
 const isFilterOpen = ref(false)
-const hasParserErrors = computed(() => parserErrors.value !== null)
 const selectedPaletteIndex = computed(() => tpsStore.filteredPalettes.findIndex(x => x.isSelected))
-
-function fileSelected(files) {
-  if (!files || !files.length) {
-    return
-  }
-
-  const reader = new FileReader()
-
-  reader.onload = function (event) {
-    const fileName = files[0].name
-    const fileContents = event.target.result
-    const result = parseTpsFile(fileContents)
-
-    if (!result.isValid) {
-      parserErrors.value = { fileName: fileName, errors: result.validationMessages }
-      tpsStore.close()
-      return
-    }
-
-    tpsStore.open(fileName, fileContents, result.palettes)
-  }
-
-  reader.readAsText(files[0])
-}
 
 async function save() {
   const xml = replacePalettesInTpsXml(tpsStore.fileContents, tpsStore.palettes)
@@ -113,8 +83,6 @@ watch(isPaletteOpen, isOpen => {
 
   paletteAction.value = ''
 })
-
-const openPaletteEditor = () => paletteStore.open()
 
 function openPalette(palette) {
   paletteAction.value = 'edit'
@@ -213,13 +181,7 @@ onUnmounted(() => {
 <template>
   <div class="tpseditor">
     <div class="toolbar"></div>
-    <div class="file">
-      <TpsFileOpen
-        :selected-file-name="tpsStore.fileName"
-        :is-file-open="tpsStore.isOpen"
-        @file-selected="fileSelected"
-      />
-    </div>
+    <div class="file"></div>
     <template v-if="tpsStore.isOpen">
       <div class="palettes">
         <TpsPaletteList
@@ -260,14 +222,6 @@ onUnmounted(() => {
         <TpsPaletteFilter />
       </div>
     </template>
-
-    <div class="standalone" v-if="!tpsStore.isOpen">
-      <button class="openpalette" @click.stop.prevent="openPaletteEditor">Create standalone palette</button>
-    </div>
-
-    <ModalPanel :show="hasParserErrors" width="54rem" @close="parserErrors = null">
-      <TpsErrors :errors="parserErrors.errors" :fileName="parserErrors.fileName" @close="parserErrors = null" />
-    </ModalPanel>
   </div>
 </template>
 
@@ -354,23 +308,6 @@ onUnmounted(() => {
     border-right: 1.3rem solid transparent;
     border-bottom: 1.3rem solid @border-colour;
     margin-left: 14.8rem;
-  }
-}
-.openpalette {
-  grid-row: 3;
-  border: none;
-  outline: none;
-  padding: 0.5rem;
-  font-size: 1.5rem;
-  color: #fff;
-  background-color: @button-colour;
-  text-align: center;
-  width: 20rem;
-  margin-top: 1rem;
-  margin-left: 2.5rem;
-
-  &:hover {
-    background-color: @button-colour-hover;
   }
 }
 </style>
