@@ -11,7 +11,7 @@ const emit = defineEmits(['double-click-palette', 'delete-palette', 'clone-palet
 const draggingActive = ref(false)
 const palettes = computed({
   get() {
-    return tpsStore.palettes
+    return tpsStore.filteredPalettes
   },
   set() {
     // Do nothing (we handle the change in paletteMoved)
@@ -33,6 +33,7 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
     v-model="palettes"
     class="palettelist"
     :options="{ delay: 25 }"
+    :disabled="tpsStore.hasActiveFilters"
     tag="ul"
     @update="paletteMoved"
     @start="draggingActive = true"
@@ -58,8 +59,8 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
   display: block;
   margin: 0;
   padding: 0;
-  min-height: 20rem;
-  max-height: 100%;
+  height: 20rem;
+  height: 100%;
   border-radius: 0.2rem;
   box-sizing: border-box;
   box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;

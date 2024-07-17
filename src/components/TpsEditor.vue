@@ -8,13 +8,15 @@ import ModalPanel from './ModalPanel.vue'
 import TpsErrors from './TpsErrors.vue'
 import TpsFileOpen from './TpsFileOpen.vue'
 import TpsPaletteList from './TpsPaletteList.vue'
+import TpsPaletteFilter from './TpsPaletteFilter.vue'
 
 const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
 const parserErrors = ref(null)
 const paletteAction = ref('')
+const isFilterOpen = ref(false)
 const hasParserErrors = computed(() => parserErrors.value !== null)
-const selectedPaletteIndex = computed(() => tpsStore.palettes.findIndex(x => x.isSelected))
+const selectedPaletteIndex = computed(() => tpsStore.filteredPalettes.findIndex(x => x.isSelected))
 
 function fileSelected(files) {
   if (!files || !files.length) {
@@ -139,16 +141,23 @@ function clonePalette(palette) {
 }
 
 function selectPaletteAtIndex(index) {
-  if (index >= 0 && index < tpsStore.palettes.length) tpsStore.selectPalette(tpsStore.palettes[index])
+  if (index >= 0 && index < tpsStore.filteredPalettes.length) tpsStore.selectPalette(tpsStore.filteredPalettes[index])
+}
+
+function toggleFilter() {
+  isFilterOpen.value = !isFilterOpen.value
+  tpsStore.isFilterActive = isFilterOpen.value
+}
+
+function moveSelectedPalette(newIndex) {
+  if (!tpsStore.hasActiveFilters) tpsStore.movePalette(tpsStore.selectedPalette, newIndex)
 }
 
 // Actions that can repeat when a key is held down
 function keyDown(event) {
   if (!isValidKeyTarget || !tpsStore.hasSelectedPalette) return
 
-  const action = event.getModifierState('Shift')
-    ? i => tpsStore.movePalette(tpsStore.selectedPalette, i)
-    : selectPaletteAtIndex
+  const action = event.getModifierState('Shift') ? moveSelectedPalette : selectPaletteAtIndex
 
   switch (event.key) {
     case 'Down':
@@ -237,14 +246,19 @@ onUnmounted(() => {
           <button
             class="iconbutton fas fa-filter"
             title="Filter palettes"
+            :class="{ 'paletteactions-filter--active': isFilterOpen }"
             :disabled="!tpsStore.palettes.length"
-            @click.prevent.stop="discard"
+            @click.prevent.stop="toggleFilter"
           ></button>
         </li>
         <li class="paletteactions-add">
           <button class="iconbutton fas fa-plus" title="Add palette (+)" @click.prevent.stop="addPalette"></button>
         </li>
       </ul>
+      <div class="filter" v-if="isFilterOpen">
+        <div class="filter-arrow"></div>
+        <TpsPaletteFilter />
+      </div>
     </template>
 
     <div class="standalone" v-if="!tpsStore.isOpen">
@@ -266,7 +280,7 @@ onUnmounted(() => {
   position: relative;
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 4rem 5rem minmax(0, 1fr) 7rem;
+  grid-template-rows: 4rem 5rem minmax(0, 1fr) 7rem auto;
 }
 .toolbar {
   grid-row: 1 / span 1;
@@ -278,7 +292,7 @@ onUnmounted(() => {
 .palettes {
   grid-row: 3 / span 1;
   padding: 0 1rem;
-  max-height: 100%;
+  height: 100%;
 }
 .paletteactions {
   grid-row: 4 / span 1;
@@ -318,6 +332,28 @@ onUnmounted(() => {
         font-size: 2rem;
       }
     }
+  }
+
+  &-filter--active {
+    color: @button-colour;
+
+    &:hover {
+      color: @button-colour-hover;
+    }
+  }
+}
+.filter {
+  grid-row: 5 / span 1;
+  margin: 1rem;
+  margin-top: -1.7rem;
+
+  &-arrow {
+    width: 0;
+    height: 0;
+    border-left: 1.3rem solid transparent;
+    border-right: 1.3rem solid transparent;
+    border-bottom: 1.3rem solid @border-colour;
+    margin-left: 14.8rem;
   }
 }
 .openpalette {
