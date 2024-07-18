@@ -228,7 +228,7 @@ onUnmounted(() => {
         <button title="Filter palettes" :disabled="!tpsStore.palettes.length" @click.prevent.stop="toggleFilter">
           <span class="fas fa-filter"></span> Filter palettes
         </button>
-        <Transition>
+        <Transition name="filter">
           <div class="filter" v-if="isFilterOpen">
             <div class="filter-arrow"></div>
             <div class="filter-form">
@@ -342,7 +342,8 @@ onUnmounted(() => {
 
 .filter {
   margin-left: 1rem;
-  transition: 0.5s ease;
+  transform-origin: left top;
+  transform: scaleY(1);
 
   &-form {
     background-color: @background-colour;
@@ -358,5 +359,15 @@ onUnmounted(() => {
     margin-left: 2rem;
     background-color: #fff;
   }
+}
+
+.filter-enter-active,
+.filter-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.filter-enter-from,
+.filter-leave-to {
+  transform: scaleY(0);
 }
 </style>
