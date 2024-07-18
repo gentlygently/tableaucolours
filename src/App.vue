@@ -133,6 +133,7 @@ textarea {
 
 button.button {
   border: none;
+  border-radius: 0.2rem;
   outline: none;
   padding: 0.5rem;
   font-size: 1.5rem;

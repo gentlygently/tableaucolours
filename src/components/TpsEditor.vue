@@ -5,25 +5,31 @@ import { useTpsFileStore } from '@/stores/tpsfile'
 import { replacePalettesInTpsXml } from '../utils/TpsWriter'
 import TpsPaletteList from './TpsPaletteList.vue'
 import TpsPaletteFilter from './TpsPaletteFilter.vue'
+import TpsPaletteExport from './TpsPaletteExport.vue'
 
 const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
 const paletteAction = ref('')
 const isFilterOpen = ref(false)
+const isExportOpen = ref(false)
 const currentPaletteIndex = computed(() => tpsStore.filteredPalettes.findIndex(x => x.isCurrent))
 
-async function save() {
-  const xml = replacePalettesInTpsXml(tpsStore.fileContents, tpsStore.palettes)
+const save = () => savePalettes(tpsStore.fileName, tpsStore.palettes, f => tpsStore.saved(f))
+
+const exportSelectedPalettes = fileName => savePalettes(fileName, tpsStore.selectedPalettes)
+
+async function savePalettes(fileName, palettes, savedCallback) {
+  const xml = replacePalettesInTpsXml(tpsStore.fileContents, palettes)
 
   if (!window.showSaveFilePicker) {
-    download(tpsStore.fileName, xml)
+    download(fileName, xml)
     return
   }
 
   try {
     const fileHandle = await window.showSaveFilePicker({
       id: 'gently-gently',
-      suggestedName: tpsStore.fileName,
+      suggestedName: fileName,
       types: [
         {
           description: 'Tableau settings file',
@@ -37,10 +43,11 @@ async function save() {
 
     const file = await fileHandle.getFile()
 
-    tpsStore.saved(file.name)
+    if (savedCallback) savedCallback(file.name)
   } catch (e) {
     if (e.name === 'AbortError') return
     console.error(e)
+    download(fileName, xml)
   }
 }
 
@@ -228,11 +235,28 @@ onUnmounted(() => {
         <button title="Filter palettes" :disabled="!tpsStore.palettes.length" @click.prevent.stop="toggleFilter">
           <span class="fas fa-filter"></span> Filter palettes
         </button>
-        <Transition name="filter">
-          <div class="filter" v-if="isFilterOpen">
-            <div class="filter-arrow"></div>
-            <div class="filter-form">
+        <Transition name="actionform">
+          <div class="actionform" v-if="isFilterOpen">
+            <div class="actionform-arrow"></div>
+            <div class="actionform-form">
               <TpsPaletteFilter />
+            </div>
+          </div>
+        </Transition>
+      </li>
+      <li class="paletteactions-export" :class="{ 'paletteactions-export--active': isExportOpen }">
+        <button
+          title="Export selected palettes to new file"
+          :disabled="!tpsStore.palettes.length"
+          @click.prevent.stop="isExportOpen = !isExportOpen"
+        >
+          <span class="fas fa-file-export"></span> Export selected palettes
+        </button>
+        <Transition name="actionform">
+          <div class="actionform" v-if="isExportOpen">
+            <div class="actionform-arrow"></div>
+            <div class="actionform-form">
+              <TpsPaletteExport @export="exportSelectedPalettes" />
             </div>
           </div>
         </Transition>
@@ -326,7 +350,12 @@ onUnmounted(() => {
     font-size: 1.1rem;
   }
 
-  &-filter--active > button {
+  &-export span {
+    font-size: 1.3rem;
+  }
+
+  &-filter--active > button,
+  &-export--active > button {
     color: @tool-colour-hover;
 
     > span {
@@ -340,10 +369,20 @@ onUnmounted(() => {
   }
 }
 
-.filter {
+.actionform {
   margin-left: 1rem;
   transform-origin: left top;
   transform: scaleY(1);
+
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.1s ease-in-out;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    transform: scaleY(0);
+  }
 
   &-form {
     background-color: @background-colour;
@@ -359,15 +398,5 @@ onUnmounted(() => {
     margin-left: 2rem;
     background-color: #fff;
   }
-}
-
-.filter-enter-active,
-.filter-leave-active {
-  transition: all 0.3s ease-in-out;
-}
-
-.filter-enter-from,
-.filter-leave-to {
-  transform: scaleY(0);
 }
 </style>
