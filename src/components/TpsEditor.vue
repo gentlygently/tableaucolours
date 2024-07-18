@@ -102,6 +102,16 @@ function deletePalette(palette) {
   if (confirm(`Are you sure you want to delete ${name}?`)) tpsStore.deletePalette(palette)
 }
 
+function deleteSelectedPalettes() {
+  const selected = tpsStore.selectedPalettes
+
+  if (!selected.length) return
+
+  if (selected.length === 1) return deletePalette(selected[0])
+
+  if (confirm(`Are you sure you want to delete ${selected.length} palettes?`)) tpsStore.deleteSelectedPalettes()
+}
+
 function clonePalette(palette) {
   paletteAction.value = 'clone'
   paletteStore.open(palette)
@@ -194,6 +204,15 @@ onUnmounted(() => {
       <li class="paletteactions-add">
         <button title="Add palette (+)" @click.prevent.stop="addPalette">
           <span class="fas fa-plus"></span> Add palette
+        </button>
+      </li>
+      <li class="paletteactions-delete">
+        <button
+          title="Delete selected palettes"
+          :disabled="!tpsStore.hasSelectedPalettes"
+          @click.prevent.stop="deleteSelectedPalettes"
+        >
+          <span class="fas fa-trash-alt"></span> Delete selected palettes
         </button>
       </li>
       <li class="paletteactions-clear">
