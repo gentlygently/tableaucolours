@@ -11,6 +11,7 @@ const props = defineProps({
   canMove: Boolean,
 })
 
+const isSelected = ref(false)
 const emit = defineEmits(['delete', 'clone'])
 
 const element = ref(null)
@@ -75,7 +76,10 @@ const cloneClick = () => {
       {{ palette.name }}
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
-    <div class="drag" v-if="canMove">
+    <div class="select">
+      <input type="checkbox" v-model="palette.isSelected" title="" @click.stop />
+    </div>
+    <div class="drag" title="" v-if="canMove">
       <span class="fas fa-ellipsis-v"></span>
     </div>
     <div class="more">
@@ -102,16 +106,15 @@ const cloneClick = () => {
 .palette {
   display: grid;
   position: relative;
-  grid-template-columns: auto 2rem;
+  grid-template-columns: 4.5rem auto 2rem;
   grid-template-rows: auto auto;
   box-sizing: border-box;
   margin: 0.75rem;
   padding: 1rem;
   padding-top: 0.4rem;
-
+  padding-left: 0;
   background-color: #fff;
   border-radius: 0.5rem;
-
   font-size: 1.4rem;
 
   &--current {
@@ -137,7 +140,7 @@ const cloneClick = () => {
   }
 
   .name {
-    grid-column: 1 / span 1;
+    grid-column: 2 / span 1;
     grid-row: 1 / span 1;
     white-space: nowrap;
     overflow: hidden;
@@ -145,15 +148,57 @@ const cloneClick = () => {
   }
 
   .preview {
-    grid-column: 1 / span 1;
+    grid-column: 2 / span 1;
     grid-row: 2 / span 1;
     height: 1.5rem;
     width: 100%;
     margin-top: 0.4rem;
   }
 
+  .select {
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 2;
+    display: grid;
+    place-content: center;
+    padding-top: 0.6rem;
+
+    input[type='checkbox'] {
+      appearance: none;
+      background-color: #fff;
+      margin: 0;
+      width: 2rem;
+      height: 2rem;
+      border: @border;
+      border-radius: 1em;
+      display: grid;
+      place-content: center;
+
+      &:hover {
+        box-shadow: inset 0rem 0rem 0.1rem 0.1rem @border-colour;
+      }
+
+      &::before {
+        content: '';
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 0.6rem;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        background-color: @button-colour;
+      }
+
+      &:checked::before {
+        transform: scale(1);
+      }
+
+      &:checked:hover::before {
+        background-color: @button-colour-hover;
+      }
+    }
+  }
+
   .drag {
-    grid-column: 2 / span 1;
+    grid-column: 3 / span 1;
     grid-row: 1 / span 2;
     text-align: right;
     color: @tool-colour;

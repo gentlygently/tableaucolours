@@ -31,7 +31,10 @@ const paletteCount = computed(() => {
   const count = tpsStore.palettes.length
   let message = `${count} colour palette${count == 1 ? '' : 's'}`
 
-  if (tpsStore.hasActiveFilters) message = `${message}, showing ${tpsStore.filteredPalettes.length}`
+  const additional = []
+  if (tpsStore.hasActiveFilters) additional.push(`showing ${tpsStore.filteredPalettes.length}`)
+  if (tpsStore.hasSelectedPalettes) additional.push(`${tpsStore.selectedPalettes.length} selected`)
+  if (additional.length) message += ` (${additional.join(', ')})`
 
   return message
 })
@@ -75,7 +78,7 @@ const paletteCount = computed(() => {
   height: 100%;
   border-radius: 0.2rem;
   box-sizing: border-box;
-  box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
+  box-shadow: @box-shadow;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: @background-colour;

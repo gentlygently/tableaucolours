@@ -196,6 +196,15 @@ onUnmounted(() => {
           <span class="fas fa-plus"></span> Add palette
         </button>
       </li>
+      <li class="paletteactions-clear">
+        <button
+          title="Clear palette selection"
+          :disabled="!tpsStore.hasSelectedPalettes"
+          @click.prevent.stop="tpsStore.clearPaletteSelection"
+        >
+          <span class="fas fa-broom"></span> Clear selection
+        </button>
+      </li>
       <li class="paletteactions-filter" :class="{ 'paletteactions-filter--active': isFilterOpen }">
         <button title="Filter palettes" :disabled="!tpsStore.palettes.length" @click.prevent.stop="toggleFilter">
           <span class="fas fa-filter"></span> Filter palettes
@@ -277,12 +286,25 @@ onUnmounted(() => {
 
       &:hover {
         color: @tool-colour-hover;
+
+        > span {
+          color: @button-colour;
+        }
+      }
+
+      &:disabled,
+      &:disabled > span {
+        color: @tool-colour-disabled;
       }
 
       > span {
         padding-right: 0.5rem;
       }
     }
+  }
+
+  &-clear span {
+    font-size: 1.1rem;
   }
 
   &-filter--active > button {

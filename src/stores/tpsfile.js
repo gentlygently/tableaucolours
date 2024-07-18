@@ -9,6 +9,7 @@ const createPalette = (palette, isCurrent) => ({
   type: palette.type,
   colours: mapColours(palette.colours),
   isCurrent: !!isCurrent,
+  isSelected: false,
   hasChanges: false,
 })
 
@@ -40,6 +41,10 @@ class TypeFilter {
   isMatch = palette => this.types.indexOf(palette.type) > -1
 }
 
+class SelectedFilter {
+  isMatch = palette => palette.isSelected
+}
+
 export const useTpsFileStore = defineStore('tpsFile', () => {
   const file = ref({})
   const palettes = ref([])
@@ -49,12 +54,15 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   const isOpen = computed(() => !!file.value.name)
   const hasCurrentPalette = computed(() => !!currentPalette.value)
   const currentPalette = computed(() => filteredPalettes.value.find(x => x.isCurrent))
+  const selectedPalettes = computed(() => filteredPalettes.value.filter(x => x.isSelected))
+  const hasSelectedPalettes = computed(() => selectedPalettes.value.length)
   const canMovePalettes = computed(() => !hasActiveFilters.value)
   const isFilterActive = ref(false)
   const paletteFilters = ref([])
   const paletteNameFilter = ref('')
   const paletteNoNameFilter = ref(false)
   const paletteTypeFilter = ref([])
+  const paletteSelectedFilter = ref(false)
 
   const hasActiveFilters = computed(() => isFilterActive.value && paletteFilters.value.length)
 
@@ -131,6 +139,10 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     }
   }
 
+  function deleteSelectedPalettes() {
+    selectedPalettes.value.forEach(deletePalette)
+  }
+
   function movePalette(palette, newIndex) {
     if (!canMovePalettes.value) {
       console.debug('Attempted to move with active filter')
@@ -142,11 +154,18 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasChanges.value = true
   }
 
+  function clearPaletteSelection() {
+    palettes.value.forEach(x => (x.isSelected = false))
+  }
+
   watchEffect(() => {
     const newFilters = []
     if (paletteNameFilter.value || paletteNoNameFilter.value)
       newFilters.push(new NameFilter(paletteNameFilter.value, paletteNoNameFilter.value))
+
     if (paletteTypeFilter.value.length) newFilters.push(new TypeFilter(paletteTypeFilter.value))
+
+    if (paletteSelectedFilter.value) newFilters.push(new SelectedFilter())
 
     paletteFilters.value = newFilters
   })
@@ -162,6 +181,8 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     currentPalette,
     hasCurrentPalette,
     canMovePalettes,
+    selectedPalettes,
+    hasSelectedPalettes,
     open,
     close,
     saved,
@@ -169,7 +190,9 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     addPalette,
     updateCurrentPalette,
     deletePalette,
+    deleteSelectedPalettes,
     movePalette,
+    clearPaletteSelection,
     isFilterActive,
     hasActiveFilters,
     arePalettesFiltered,
@@ -177,5 +200,6 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     paletteNameFilter,
     paletteNoNameFilter,
     paletteTypeFilter,
+    paletteSelectedFilter,
   }
 })

@@ -33,6 +33,13 @@ const tpsStore = useTpsFileStore()
         >
       </div>
     </li>
+    <li class="selected">
+      <div class="label"><label>Selected</label></div>
+      <label
+        ><input id="palettefilter-selected" type="checkbox" v-model="tpsStore.paletteSelectedFilter" /> Only
+        selected</label
+      >
+    </li>
   </ul>
 </template>
 
@@ -49,7 +56,7 @@ const tpsStore = useTpsFileStore()
   li {
     margin: 0;
     display: grid;
-    grid-template-columns: 5rem auto;
+    grid-template-columns: 6.5rem auto;
     border-bottom: @border;
     padding: 1rem;
 
