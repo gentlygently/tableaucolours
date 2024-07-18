@@ -263,7 +263,7 @@ onUnmounted(() => {
       </li>
     </ul>
     <div class="fileactions">
-      <button class="button" title="Close file" @click.prevent.stop="close">Cancel</button>
+      <button class="button" title="Close file" @click.prevent.stop="close">Close</button>
       <button class="button" title="Save changes" :disabled="!tpsStore.hasChanges" @click.prevent.stop="save">
         Save
       </button>

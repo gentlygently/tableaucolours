@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import ImageColourSwatch from './ImageColourSwatch.vue'
 
 const props = defineProps({
@@ -27,15 +27,16 @@ const scale = computed(() => props.scale)
 const height = computed(() => props.image.height * props.scale)
 const width = computed(() => props.image.width * props.scale)
 
-watch(image, () => {
-  resetMouseAndColour()
-  drawImage()
+watch(image, resetImage)
+watch(scale, resetImage)
+onMounted(() => {
+  if (image) resetImage()
 })
 
-watch(scale, () => {
+function resetImage() {
   resetMouseAndColour()
   drawImage()
-})
+}
 
 function drawImage() {
   const drawingContext = getDrawingContext()
