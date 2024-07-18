@@ -2,6 +2,8 @@
 import { computed, ref, watch } from 'vue'
 import { parseTpsFile } from '@/utils/TpsParser'
 import { useTpsFileStore } from '@/stores/tpsfile'
+import ModalPanel from './ModalPanel.vue'
+import TpsErrors from './TpsErrors.vue'
 
 const label = ref(null)
 const fileInput = ref(null)

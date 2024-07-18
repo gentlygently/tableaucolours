@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import TpsPalette from './TpsPalette.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
+import TpsFileOpen from './TpsFileOpen.vue'
 
 const tpsStore = useTpsFileStore()
 
@@ -26,6 +27,15 @@ function doubleClick(palette) {
 const clonePalette = palette => emit('clone-palette', palette)
 const deletePalette = palette => emit('delete-palette', palette)
 const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIndex], event.newIndex)
+
+const paletteCount = computed(() => {
+  const count = tpsStore.palettes.length
+  let message = `${count} colour palette${count == 1 ? '' : 's'}`
+
+  if (tpsStore.hasActiveFilters) message = `${message}, showing ${tpsStore.filteredPalettes.length}`
+
+  return message
+})
 </script>
 
 <template>
@@ -52,6 +62,7 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
       @clone="clonePalette"
     />
   </VueDraggable>
+  <div class="palettecount">{{ paletteCount }}</div>
 </template>
 
 <style scoped lang="less">
@@ -69,5 +80,8 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: @background-colour;
+}
+.palettecount {
+  margin-top: 0.5rem;
 }
 </style>
