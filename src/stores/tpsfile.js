@@ -3,12 +3,12 @@ import { computed, ref, watchEffect } from 'vue'
 
 let nextPaletteId = 1
 
-const createPalette = (palette, isSelected) => ({
+const createPalette = (palette, isCurrent) => ({
   id: nextPaletteId++,
   name: palette.name,
   type: palette.type,
   colours: mapColours(palette.colours),
-  isSelected: !!isSelected,
+  isCurrent: !!isCurrent,
   hasChanges: false,
 })
 
@@ -47,8 +47,8 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   const fileContents = computed(() => file.value.contents || '')
   const fileName = computed(() => file.value.name || '')
   const isOpen = computed(() => !!file.value.name)
-  const hasSelectedPalette = computed(() => !!selectedPalette.value)
-  const selectedPalette = computed(() => filteredPalettes.value.find(x => x.isSelected))
+  const hasCurrentPalette = computed(() => !!currentPalette.value)
+  const currentPalette = computed(() => filteredPalettes.value.find(x => x.isCurrent))
   const canMovePalettes = computed(() => !hasActiveFilters.value)
   const isFilterActive = ref(false)
   const paletteFilters = ref([])
@@ -91,18 +91,18 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasChanges.value = false
   }
 
-  const selectPalette = palette => filteredPalettes.value.forEach(x => (x.isSelected = x === palette))
+  const setCurrentPalette = palette => filteredPalettes.value.forEach(x => (x.isCurrent = x === palette))
 
   function addPalette(name, type, colours) {
     palettes.value.push(createPalette({ name, type, colours }))
     const palette = palettes.value.slice(-1)[0]
-    selectPalette(palette)
+    setCurrentPalette(palette)
     palette.hasChanges = true
     hasChanges.value = true
   }
 
-  function updateSelectedPalette(name, type, colours) {
-    const palette = selectedPalette.value
+  function updateCurrentPalette(name, type, colours) {
+    const palette = currentPalette.value
 
     palette.name = name
     palette.type = type
@@ -116,9 +116,9 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
 
     if (index < 0) return
 
-    let selectedIndex = -1
-    if (palette.isSelected) {
-      selectedIndex = arePalettesFiltered.value ? filteredPalettes.value.indexOf(palette) : index
+    let currentIndex = -1
+    if (palette.isCurrent) {
+      currentIndex = arePalettesFiltered.value ? filteredPalettes.value.indexOf(palette) : index
     }
 
     const p = palettes.value
@@ -126,8 +126,8 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasChanges.value = true
 
     const f = filteredPalettes.value
-    if (selectedIndex >= 0 && f.length > 0) {
-      selectPalette(f[selectedIndex >= f.length ? f.length - 1 : selectedIndex])
+    if (currentIndex >= 0 && f.length > 0) {
+      setCurrentPalette(f[currentIndex >= f.length ? f.length - 1 : currentIndex])
     }
   }
 
@@ -159,15 +159,15 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     filteredPalettes,
     hasChanges,
     isOpen,
-    selectedPalette,
-    hasSelectedPalette,
+    currentPalette,
+    hasCurrentPalette,
     canMovePalettes,
     open,
     close,
     saved,
-    selectPalette,
+    setCurrentPalette,
     addPalette,
-    updateSelectedPalette,
+    updateCurrentPalette,
     deletePalette,
     movePalette,
     isFilterActive,

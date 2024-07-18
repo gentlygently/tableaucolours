@@ -40,15 +40,15 @@ function animated() {
   moreClasses.value = moreClasses.value.filter(x => x === 'palette--more')
 }
 
-const isPaletteSelected = computed(() => props.palette.isSelected)
+const isPaletteSelected = computed(() => props.palette.isCurrent)
 
-const scrollIntoViewIfSelected = isSelected => {
-  if (isSelected) element.value.scrollIntoView({ block: 'nearest' })
+const scrollIntoViewIfCurrent = isCurrent => {
+  if (isCurrent) element.value.scrollIntoView({ block: 'nearest' })
 }
 
-onMounted(() => scrollIntoViewIfSelected(props.palette.isSelected))
+onMounted(() => scrollIntoViewIfCurrent(props.palette.isCurrent))
 
-watch(isPaletteSelected, newValue => scrollIntoViewIfSelected(newValue), { flush: 'post' })
+watch(isPaletteSelected, newValue => scrollIntoViewIfCurrent(newValue), { flush: 'post' })
 
 const deleteClick = () => emit('delete', props.palette)
 const cloneClick = () => {
@@ -64,7 +64,7 @@ const cloneClick = () => {
     :title="tooltip"
     :class="[
       {
-        'palette--selected': palette.isSelected,
+        'palette--current': palette.isCurrent,
         'palette--changed': palette.hasChanges,
       },
       ...moreClasses,
@@ -114,7 +114,7 @@ const cloneClick = () => {
 
   font-size: 1.4rem;
 
-  &--selected {
+  &--current {
     box-shadow: inset 0rem 0rem 0.1rem 0.1rem @border-colour-active;
   }
 

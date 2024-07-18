@@ -10,7 +10,7 @@ const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
 const paletteAction = ref('')
 const isFilterOpen = ref(false)
-const selectedPaletteIndex = computed(() => tpsStore.filteredPalettes.findIndex(x => x.isSelected))
+const currentPaletteIndex = computed(() => tpsStore.filteredPalettes.findIndex(x => x.isCurrent))
 
 async function save() {
   const xml = replacePalettesInTpsXml(tpsStore.fileContents, tpsStore.palettes)
@@ -75,7 +75,7 @@ watch(isPaletteOpen, isOpen => {
         break
 
       case 'edit':
-        action = tpsStore.updateSelectedPalette
+        action = tpsStore.updateCurrentPalette
         break
     }
     if (action) action(paletteStore.name, paletteStore.type, paletteStore.colours)
@@ -108,8 +108,9 @@ function clonePalette(palette) {
   paletteStore.name = (palette.name + ' (Copy)').trim()
 }
 
-function selectPaletteAtIndex(index) {
-  if (index >= 0 && index < tpsStore.filteredPalettes.length) tpsStore.selectPalette(tpsStore.filteredPalettes[index])
+function makePaletteAtIndexCurrent(index) {
+  if (index >= 0 && index < tpsStore.filteredPalettes.length)
+    tpsStore.setCurrentPalette(tpsStore.filteredPalettes[index])
 }
 
 function toggleFilter() {
@@ -117,26 +118,26 @@ function toggleFilter() {
   tpsStore.isFilterActive = isFilterOpen.value
 }
 
-function moveSelectedPalette(newIndex) {
-  if (tpsStore.canMovePalettes) tpsStore.movePalette(tpsStore.selectedPalette, newIndex)
+function moveCurrentPalete(newIndex) {
+  if (tpsStore.canMovePalettes) tpsStore.movePalette(tpsStore.currentPalette, newIndex)
 }
 
 // Actions that can repeat when a key is held down
 function keyDown(event) {
-  if (!isValidKeyTarget || !tpsStore.hasSelectedPalette) return
+  if (!isValidKeyTarget || !tpsStore.hasCurrentPalette) return
 
-  const action = event.getModifierState('Shift') ? moveSelectedPalette : selectPaletteAtIndex
+  const action = event.getModifierState('Shift') ? moveCurrentPalete : makePaletteAtIndexCurrent
 
   switch (event.key) {
     case 'Down':
     case 'ArrowDown':
-      action(selectedPaletteIndex.value + 1)
+      action(currentPaletteIndex.value + 1)
       event.preventDefault()
       return
 
     case 'Up':
     case 'ArrowUp':
-      action(selectedPaletteIndex.value - 1)
+      action(currentPaletteIndex.value - 1)
       event.preventDefault()
       return
   }
@@ -152,16 +153,16 @@ function keyUp(event) {
       return
   }
 
-  if (!tpsStore.hasSelectedPalette) return
+  if (!tpsStore.hasCurrentPalette) return
 
   switch (event.key) {
     case 'Enter':
-      openPalette(tpsStore.selectedPalette)
+      openPalette(tpsStore.currentPalette)
       return
 
     case 'Backspace':
     case 'Delete':
-      deletePalette(tpsStore.selectedPalette)
+      deletePalette(tpsStore.currentPalette)
       return
   }
 }

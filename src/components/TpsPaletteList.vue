@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 import TpsPalette from './TpsPalette.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import TpsFileOpen from './TpsFileOpen.vue'
 
 const tpsStore = useTpsFileStore()
 
@@ -20,7 +19,7 @@ const palettes = computed({
 })
 
 function doubleClick(palette) {
-  tpsStore.selectPalette(palette)
+  tpsStore.setCurrentPalette(palette)
   emit('double-click-palette', palette)
 }
 
@@ -56,7 +55,7 @@ const paletteCount = computed(() => {
       :palette="palette"
       :can-move="tpsStore.canMovePalettes"
       class="palettelist-palette"
-      @click.stop.prevent="tpsStore.selectPalette(palette)"
+      @click.stop.prevent="tpsStore.setCurrentPalette(palette)"
       @dblclick.stop.prevent="doubleClick(palette)"
       @delete="deletePalette"
       @clone="clonePalette"
