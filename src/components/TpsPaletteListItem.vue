@@ -104,7 +104,7 @@ const cloneClick = () => {
   font-size: 1.4rem;
 
   &--current {
-    box-shadow: inset 0rem 0rem 0.1rem 0.1rem @border-colour-active;
+    box-shadow: inset 0rem 0rem 0.2rem 0.2rem @border-colour-active;
   }
 
   &--changed .name {

@@ -10,9 +10,10 @@ const tpsStore = useTpsFileStore()
     <li class="name">
       <div class="label"><label>Name</label></div>
       <div class="input">
-        <input id="palettefilter-name" type="text" v-model="tpsStore.paletteNameFilter" />
+        <input id="palettefilter-name" type="text" v-model="tpsStore.paletteFilterValues.name" />
         <label
-          ><input id="palettefilter-noname" type="checkbox" v-model="tpsStore.paletteNoNameFilter" /> No name</label
+          ><input id="palettefilter-noname" type="checkbox" v-model="tpsStore.paletteFilterValues.noName" /> No
+          name</label
         >
       </div>
     </li>
@@ -20,15 +21,15 @@ const tpsStore = useTpsFileStore()
       <div class="label"><label>Type</label></div>
       <div class="input">
         <label
-          ><input type="checkbox" :value="PaletteTypes.regular.id" v-model="tpsStore.paletteTypeFilter" />
+          ><input type="checkbox" :value="PaletteTypes.regular.id" v-model="tpsStore.paletteFilterValues.types" />
           {{ PaletteTypes.regular.name }}</label
         >
         <label
-          ><input type="checkbox" :value="PaletteTypes.sequential.id" v-model="tpsStore.paletteTypeFilter" />
+          ><input type="checkbox" :value="PaletteTypes.sequential.id" v-model="tpsStore.paletteFilterValues.types" />
           {{ PaletteTypes.sequential.name }}</label
         >
         <label
-          ><input type="checkbox" :value="PaletteTypes.diverging.id" v-model="tpsStore.paletteTypeFilter" />
+          ><input type="checkbox" :value="PaletteTypes.diverging.id" v-model="tpsStore.paletteFilterValues.types" />
           {{ PaletteTypes.diverging.name }}</label
         >
       </div>
@@ -36,7 +37,7 @@ const tpsStore = useTpsFileStore()
     <li class="selected">
       <div class="label"><label>Selected</label></div>
       <label
-        ><input id="palettefilter-selected" type="checkbox" v-model="tpsStore.paletteSelectedFilter" /> Only
+        ><input id="palettefilter-selected" type="checkbox" v-model="tpsStore.paletteFilterValues.selected" /> Only
         selected</label
       >
     </li>

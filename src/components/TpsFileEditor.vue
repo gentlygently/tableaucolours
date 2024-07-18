@@ -32,7 +32,7 @@ async function savePalettes(fileName, palettes, savedCallback) {
       suggestedName: fileName,
       types: [
         {
-          description: 'Tableau settings file',
+          description: 'Tableau preferences file',
           accept: { 'text/plain': ['.tps'] },
         },
       ],

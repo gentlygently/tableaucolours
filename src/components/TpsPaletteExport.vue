@@ -9,7 +9,7 @@ const canExport = computed(() => fileName.value && tpsStore.hasSelectedPalettes)
 
 const buttonTitle = computed(() => {
   if (!tpsStore.hasSelectedPalettes) return 'Select one or more palettes for export'
-  if (!fileName.value) return 'Enter a name for the new settings file'
+  if (!fileName.value) return 'Enter a name for the new preferences file'
 
   const count = tpsStore.selectedPalettes.length
 
