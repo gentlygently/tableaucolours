@@ -12,8 +12,8 @@ const openPaletteEditor = () => paletteStore.open()
 
 <template>
   <div class="startmenu">
-    <button class="button" @click.stop.prevent="openTpsFileEditor">Edit Tableau Settings File</button>
-    <button class="button" @click.stop.prevent="openPaletteEditor">Create Standalone Palette</button>
+    <button class="button" @click.stop.prevent="openTpsFileEditor">Edit Tableau settings file</button>
+    <button class="button" @click.stop.prevent="openPaletteEditor">Create standalone palette</button>
   </div>
   <TpsFileOpen ref="openTpsFile" />
 </template>
