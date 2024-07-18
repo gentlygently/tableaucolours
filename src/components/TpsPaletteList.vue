@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import TpsPalette from './TpsPalette.vue'
+import TpsPaletteListItem from './TpsPaletteListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
@@ -52,7 +52,7 @@ const paletteCount = computed(() => {
     @start="draggingActive = true"
     @end="draggingActive = false"
   >
-    <TpsPalette
+    <TpsPaletteListItem
       v-for="palette in palettes"
       :key="palette.id"
       :palette="palette"
