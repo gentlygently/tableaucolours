@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import PaletteType from './PaletteType.vue'
+import ColourPaletteTypeSelectorItem from './ColourPaletteTypeSelectorItem.vue'
 import { PaletteTypes } from '@/PaletteTypes'
 
 const props = defineProps({
@@ -96,7 +96,7 @@ watch(isListOpen, newValue => {
       @click="toggleList"
     >
       <div class="palettetypes-selectedtype">
-        <PaletteType :type="selectedType" />
+        <ColourPaletteTypeSelectorItem :type="selectedType" />
       </div>
       <div class="palettetypes-selectindicator">
         <span class="fas fa-chevron-down"></span>
@@ -110,7 +110,7 @@ watch(isListOpen, newValue => {
         :class="type.isSelected ? 'palettetypes-type--selected' : ''"
         @click="typeClicked(type)"
       >
-        <PaletteType :type="type" />
+        <ColourPaletteTypeSelectorItem :type="type" />
       </li>
     </ul>
   </div>
