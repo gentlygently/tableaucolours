@@ -16,8 +16,12 @@ const numberInput = ref(null)
 const numberOfColours = ref(localStorage.numberOfColoursToExtract || 8)
 
 const canAddColours = computed(() => paletteStore.canAddColour)
-const addColoursClass = computed(() => (canAddColours.value ? '' : 'extractcolours-field--disabled'))
-const addColoursTitle = computed(() => (canAddColours.value ? '' : 'The colour palette is already full'))
+const addColoursClass = computed(() =>
+  canAddColours.value ? '' : 'extractcolours-field--disabled'
+)
+const addColoursTitle = computed(() =>
+  canAddColours.value ? '' : 'The colour palette is already full'
+)
 
 const action = computed({
   get() {
@@ -34,11 +38,15 @@ const maximumColoursToExtract = computed(() =>
     : paletteStore.maximumColours - paletteStore.colours.length
 )
 
-const numberControlClass = computed(() => (numberHasFocus.value ? 'extractcolours-numbercontrol--focus' : ''))
+const numberControlClass = computed(() =>
+  numberHasFocus.value ? 'extractcolours-numbercontrol--focus' : ''
+)
 
 const numberOfColoursToExtract = computed({
   get() {
-    return numberOfColours.value > maximumColoursToExtract.value ? maximumColoursToExtract.value : numberOfColours.value
+    return numberOfColours.value > maximumColoursToExtract.value
+      ? maximumColoursToExtract.value
+      : numberOfColours.value
   },
   set(newValue) {
     if (newValue > maximumColoursToExtract.value) {
@@ -55,9 +63,11 @@ function close() {
 }
 
 function extract() {
+  const colourCount = Number.parseInt(numberOfColoursToExtract.value, 10)
   const colours = new ColorThief()
-    .getPalette(imageStore.image, numberOfColoursToExtract.value)
+    .getPalette(imageStore.image, colourCount, 1)
     .map(x => createColour(x[0], x[1], x[2]))
+
   colours.sort(compareColours)
   const hexes = colours.map(x => x.hex)
   switch (action.value) {
@@ -125,7 +135,9 @@ onMounted(() => numberInput.value.focus())
   <div class="extractcolours">
     <div class="extractcolours-fields">
       <div class="extractcolours-field extractcolours-number">
-        <label for="numberOfColours" class="extractcolours-numberlabel">Number of colours to extract from image</label>
+        <label for="numberOfColours" class="extractcolours-numberlabel"
+          >Number of colours to extract from image</label
+        >
         <div class="extractcolours-numbercontrol" :class="numberControlClass">
           <button
             class="iconbutton extractcolours-numberstep extractcolours-numberstep--down fas fa-minus"
@@ -181,8 +193,12 @@ onMounted(() => numberInput.value.focus())
         </label>
       </div>
     </div>
-    <button class="extractcolours-button extractcolours-button--extract" @click="extract">Extract</button>
-    <button class="extractcolours-button extractcolours-button--cancel" @click="close">Cancel</button>
+    <button class="extractcolours-button extractcolours-button--extract" @click="extract">
+      Extract
+    </button>
+    <button class="extractcolours-button extractcolours-button--cancel" @click="close">
+      Cancel
+    </button>
   </div>
 </template>
 
