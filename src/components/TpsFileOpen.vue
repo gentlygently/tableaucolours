@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { parseTpsFile } from '@/utils/TpsParser'
 import { useTpsFileStore } from '@/stores/tpsfile'
 import ModalPanel from './ModalPanel.vue'
-import TpsErrors from './TpsErrors.vue'
+import TpsFileErrors from './TpsFileErrors.vue'
 
 const label = ref(null)
 const fileInput = ref(null)
@@ -54,7 +54,7 @@ defineExpose({ selectFile })
     </label>
   </div>
   <ModalPanel :show="hasParserErrors" width="54rem" @close="parserErrors = null">
-    <TpsErrors
+    <TpsFileErrors
       v-if="hasParserErrors"
       :errors="parserErrors.errors"
       :fileName="parserErrors.fileName"

@@ -16,13 +16,13 @@ function parseTpsFile(xml) {
   }
 
   if (root.tagName !== 'workbook') {
-    return invalidPalette('Expected a root element of <workbook>')
+    return invalidFile(`Expected a root element of <workbook>, found <${root.tagName}>`)
   }
 
   const preferences = [...root.children].find(x => x.tagName === 'preferences')
 
   if (!preferences) {
-    return invalidPalette('Expected a <preferences> element inside <workbook>')
+    return invalidFile('Expected a <preferences> element inside <workbook>')
   }
 
   const parsedPalettes = [...preferences.children]
@@ -108,7 +108,7 @@ const invalidPalette = (message, element) => ({
   isValid: false,
   validationMessage: message,
   palette: {
-    name: element.getAttribute('name') ?? '',
+    name: element ? element.getAttribute('name') ?? '' : '',
   },
 })
 
