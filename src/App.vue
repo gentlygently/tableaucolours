@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import StartMenu from '@/components/StartMenu.vue'
 import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
-import TpsEditor from '@/components/TpsEditor.vue'
+import TpsFileEditor from '@/components/TpsFileEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
@@ -27,7 +27,7 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
   </Transition>
   <section id="tpssection" v-if="tpsStore.isOpen">
     <div>
-      <TpsEditor />
+      <TpsFileEditor />
     </div>
   </section>
 </template>
