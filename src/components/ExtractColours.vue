@@ -13,7 +13,7 @@ const paletteStore = usePaletteStore()
 const replaceExisting = ref(true)
 const numberHasFocus = ref(false)
 const numberInput = ref(null)
-const numberOfColours = ref(8)
+const numberOfColours = ref(localStorage.numberOfColoursToExtract || 8)
 
 const canAddColours = computed(() => paletteStore.canAddColour)
 const addColoursClass = computed(() => (canAddColours.value ? '' : 'extractcolours-field--disabled'))
@@ -68,6 +68,7 @@ function extract() {
       paletteStore.replaceColours(hexes)
       break
   }
+  localStorage.numberOfColoursToExtract = numberOfColoursToExtract.value
   close()
 }
 
