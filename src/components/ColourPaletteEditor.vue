@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourPaletteColourList from './ColourPaletteColourList.vue'
-import GetCode from './GetCode.vue'
+import ColourPaletteGetCode from './ColourPaletteGetCode.vue'
 import ExtractColours from './ExtractColours.vue'
 import ImportCode from './ImportCode.vue'
 import ModalPanel from './ModalPanel.vue'
@@ -145,7 +145,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     </div>
     <div class="paletteeditor-image"><ImageColourPicker /></div>
     <ModalPanel :show="codeModalOpen" width="54rem" @close="codeModalOpen = false">
-      <GetCode />
+      <ColourPaletteGetCode />
     </ModalPanel>
     <ModalPanel :show="importModalOpen" width="54rem" @close="importModalOpen = false">
       <ImportCode @close="importModalOpen = false" />
