@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourPaletteColourList from './ColourPaletteColourList.vue'
 import ColourPaletteGetCode from './ColourPaletteGetCode.vue'
 import ColourPaletteExtractColours from './ColourPaletteExtractColours.vue'
-import ImportCode from './ImportCode.vue'
+import ColourPaletteImport from './ColourPaletteImport.vue'
 import ModalPanel from './ModalPanel.vue'
 import PalettePreview from './PalettePreview.vue'
 import SelectPaletteType from './SelectPaletteType.vue'
@@ -148,7 +148,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       <ColourPaletteGetCode />
     </ModalPanel>
     <ModalPanel :show="importModalOpen" width="54rem" @close="importModalOpen = false">
-      <ImportCode @close="importModalOpen = false" />
+      <ColourPaletteImport @close="importModalOpen = false" />
     </ModalPanel>
     <ModalPanel :show="extractModalOpen" width="54rem" @close="extractModalOpen = false">
       <ColourPaletteExtractColours @close="extractModalOpen = false" />
