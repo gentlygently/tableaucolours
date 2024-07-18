@@ -64,6 +64,10 @@ textarea {
   background-color: @background-colour;
 }
 
+#startmenu {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
 #palettesection {
   z-index: 1000;
 
@@ -107,7 +111,7 @@ textarea {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgba(0, 0, 0, 0.5);
   transition: opacity 0.5s ease;
 
   &-enter-from {

@@ -94,7 +94,7 @@ const cloneClick = () => {
 .palette {
   display: grid;
   position: relative;
-  grid-template-columns: 4.5rem auto 3.1rem 2.5rem;
+  grid-template-columns: 4.5rem auto 3.1rem 2.7rem;
   grid-template-rows: auto auto;
   box-sizing: border-box;
   margin: 0.75rem;

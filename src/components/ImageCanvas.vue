@@ -53,10 +53,6 @@ function openImageFile() {
   eventBus.emit('open-image-file')
 }
 
-function openTpsFile() {
-  eventBus.emit('open-tps-file')
-}
-
 function wheel(event) {
   if (!event.deltaY) {
     return
@@ -66,8 +62,7 @@ function wheel(event) {
 }
 
 const messageType = computed(() => {
-  if (!props.isPaletteOpen) return props.isTpsFileOpen ? 'palette' : 'tps'
-  else if (!hasImage.value) return 'image'
+  if (!hasImage.value) return 'image'
   else if (!props.canPickColour) return 'colour'
   return null
 })
@@ -110,10 +105,6 @@ function preventDefaults(event) {
     </div>
     <div v-show="hasMessage" class="canvashint">
       <div class="canvashint-container">
-        <div v-show="messageType === 'tps'" class="canvashint-text">
-          <a href="#" @click.prevent="openTpsFile">Open a .tps file</a> to get started
-        </div>
-        <div v-show="messageType === 'palette'" class="canvashint-text">Double click a palette to edit</div>
         <div v-show="messageType === 'image'" class="canvashint-text">
           <a href="#" @click.prevent="openImageFile">Open</a>, paste or drop an image to get started
         </div>

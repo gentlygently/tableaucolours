@@ -22,13 +22,14 @@ const extractModalOpen = ref(false)
 const importModalOpen = ref(false)
 
 function close() {
+  const destination = tpsStore.isOpen ? 'file editor' : 'main menu'
   if (
-    !tpsStore.isOpen &&
     paletteStore.hasChanges &&
-    !confirm('Your palette will be discarded if you return to the .tps file editor. Continue?')
+    !confirm(`Your palette will be discarded if you return to the ${destination}. Continue?`)
   ) {
     return
   }
+  paletteStore.hasChanges = false
   paletteStore.close()
 }
 
@@ -75,8 +76,9 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       <div class="colourpalette">
         <div class="colourpalette-toolbar">
           <button
+            v-if="!tpsStore.isOpen"
             class="back iconbutton fas fa-arrow-left"
-            title="Back to file editor"
+            title="Back"
             @click.prevent.stop="close"
           ></button>
         </div>
@@ -133,6 +135,12 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
             ></button>
           </li>
         </ul>
+        <div v-if="tpsStore.isOpen" class="colourpalette-buttons">
+          <button class="button" @click.stop.prevent="close">Cancel</button>
+          <button class="button" :disabled="!paletteStore.hasChanges" @click.stop.prevent="paletteStore.close()">
+            Done
+          </button>
+        </div>
       </div>
     </div>
     <div class="paletteeditor-image"><ImageColourPicker /></div>
@@ -194,6 +202,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   }
   &-name {
     padding: 1rem;
+    padding-top: 0;
     box-sizing: border-box;
 
     input {
@@ -264,6 +273,16 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
           font-size: 2rem;
         }
       }
+    }
+  }
+  &-buttons {
+    display: grid;
+    margin: 1rem 1.2rem;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+
+    > button {
+      width: 100%;
     }
   }
 }
