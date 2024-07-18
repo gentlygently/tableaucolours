@@ -180,48 +180,39 @@ onUnmounted(() => {
 
 <template>
   <div class="tpseditor">
-    <div class="toolbar"></div>
-    <div class="file"></div>
-    <template v-if="tpsStore.isOpen">
-      <div class="palettes">
-        <TpsPaletteList
-          @double-click-palette="openPalette"
-          @delete-palette="deletePalette"
-          @clone-palette="clonePalette"
-          @move-palette="tpsStore.movePalette"
-        />
-      </div>
-      <ul class="paletteactions">
-        <li class="paletteactions-save">
-          <button
-            class="iconbutton fas fa-save"
-            title="Save changes"
-            :disabled="!tpsStore.hasChanges"
-            @click.prevent.stop="save"
-          ></button>
-        </li>
-        <li class="paletteactions-close">
-          <button class="iconbutton fas fa-times" title="Close file" @click.prevent.stop="close"></button>
-        </li>
-        <li class="paletteactions-empty"></li>
-        <li class="paletteactions-filter">
-          <button
-            class="iconbutton fas fa-filter"
-            title="Filter palettes"
-            :class="{ 'paletteactions-filter--active': isFilterOpen }"
-            :disabled="!tpsStore.palettes.length"
-            @click.prevent.stop="toggleFilter"
-          ></button>
-        </li>
-        <li class="paletteactions-add">
-          <button class="iconbutton fas fa-plus" title="Add palette (+)" @click.prevent.stop="addPalette"></button>
-        </li>
-      </ul>
-      <div class="filter" v-if="isFilterOpen">
-        <div class="filter-arrow"></div>
-        <TpsPaletteFilter />
-      </div>
-    </template>
+    <div class="file">{{ tpsStore.fileName }}</div>
+    <div class="palettes">
+      <TpsPaletteList
+        @double-click-palette="openPalette"
+        @delete-palette="deletePalette"
+        @clone-palette="clonePalette"
+        @move-palette="tpsStore.movePalette"
+      />
+    </div>
+    <ul class="paletteactions">
+      <li class="paletteactions-filter">
+        <button
+          class="iconbutton fas fa-filter"
+          title="Filter palettes"
+          :class="{ 'paletteactions-filter--active': isFilterOpen }"
+          :disabled="!tpsStore.palettes.length"
+          @click.prevent.stop="toggleFilter"
+        ></button>
+      </li>
+      <li class="paletteactions-add">
+        <button class="iconbutton fas fa-plus" title="Add palette (+)" @click.prevent.stop="addPalette"></button>
+      </li>
+    </ul>
+    <div class="filter" v-if="isFilterOpen">
+      <div class="filter-arrow"></div>
+      <TpsPaletteFilter />
+    </div>
+    <div class="fileactions">
+      <button class="button" title="Close file" @click.prevent.stop="close">Cancel</button>
+      <button class="button" title="Save changes" :disabled="!tpsStore.hasChanges" @click.prevent.stop="save">
+        Save
+      </button>
+    </div>
   </div>
 </template>
 
@@ -229,34 +220,46 @@ onUnmounted(() => {
 @import '../variables.less';
 
 .tpseditor {
-  height: 100%;
-  width: 100%;
   position: relative;
   display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 4rem 5rem minmax(0, 1fr) 7rem auto;
-}
-.toolbar {
-  grid-row: 1 / span 1;
-}
-.file {
-  grid-row: 2 / span 1;
-  padding: 1rem;
-}
-.palettes {
-  grid-row: 3 / span 1;
-  padding: 0 1rem;
+  grid-template-rows: 4rem minmax(0, 1fr) 6rem;
+  grid-template-columns: minmax(0, 1fr) 25rem;
+  grid-gap: 1rem;
+  box-sizing: border-box;
+  width: 100%;
   height: 100%;
 }
+.file {
+  grid-row: 1;
+  grid-column: 1 / span 2;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.fileactions {
+  grid-row: 3;
+  grid-column: 1 / span 2;
+  padding-top: 2rem;
+  margin: auto;
+
+  > button {
+    font-size: 1.8rem;
+    padding: 1rem;
+    width: 15rem;
+    margin: 0 1rem;
+  }
+}
+.palettes {
+  grid-row: 2;
+  grid-column: 1 / span 1;
+}
+
 .paletteactions {
-  grid-row: 4 / span 1;
+  grid-row: 2;
+  grid-column: 2 / span 1;
   display: block;
-  clear: both;
   list-style: none;
   margin: auto;
   width: 22.5rem;
-  padding: 0;
-  margin-top: 1rem;
   box-sizing: border-box;
 
   > li {
@@ -296,8 +299,11 @@ onUnmounted(() => {
     }
   }
 }
+
+/*
 .filter {
-  grid-row: 5 / span 1;
+  grid-row: 2 / span 1;
+  grid-column: 2;
   margin: 1rem;
   margin-top: -1.7rem;
 
@@ -310,4 +316,5 @@ onUnmounted(() => {
     margin-left: 14.8rem;
   }
 }
+  */
 </style>

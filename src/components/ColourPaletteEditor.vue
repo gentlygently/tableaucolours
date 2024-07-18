@@ -158,15 +158,8 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   align-content: stretch;
   box-sizing: border-box;
   position: relative;
-  margin: auto;
-  width: max(75rem, 80%);
-  min-width: 75rem;
-  max-width: 80%;
-  height: max(55rem, 80%);
-  min-height: 55rem;
-  max-height: 100rem;
-  border-radius: 0.2rem;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
 
   &-editor {
     position: relative;

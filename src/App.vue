@@ -18,16 +18,18 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
       <StartMenu />
     </section>
   </Transition>
-  <section id="sidebar">
-    <section id="tpssection">
-      <TpsEditor />
-    </section>
-  </section>
   <Transition name="overlay">
     <section id="palettesection" class="overlay" v-if="paletteStore.isOpen">
-      <ColourPaletteEditor />
+      <div>
+        <ColourPaletteEditor />
+      </div>
     </section>
   </Transition>
+  <section id="tpssection" v-if="tpsStore.isOpen">
+    <div>
+      <TpsEditor />
+    </div>
+  </section>
 </template>
 
 <style lang="less">
@@ -59,18 +61,42 @@ textarea {
   height: 100%;
   box-sizing: border-box;
   position: relative;
-}
-#sidebar {
-  position: relative;
-  flex-shrink: 0;
-  flex-grow: 0;
-}
-#sidebar,
-#tpssection {
-  width: 25rem;
-  height: 100%;
   background-color: @background-colour;
-  border-right: @border;
+}
+
+#palettesection {
+  z-index: 1000;
+
+  > div {
+    margin: auto;
+    width: max(75rem, 80%);
+    min-width: 75rem;
+    max-width: 80%;
+    height: max(55rem, 80%);
+    min-height: 55rem;
+    max-height: 100rem;
+    border-radius: 0.2rem;
+    overflow: hidden;
+  }
+}
+
+#tpssection {
+  display: flex;
+
+  width: 100%;
+  height: 100%;
+
+  > div {
+    margin: auto;
+    width: 75rem;
+    min-height: 55rem;
+    max-height: 80%;
+    height: max(55rem, 80%);
+    background-color: #fff;
+    border-radius: 0.2rem;
+    padding: 2.5rem;
+    box-shadow: @box-shadow;
+  }
 }
 
 .overlay {
@@ -112,6 +138,10 @@ button.button {
 
   &:hover {
     background-color: @button-colour-hover;
+  }
+
+  &:disabled {
+    background-color: @button-colour-disabled;
   }
 }
 

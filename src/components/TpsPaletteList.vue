@@ -58,7 +58,7 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
 .palettelist {
   display: block;
   margin: 0;
-  padding: 0;
+  padding: 0.5rem;
   height: 20rem;
   height: 100%;
   border-radius: 0.2rem;
@@ -66,5 +66,6 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
   box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
   overflow-y: scroll;
   overflow-x: hidden;
+  background-color: @background-colour;
 }
 </style>
