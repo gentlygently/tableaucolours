@@ -8,6 +8,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  canMove: Boolean,
 })
 
 const emit = defineEmits(['delete', 'clone'])
@@ -74,7 +75,7 @@ const cloneClick = () => {
       {{ palette.name }}
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
-    <div class="drag">
+    <div class="drag" v-if="canMove">
       <span class="fas fa-ellipsis-v"></span>
     </div>
     <div class="more">

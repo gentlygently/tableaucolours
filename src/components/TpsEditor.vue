@@ -118,7 +118,7 @@ function toggleFilter() {
 }
 
 function moveSelectedPalette(newIndex) {
-  if (!tpsStore.hasActiveFilters) tpsStore.movePalette(tpsStore.selectedPalette, newIndex)
+  if (tpsStore.canMovePalettes) tpsStore.movePalette(tpsStore.selectedPalette, newIndex)
 }
 
 // Actions that can repeat when a key is held down
@@ -190,23 +190,26 @@ onUnmounted(() => {
       />
     </div>
     <ul class="paletteactions">
-      <li class="paletteactions-filter">
-        <button
-          class="iconbutton fas fa-filter"
-          title="Filter palettes"
-          :class="{ 'paletteactions-filter--active': isFilterOpen }"
-          :disabled="!tpsStore.palettes.length"
-          @click.prevent.stop="toggleFilter"
-        ></button>
-      </li>
       <li class="paletteactions-add">
-        <button class="iconbutton fas fa-plus" title="Add palette (+)" @click.prevent.stop="addPalette"></button>
+        <button title="Add palette (+)" @click.prevent.stop="addPalette">
+          <span class="fas fa-plus"></span> Add palette
+        </button>
+      </li>
+      <li class="paletteactions-filter" :class="{ 'paletteactions-filter--active': isFilterOpen }">
+        <button title="Filter palettes" :disabled="!tpsStore.palettes.length" @click.prevent.stop="toggleFilter">
+          <span class="fas fa-filter"></span> Filter palettes
+        </button>
+        <Transition>
+          <div class="filter" v-if="isFilterOpen">
+            <div class="filter-arrow"></div>
+            <div class="filter-form">
+              <TpsPaletteFilter />
+            </div>
+          </div>
+        </Transition>
       </li>
     </ul>
-    <div class="filter" v-if="isFilterOpen">
-      <div class="filter-arrow"></div>
-      <TpsPaletteFilter />
-    </div>
+
     <div class="fileactions">
       <button class="button" title="Close file" @click.prevent.stop="close">Cancel</button>
       <button class="button" title="Save changes" :disabled="!tpsStore.hasChanges" @click.prevent.stop="save">
@@ -223,7 +226,7 @@ onUnmounted(() => {
   position: relative;
   display: grid;
   grid-template-rows: 4rem minmax(0, 1fr) 6rem;
-  grid-template-columns: minmax(0, 1fr) 25rem;
+  grid-template-columns: minmax(0, 1fr) 22rem;
   grid-gap: 1rem;
   box-sizing: border-box;
   width: 100%;
@@ -258,63 +261,61 @@ onUnmounted(() => {
   grid-column: 2 / span 1;
   display: block;
   list-style: none;
-  margin: auto;
-  width: 22.5rem;
-  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 
   > li {
-    display: inline-block;
-    height: 4rem;
-    width: 4.5rem;
-    border-left: @border;
-    border-top: @border;
-    border-bottom: @border;
-    text-align: center;
-    white-space: nowrap;
-    box-sizing: border-box;
-    overflow: hidden;
+    margin-left: 1rem;
+    margin-bottom: 0.7rem;
+    color: @tool-colour;
 
-    &:last-of-type {
-      border-right: @border;
-    }
-    .iconbutton {
-      font-size: 1.7rem;
-      line-height: 3.8rem;
-    }
-    &.paletteactions-save,
-    &.paletteactions-close,
-    &.paletteactions-add {
-      padding-top: 0;
-      .iconbutton {
-        font-size: 2rem;
+    > button {
+      border: 0;
+      outline: 0;
+      background-color: transparent;
+      font-size: 1.5rem;
+
+      &:hover {
+        color: @tool-colour-hover;
+      }
+
+      > span {
+        padding-right: 0.5rem;
       }
     }
   }
 
-  &-filter--active {
-    color: @button-colour;
+  &-filter--active > button {
+    color: @tool-colour-hover;
 
-    &:hover {
+    > span {
+      color: @button-colour;
+    }
+
+    &:hover,
+    &:hover > span {
       color: @button-colour-hover;
     }
   }
 }
 
-/*
 .filter {
-  grid-row: 2 / span 1;
-  grid-column: 2;
-  margin: 1rem;
-  margin-top: -1.7rem;
+  margin-left: 1rem;
+  transition: 0.5s ease;
+
+  &-form {
+    background-color: @background-colour;
+    border-radius: 0.5rem;
+  }
 
   &-arrow {
     width: 0;
     height: 0;
-    border-left: 1.3rem solid transparent;
-    border-right: 1.3rem solid transparent;
-    border-bottom: 1.3rem solid @border-colour;
-    margin-left: 14.8rem;
+    border-left: 1rem solid transparent;
+    border-right: 1rem solid transparent;
+    border-bottom: 1rem solid @background-colour;
+    margin-left: 2rem;
+    background-color: #fff;
   }
 }
-  */
 </style>

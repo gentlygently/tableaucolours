@@ -49,6 +49,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   const isOpen = computed(() => !!file.value.name)
   const hasSelectedPalette = computed(() => !!selectedPalette.value)
   const selectedPalette = computed(() => filteredPalettes.value.find(x => x.isSelected))
+  const canMovePalettes = computed(() => !hasActiveFilters.value)
   const isFilterActive = ref(false)
   const paletteFilters = ref([])
   const paletteNameFilter = ref('')
@@ -131,7 +132,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   }
 
   function movePalette(palette, newIndex) {
-    if (hasActiveFilters.value) {
+    if (!canMovePalettes.value) {
       console.debug('Attempted to move with active filter')
       return
     }
@@ -160,6 +161,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     isOpen,
     selectedPalette,
     hasSelectedPalette,
+    canMovePalettes,
     open,
     close,
     saved,

@@ -44,8 +44,6 @@ const tpsStore = useTpsFileStore()
   margin: 0;
   padding: 0;
   list-style: none;
-  border: @border;
-  border-radius: 0.5rem;
   font-size: 1.4rem;
 
   li {
@@ -54,6 +52,10 @@ const tpsStore = useTpsFileStore()
     grid-template-columns: 5rem auto;
     border-bottom: @border;
     padding: 1rem;
+
+    &:last-of-type {
+      border-bottom: 0;
+    }
   }
 
   .label {
