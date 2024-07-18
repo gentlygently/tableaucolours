@@ -11,6 +11,7 @@ const createPalette = (palette, isCurrent) => ({
   isCurrent: !!isCurrent,
   isSelected: false,
   hasChanges: false,
+  moved: 0, // Just a number that we can watch for changes
 })
 
 const mapColours = colours => colours.map(x => (typeof x === 'string' ? x : x.hex))
@@ -151,6 +152,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     const p = palettes.value
     const oldIndex = p.indexOf(palette)
     p.splice(newIndex, 0, p.splice(oldIndex, 1)[0])
+    palette.moved++
     hasChanges.value = true
   }
 

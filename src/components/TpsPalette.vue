@@ -11,8 +11,7 @@ const props = defineProps({
   canMove: Boolean,
 })
 
-const isSelected = ref(false)
-const emit = defineEmits(['delete', 'clone'])
+const emit = defineEmits(['clone'])
 
 const element = ref(null)
 
@@ -41,7 +40,8 @@ function animated() {
   moreClasses.value = moreClasses.value.filter(x => x === 'palette--more')
 }
 
-const isPaletteSelected = computed(() => props.palette.isCurrent)
+const isCurrentPalette = computed(() => props.palette.isCurrent)
+const hasPaletteMovied = computed(() => props.palette.moved)
 
 const scrollIntoViewIfCurrent = isCurrent => {
   if (isCurrent) element.value.scrollIntoView({ block: 'nearest' })
@@ -49,9 +49,9 @@ const scrollIntoViewIfCurrent = isCurrent => {
 
 onMounted(() => scrollIntoViewIfCurrent(props.palette.isCurrent))
 
-watch(isPaletteSelected, newValue => scrollIntoViewIfCurrent(newValue), { flush: 'post' })
+watch(isCurrentPalette, newValue => scrollIntoViewIfCurrent(newValue), { flush: 'post' })
+watch(hasPaletteMovied, () => scrollIntoViewIfCurrent(props.palette.isCurrent), { flush: 'post' })
 
-const deleteClick = () => emit('delete', props.palette)
 const cloneClick = () => {
   moreClick()
   emit('clone', props.palette)
@@ -77,7 +77,7 @@ const cloneClick = () => {
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
     <div class="select">
-      <input type="checkbox" v-model="palette.isSelected" title="" @click.stop />
+      <input type="checkbox" v-model="palette.isSelected" title="Select palette" @click.stop />
     </div>
     <div class="clone" title="">
       <button class="iconbutton fas fa-plus" title="Clone palette" @click.stop.prevent="cloneClick"></button>
@@ -174,7 +174,7 @@ const cloneClick = () => {
     grid-row: 1 / span 2;
     display: grid;
     place-content: center;
-    margin-left: 2rem;
+    margin-left: 1.7rem;
     margin-top: 0.8rem;
 
     .iconbutton {
@@ -194,8 +194,8 @@ const cloneClick = () => {
     place-content: center;
     color: @tool-colour-disabled;
     background-color: #fff;
-    margin: 1.2rem 0.2rem 0.5rem 0.8rem;
-    padding: 0.3rem 0.2rem 0.3rem 0;
+    margin: 1.2rem 0.2rem 0.5rem 0.7rem;
+    padding: 0.3rem 0.2rem 0.3rem 0.1rem;
     padding-left: 0.5rem;
     border-left: @border;
     box-sizing: border-box;
