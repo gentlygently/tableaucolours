@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ColourList from './ColourList.vue'
+import ColourPaletteColourList from './ColourPaletteColourList.vue'
 import GetCode from './GetCode.vue'
 import ExtractColours from './ExtractColours.vue'
 import ImportCode from './ImportCode.vue'
@@ -95,7 +95,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         <div class="colourpalette-type">
           <SelectPaletteType :selected-type-name="paletteStore.type" :tab-index="2" @type-selected="typeSelected" />
         </div>
-        <ColourList class="colourpalette-colours" />
+        <ColourPaletteColourList class="colourpalette-colours" />
         <div class="colourpalette-preview">
           <PalettePreview :type="paletteStore.type" :colours="paletteStore.colours" />
         </div>

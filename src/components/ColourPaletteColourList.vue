@@ -1,8 +1,8 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ColourSwatch from './ColourSwatch.vue'
+import ColourPaletteColourListItem from './ColourPaletteColourListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import { usePaletteStore } from '../stores/palette'
+import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()
 const draggingActive = ref(false)
@@ -115,7 +115,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     @start="draggingActive = true"
     @end="draggingActive = false"
   >
-    <ColourSwatch
+    <ColourPaletteColourListItem
       v-for="(colour, index) in colours"
       :key="colour.id"
       :colour="colour"
