@@ -41,6 +41,13 @@ const tpsStore = useTpsFileStore()
         selected</label
       >
     </li>
+    <li class="modified">
+      <div class="label"><label>Modifed</label></div>
+      <label
+        ><input id="palettefilter-modified" type="checkbox" v-model="tpsStore.paletteFilterValues.hasChanges" /> Only
+        modified</label
+      >
+    </li>
   </ul>
 </template>
 

@@ -21,6 +21,7 @@ const createPaletteFilterValues = () => ({
   noName: false,
   types: [],
   selected: false,
+  hasChanges: false,
 })
 
 class NameFilter {
@@ -51,6 +52,10 @@ class TypeFilter {
 
 class SelectedFilter {
   isMatch = palette => palette.isSelected
+}
+
+class HasChangesFilter {
+  isMatch = palette => palette.hasChanges
 }
 
 export const useTpsFileStore = defineStore('tpsFile', () => {
@@ -173,6 +178,8 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     if (paletteFilterValues.value.types.length) newFilters.push(new TypeFilter(paletteFilterValues.value.types))
 
     if (paletteFilterValues.value.selected) newFilters.push(new SelectedFilter())
+
+    if (paletteFilterValues.value.hasChanges) newFilters.push(new HasChangesFilter())
 
     paletteFilters.value = newFilters
   })

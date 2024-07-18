@@ -80,9 +80,9 @@ const cloneClick = () => {
       <input type="checkbox" v-model="palette.isSelected" title="Select palette" @click.stop />
     </div>
     <div class="clone" title="">
-      <button class="iconbutton fas fa-plus" title="Clone palette" @click.stop.prevent="cloneClick"></button>
+      <button class="iconbutton fas fa-stamp" title="Clone palette" @click.stop.prevent="cloneClick"></button>
     </div>
-    <div class="drag" title="" v-if="canMove">
+    <div class="drag" title="Move" v-if="canMove">
       <span class="fas fa-ellipsis-v"></span>
     </div>
   </li>
