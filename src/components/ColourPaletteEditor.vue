@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourPaletteColourList from './ColourPaletteColourList.vue'
 import ColourPaletteGetCode from './ColourPaletteGetCode.vue'
-import ExtractColours from './ExtractColours.vue'
+import ColourPaletteExtractColours from './ColourPaletteExtractColours.vue'
 import ImportCode from './ImportCode.vue'
 import ModalPanel from './ModalPanel.vue'
 import PalettePreview from './PalettePreview.vue'
@@ -151,7 +151,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       <ImportCode @close="importModalOpen = false" />
     </ModalPanel>
     <ModalPanel :show="extractModalOpen" width="54rem" @close="extractModalOpen = false">
-      <ExtractColours @close="extractModalOpen = false" />
+      <ColourPaletteExtractColours @close="extractModalOpen = false" />
     </ModalPanel>
   </div>
 </template>
