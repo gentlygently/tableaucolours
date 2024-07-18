@@ -7,6 +7,7 @@ import ImportCode from './ImportCode.vue'
 import ModalPanel from './ModalPanel.vue'
 import PalettePreview from './PalettePreview.vue'
 import SelectPaletteType from './SelectPaletteType.vue'
+import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { useTpsFileStore } from '@/stores/tpsfile'
@@ -69,63 +70,72 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
-  <div class="colourpalette">
-    <div class="colourpalette-toolbar">
-      <button
-        class="back iconbutton fas fa-arrow-left"
-        title="Back to file editor"
-        @click.prevent.stop="close"
-      ></button>
+  <div class="paletteeditor">
+    <div class="paletteeditor-editor">
+      <div class="colourpalette">
+        <div class="colourpalette-toolbar">
+          <button
+            class="back iconbutton fas fa-arrow-left"
+            title="Back to file editor"
+            @click.prevent.stop="close"
+          ></button>
+        </div>
+        <div class="colourpalette-name">
+          <input
+            id="name"
+            v-model="paletteStore.name"
+            type="text"
+            tabindex="1"
+            placeholder="Enter a palette name"
+            autocomplete="off"
+          />
+        </div>
+        <div class="colourpalette-type">
+          <SelectPaletteType :selected-type-name="paletteStore.type" :tab-index="2" @type-selected="typeSelected" />
+        </div>
+        <ColourList class="colourpalette-colours" />
+        <div class="colourpalette-preview">
+          <PalettePreview :type="paletteStore.type" :colours="paletteStore.colours" />
+        </div>
+        <ul class="colourpalette-actions">
+          <!-- TODO: Put these in a separate component? -->
+          <li class="extract">
+            <button
+              class="iconbutton fas fa-magic"
+              title="Extract colours from image (magic!)"
+              :disabled="!canExtractColours"
+              @click.prevent.stop="extractModalOpen = true"
+            ></button>
+          </li>
+          <li class="import">
+            <button
+              class="iconbutton fas fa-file-import"
+              title="Import XML"
+              @click.prevent.stop="importModalOpen = true"
+            ></button>
+          </li>
+          <li class="code">
+            <button class="iconbutton fas fa-code" title="Get XML" @click.prevent.stop="codeModalOpen = true"></button>
+          </li>
+          <li class="discard">
+            <button
+              class="iconbutton fas fa-trash-alt"
+              title="Delete all colours"
+              @click.prevent.stop="discard"
+            ></button>
+          </li>
+          <li class="add">
+            <button
+              class="iconbutton fas fa-plus"
+              title="Add colour (+)"
+              :disabled="!canAddColour"
+              @click.prevent.stop="addColour"
+            ></button>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="colourpalette-name">
-      <input
-        id="name"
-        v-model="paletteStore.name"
-        type="text"
-        tabindex="1"
-        placeholder="Enter a palette name"
-        autocomplete="off"
-      />
-    </div>
-    <div class="colourpalette-type">
-      <SelectPaletteType :selected-type-name="paletteStore.type" :tab-index="2" @type-selected="typeSelected" />
-    </div>
-    <ColourList class="colourpalette-colours" />
-    <div class="colourpalette-preview">
-      <PalettePreview :type="paletteStore.type" :colours="paletteStore.colours" />
-    </div>
-    <ul class="colourpalette-actions">
-      <!-- TODO: Put these in a separate component? -->
-      <li class="extract">
-        <button
-          class="iconbutton fas fa-magic"
-          title="Extract colours from image (magic!)"
-          :disabled="!canExtractColours"
-          @click.prevent.stop="extractModalOpen = true"
-        ></button>
-      </li>
-      <li class="import">
-        <button
-          class="iconbutton fas fa-file-import"
-          title="Import XML"
-          @click.prevent.stop="importModalOpen = true"
-        ></button>
-      </li>
-      <li class="code">
-        <button class="iconbutton fas fa-code" title="Get XML" @click.prevent.stop="codeModalOpen = true"></button>
-      </li>
-      <li class="discard">
-        <button class="iconbutton fas fa-trash-alt" title="Delete all colours" @click.prevent.stop="discard"></button>
-      </li>
-      <li class="add">
-        <button
-          class="iconbutton fas fa-plus"
-          title="Add colour (+)"
-          :disabled="!canAddColour"
-          @click.prevent.stop="addColour"
-        ></button>
-      </li>
-    </ul>
+    <div class="paletteeditor-image"><ImageColourPicker /></div>
     <ModalPanel :show="codeModalOpen" width="54rem" @close="codeModalOpen = false">
       <GetCode />
     </ModalPanel>
@@ -140,6 +150,42 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
 <style scoped lang="less">
 @import '../variables.less';
+
+.paletteeditor {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  align-content: stretch;
+  box-sizing: border-box;
+  position: relative;
+  margin: auto;
+  width: max(75rem, 80%);
+  min-width: 75rem;
+  max-width: 80%;
+  height: max(55rem, 80%);
+  min-height: 55rem;
+  max-height: 100rem;
+  border-radius: 0.2rem;
+  overflow: hidden;
+
+  &-editor {
+    position: relative;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 25rem;
+    height: 100%;
+    background-color: @background-colour;
+    border-right: @border;
+  }
+
+  &-image {
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+}
 
 .colourpalette {
   &-toolbar {

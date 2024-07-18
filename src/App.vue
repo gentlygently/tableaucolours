@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import StartMenu from '@/components/StartMenu.vue'
 import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
-import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import TpsEditor from '@/components/TpsEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
@@ -23,15 +22,12 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
     <section id="tpssection">
       <TpsEditor />
     </section>
-    <Transition name="palette">
-      <section id="palettesection" v-if="paletteStore.isOpen">
-        <ColourPaletteEditor />
-      </section>
-    </Transition>
   </section>
-  <section id="imagesection">
-    <ImageColourPicker />
-  </section>
+  <Transition name="overlay">
+    <section id="palettesection" class="overlay" v-if="paletteStore.isOpen">
+      <ColourPaletteEditor />
+    </section>
+  </Transition>
 </template>
 
 <style lang="less">
@@ -70,42 +66,11 @@ textarea {
   flex-grow: 0;
 }
 #sidebar,
-#tpssection,
-#palettesection {
+#tpssection {
   width: 25rem;
   height: 100%;
   background-color: @background-colour;
   border-right: @border;
-}
-#palettesection {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2000;
-}
-
-.palette-enter-active {
-  animation: slide-in 0.3s;
-}
-.palette-leave-active {
-  animation: slide-in 0.3s reverse;
-}
-
-@keyframes slide-in {
-  0% {
-    top: 100%;
-  }
-  100% {
-    top: 0;
-  }
-}
-
-#imagesection {
-  height: 100%;
-  box-sizing: border-box;
-  position: relative;
-  flex-grow: 1;
-  overflow: hidden;
 }
 
 .overlay {
@@ -132,7 +97,7 @@ textarea {
   }
 
   &-leave-active > * {
-    transform: scale(0.5);
+    transform: scale(0);
   }
 }
 
