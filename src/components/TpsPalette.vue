@@ -79,24 +79,12 @@ const cloneClick = () => {
     <div class="select">
       <input type="checkbox" v-model="palette.isSelected" title="" @click.stop />
     </div>
+    <div class="clone" title="">
+      <button class="iconbutton fas fa-plus" title="Clone palette" @click.stop.prevent="cloneClick"></button>
+    </div>
     <div class="drag" title="" v-if="canMove">
       <span class="fas fa-ellipsis-v"></span>
     </div>
-    <div class="more">
-      <button class="more-toggle" :title="showMore ? 'Less' : 'More'" @click.stop.prevent="moreClick">...</button>
-    </div>
-    <ul class="actions" style="display: none">
-      <li>
-        <button class="actions-clone" title="Clone palette" @click.stop.prevent="cloneClick">
-          <span class="fas fa-clone"></span><
-        </button>
-      </li>
-      <li>
-        <button class="actions-delete" title="Delete palette" @click.stop.prevent="deleteClick">
-          <span class="fas fa-trash-alt"></span>
-        </button>
-      </li>
-    </ul>
   </li>
 </template>
 
@@ -106,13 +94,11 @@ const cloneClick = () => {
 .palette {
   display: grid;
   position: relative;
-  grid-template-columns: 4.5rem auto 2rem;
+  grid-template-columns: 4.5rem auto 3.1rem 2.5rem;
   grid-template-rows: auto auto;
   box-sizing: border-box;
   margin: 0.75rem;
-  padding: 1rem;
-  padding-top: 0.4rem;
-  padding-left: 0;
+  padding: 0.4rem 0.5rem 1rem 0;
   background-color: #fff;
   border-radius: 0.5rem;
   font-size: 1.4rem;
@@ -123,20 +109,6 @@ const cloneClick = () => {
 
   &--changed .name {
     font-weight: bold;
-  }
-
-  &--more {
-    left: -2.5rem;
-  }
-
-  &--more-enter {
-    left: -2.5rem;
-    animation: slide-in 0.3s;
-  }
-
-  &--more-leave {
-    left: 0;
-    animation: slide-in 0.3s reverse;
   }
 
   .name {
@@ -197,107 +169,41 @@ const cloneClick = () => {
     }
   }
 
-  .drag {
+  .clone {
     grid-column: 3 / span 1;
     grid-row: 1 / span 2;
-    text-align: right;
-    color: @tool-colour;
+    display: grid;
+    place-content: center;
+    margin-left: 2rem;
+    margin-top: 0.8rem;
+
+    .iconbutton {
+      font-size: 1.5rem;
+      color: lighten(@tool-colour, 10%);
+
+      &:hover {
+        color: @tool-colour-hover;
+      }
+    }
+  }
+
+  .drag {
+    grid-column: 4 / span 1;
+    grid-row: 1 / span 2;
+    display: grid;
+    place-content: center;
+    color: @tool-colour-disabled;
     background-color: #fff;
-    padding-top: 1.2rem;
-    margin-left: 0.5rem;
-    margin-right: 0.2rem;
+    margin: 1.2rem 0.2rem 0.5rem 0.8rem;
+    padding: 0.3rem 0.2rem 0.3rem 0;
+    padding-left: 0.5rem;
+    border-left: @border;
+    box-sizing: border-box;
 
     &:hover {
       color: @tool-colour-hover;
       cursor: move;
     }
-  }
-
-  .more {
-    display: none;
-    grid-column: 2 / span 1;
-    grid-row: 1 / span 1;
-  }
-
-  .more-toggle {
-    display: block;
-    float: right;
-    box-sizing: border-box;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 0;
-    border-radius: 50%;
-    outline: none;
-    font-weight: bold;
-    font-size: 1rem;
-    line-height: 0.5rem;
-    text-align: center;
-    padding: 0;
-    padding-bottom: 0.5rem;
-    margin: 0;
-    color: #fff;
-    background-color: @tool-colour-disabled;
-
-    &:hover {
-      background-color: @tool-colour;
-    }
-  }
-
-  &--more .more-toggle {
-    background-color: @button-colour;
-
-    &:hover {
-      background-color: @button-colour-hover;
-    }
-  }
-
-  .actions {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: -2.5rem;
-    width: 2.5rem;
-    height: 5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-bottom: @border;
-
-    button {
-      display: block;
-      width: 100%;
-      height: 2.5rem;
-      border: 0;
-      margin: 0;
-      outline: 0;
-      text-align: center;
-      color: #fff;
-      line-height: 2.2rem;
-    }
-
-    &-clone {
-      background-color: orange;
-
-      &:hover {
-        background-color: lighten(orange, 10%);
-      }
-    }
-
-    &-delete {
-      background-color: red;
-
-      &:hover {
-        background-color: lighten(red, 15%);
-      }
-    }
-  }
-}
-@keyframes slide-in {
-  0% {
-    left: 0;
-  }
-  100% {
-    left: -2.5rem;
   }
 }
 </style>
