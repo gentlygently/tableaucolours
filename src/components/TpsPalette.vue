@@ -74,10 +74,13 @@ const cloneClick = () => {
       {{ palette.name }}
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
+    <div class="drag">
+      <span class="fas fa-ellipsis-v"></span>
+    </div>
     <div class="more">
       <button class="more-toggle" :title="showMore ? 'Less' : 'More'" @click.stop.prevent="moreClick">...</button>
     </div>
-    <ul class="actions">
+    <ul class="actions" style="display: none">
       <li>
         <button class="actions-clone" title="Clone palette" @click.stop.prevent="cloneClick">
           <span class="fas fa-clone"></span><
@@ -97,25 +100,21 @@ const cloneClick = () => {
 
 .palette {
   display: grid;
+  position: relative;
   grid-template-columns: auto 2rem;
   grid-template-rows: auto auto;
   box-sizing: border-box;
-  height: 5.1rem;
-  padding: 0.75rem;
+  margin: 0.75rem;
+  padding: 1rem;
   padding-top: 0.4rem;
-  list-style: none;
-  background-color: darken(@background-colour, 2%);
-  border-bottom: @border;
-  position: relative;
+
+  background-color: #fff;
+  border-radius: 0.5rem;
+
   font-size: 1.4rem;
 
-  &:hover {
-    background-color: @background-colour-hover;
-  }
-
-  &--selected,
-  &--selected:hover {
-    box-shadow: inset 0rem 0rem 0.2rem 0.2rem @border-colour-active;
+  &--selected {
+    box-shadow: inset 0rem 0rem 0.1rem 0.1rem @border-colour-active;
   }
 
   &--changed .name {
@@ -145,14 +144,31 @@ const cloneClick = () => {
   }
 
   .preview {
-    grid-column: 1 / span 2;
+    grid-column: 1 / span 1;
     grid-row: 2 / span 1;
     height: 1.5rem;
     width: 100%;
-    margin-top: 0.2rem;
+    margin-top: 0.4rem;
+  }
+
+  .drag {
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 2;
+    text-align: right;
+    color: @tool-colour;
+    background-color: #fff;
+    padding-top: 1.2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.2rem;
+
+    &:hover {
+      color: @tool-colour-hover;
+      cursor: move;
+    }
   }
 
   .more {
+    display: none;
     grid-column: 2 / span 1;
     grid-row: 1 / span 1;
   }

@@ -35,6 +35,7 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
     :options="{ delay: 25 }"
     :disabled="tpsStore.hasActiveFilters"
     tag="ul"
+    draggable="li"
     @update="paletteMoved"
     @start="draggingActive = true"
     @end="draggingActive = false"
@@ -58,7 +59,7 @@ const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIn
 .palettelist {
   display: block;
   margin: 0;
-  padding: 0.5rem;
+  padding: 0;
   height: 20rem;
   height: 100%;
   border-radius: 0.2rem;
