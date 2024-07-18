@@ -110,7 +110,8 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasChanges.value = false
   }
 
-  const setCurrentPalette = palette => filteredPalettes.value.forEach(x => (x.isCurrent = x === palette))
+  const setCurrentPalette = palette =>
+    filteredPalettes.value.forEach(x => (x.isCurrent = x === palette))
 
   function addPalette(name, type, colours) {
     palettes.value.push(createPalette({ name, type, colours }))
@@ -166,6 +167,10 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     hasChanges.value = true
   }
 
+  function selectAllPalettes() {
+    filteredPalettes.value.forEach(x => (x.isSelected = true))
+  }
+
   function clearPaletteSelection() {
     palettes.value.forEach(x => (x.isSelected = false))
   }
@@ -173,9 +178,12 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   watchEffect(() => {
     const newFilters = []
     if (paletteFilterValues.value.name || paletteFilterValues.value.noName)
-      newFilters.push(new NameFilter(paletteFilterValues.value.name, paletteFilterValues.value.name))
+      newFilters.push(
+        new NameFilter(paletteFilterValues.value.name, paletteFilterValues.value.name)
+      )
 
-    if (paletteFilterValues.value.types.length) newFilters.push(new TypeFilter(paletteFilterValues.value.types))
+    if (paletteFilterValues.value.types.length)
+      newFilters.push(new TypeFilter(paletteFilterValues.value.types))
 
     if (paletteFilterValues.value.selected) newFilters.push(new SelectedFilter())
 
@@ -206,6 +214,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     deletePalette,
     deleteSelectedPalettes,
     movePalette,
+    selectAllPalettes,
     clearPaletteSelection,
     isFilterActive,
     hasActiveFilters,

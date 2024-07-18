@@ -116,7 +116,8 @@ function deleteSelectedPalettes() {
 
   if (selected.length === 1) return deletePalette(selected[0])
 
-  if (confirm(`Are you sure you want to delete ${selected.length} palettes?`)) tpsStore.deleteSelectedPalettes()
+  if (confirm(`Are you sure you want to delete ${selected.length} palettes?`))
+    tpsStore.deleteSelectedPalettes()
 }
 
 function clonePalette(palette) {
@@ -222,6 +223,15 @@ onUnmounted(() => {
           <span class="fas fa-trash-alt"></span> Delete selected palettes
         </button>
       </li>
+      <li class="paletteactions-selectall">
+        <button
+          title="Select all palettes"
+          :disabled="!tpsStore.filteredPalettes.length"
+          @click.prevent.stop="tpsStore.selectAllPalettes"
+        >
+          <span class="fas fa-check-circle"></span> Select all
+        </button>
+      </li>
       <li class="paletteactions-clear">
         <button
           title="Clear palette selection"
@@ -232,7 +242,11 @@ onUnmounted(() => {
         </button>
       </li>
       <li class="paletteactions-filter" :class="{ 'paletteactions-filter--active': isFilterOpen }">
-        <button title="Filter palettes" :disabled="!tpsStore.palettes.length" @click.prevent.stop="toggleFilter">
+        <button
+          title="Filter palettes"
+          :disabled="!tpsStore.palettes.length"
+          @click.prevent.stop="toggleFilter"
+        >
           <span class="fas fa-filter"></span> Filter palettes
         </button>
         <Transition name="actionform">
@@ -264,7 +278,12 @@ onUnmounted(() => {
     </ul>
     <div class="fileactions">
       <button class="button" title="Close file" @click.prevent.stop="close">Close</button>
-      <button class="button" title="Save changes" :disabled="!tpsStore.hasChanges" @click.prevent.stop="save">
+      <button
+        class="button"
+        title="Save changes"
+        :disabled="!tpsStore.hasChanges"
+        @click.prevent.stop="save"
+      >
         Save
       </button>
     </div>
@@ -344,6 +363,10 @@ onUnmounted(() => {
         padding-right: 0.5rem;
       }
     }
+  }
+
+  &-selectall span {
+    font-size: 1.4rem;
   }
 
   &-clear span {
