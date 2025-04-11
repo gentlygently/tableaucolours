@@ -11,7 +11,7 @@ function parseTpsFile(xml) {
   const doc = xmlParser.parseFromString(xml, 'application/xml')
   const root = doc.documentElement
 
-  if (root.getElementsByTagName('parsererror').length) {
+  if (doc.querySelector('parsererror')) {
     return invalidFile('Unable to parse XML')
   }
 
@@ -47,7 +47,8 @@ function parseTpsFile(xml) {
 
 const invalidFile = messages => ({
   isValid: false,
-  validationMessages: typeof messages === 'string' ? [{ message: messages, palette: '' }] : messages,
+  validationMessages:
+    typeof messages === 'string' ? [{ message: messages, palette: '' }] : messages,
   palettes: [],
 })
 
@@ -59,7 +60,7 @@ function parseColourPalette(xml) {
   const doc = xmlParser.parseFromString(xml, 'application/xml')
   const root = doc.documentElement
 
-  if (root.getElementsByTagName('parsererror').length) {
+  if (doc.querySelector('parsererror')) {
     return invalidPalette('Unable to parse XML')
   }
 
@@ -71,7 +72,9 @@ function parsePaletteElement(element, requireColour) {
     return invalidPalette('Expected a root element of <color-palette>')
   }
 
-  const colours = [...element.children].filter(x => x.tagName === 'color').map(x => x.innerHTML.trim())
+  const colours = [...element.children]
+    .filter(x => x.tagName === 'color')
+    .map(x => x.innerHTML.trim())
 
   if (requireColour && !colours.length) {
     return invalidPalette('Expected one or more <color> elements', element)
