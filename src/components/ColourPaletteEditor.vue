@@ -121,7 +121,11 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
             ></button>
           </li>
           <li class="code">
-            <button class="iconbutton fas fa-code" title="Get XML" @click.prevent.stop="codeModalOpen = true"></button>
+            <button
+              class="iconbutton fas fa-code"
+              title="Get XML"
+              @click.prevent.stop="codeModalOpen = true"
+            ></button>
           </li>
           <li class="discard">
             <button
@@ -141,7 +145,11 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
         </ul>
         <div v-if="tpsStore.isOpen" class="colourpalette-buttons">
           <button class="button" @click.stop.prevent="close">Cancel</button>
-          <button class="button" :disabled="!paletteStore.hasChanges" @click.stop.prevent="paletteStore.close()">
+          <button
+            class="button"
+            :disabled="!paletteStore.hasChanges"
+            @click.stop.prevent="paletteStore.close()"
+          >
             Done
           </button>
         </div>

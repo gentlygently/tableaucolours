@@ -125,6 +125,7 @@ export const usePaletteStore = defineStore('palette', () => {
     name,
     type,
     maximumColours,
+    selectedColour,
     colours,
     hasChanges,
     isOpen,
