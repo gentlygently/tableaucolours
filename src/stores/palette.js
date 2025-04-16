@@ -89,8 +89,14 @@ export const usePaletteStore = defineStore('palette', () => {
   }
 
   function removeColour(colour) {
-    colours.value = colours.value.filter(x => x !== colour)
+    const c = colours.value
+    const index = c.findIndex(x => x === colour)
+    if (index < 0) return
+    c.splice(index, 1)
     hasChanges.value = true
+
+    if (!colour.isSelected || !c.length) return
+    selectColour(c[index >= c.length ? c.length - 1 : index])
   }
 
   function replacePalette(paletteName, paletteType, paletteColours) {
