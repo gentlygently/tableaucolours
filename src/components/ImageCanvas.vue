@@ -86,7 +86,6 @@ function preventDefaults(event) {
 
 <template>
   <div
-    ref="container"
     class="imagecanvas"
     :class="dropClass"
     @dragenter.prevent="dragEnter"
@@ -113,7 +112,7 @@ function preventDefaults(event) {
         </div>
       </div>
     </div>
-    <div ref="droptarget" class="droptarget">
+    <div ref="dropTarget" class="droptarget">
       <div class="droptarget-textwrapper">
         <div class="droptarget-text">
           <span class="droptarget-icon fas fa-hand-point-down"></span>
@@ -192,6 +191,9 @@ function preventDefaults(event) {
   top: 0;
   left: 0;
   z-index: 1001;
+  & * {
+    pointer-events: none;
+  }
   &-textwrapper {
     display: table-cell;
     vertical-align: middle;
