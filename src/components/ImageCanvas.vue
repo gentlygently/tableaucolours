@@ -22,7 +22,7 @@ const dropClass = computed(() => (isDropHighlightActive.value ? 'imagecanvas--dr
 function dragEnter(event) {
   if (
     event.dataTransfer.files.length ||
-    [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/' > -1))
+    [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/') > -1)
   ) {
     isDropHighlightActive.value = true
     event.dataTransfer.dropEffect = 'copy'
