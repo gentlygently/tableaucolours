@@ -20,10 +20,7 @@ const hasImage = computed(() => props.image.width && props.image.height)
 const dropClass = computed(() => (isDropHighlightActive.value ? 'imagecanvas--drop' : ''))
 
 function dragEnter(event) {
-  if (
-    event.dataTransfer.files.length ||
-    [...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/') > -1)
-  ) {
+  if ([...event.dataTransfer.items].find(x => x.kind === 'file' && x.type.indexOf('image/') > -1)) {
     isDropHighlightActive.value = true
     event.dataTransfer.dropEffect = 'copy'
   }
