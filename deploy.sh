@@ -39,8 +39,8 @@ npm run build || exit 1
 
 cd "${deploy_path}" && git reset --hard && cd -|| exit 1
 cd "${deploy_path}" && git pull && cd -|| exit 1
-cd "${deploy_path}" && find . -maxdepth 1 ! -name '.git' ! -name '.' ! -name '..' -type f -exec rm -rf {} + && cd - || exit 1
-cd "${deploy_path}" && find . -maxdepth 1 ! -name '.git' ! -name '.' ! -name '..' -type d -exec rm -rf {} + && cd - || exit 1
+cd "${deploy_path}" && find . -maxdepth 1 ! -name 'react' ! -name '.git' ! -name '.' ! -name '..' -type f -exec rm -rf {} + && cd - || exit 1
+cd "${deploy_path}" && find . -maxdepth 1 ! -name 'react' ! -name '.git' ! -name '.' ! -name '..' -type d -exec rm -rf {} + && cd - || exit 1
 cp -R dist/. "${deploy_path}" || exit 1
 
 cd "${deploy_path}" && git add * && cd - || exit 1
