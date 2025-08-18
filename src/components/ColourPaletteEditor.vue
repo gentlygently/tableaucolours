@@ -74,14 +74,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   <div class="paletteeditor">
     <div class="paletteeditor-editor">
       <div class="colourpalette">
-        <div class="colourpalette-toolbar">
-          <button
-            v-if="!tpsStore.isOpen"
-            class="back iconbutton fas fa-arrow-left"
-            title="Back"
-            @click.prevent.stop="close"
-          ></button>
-        </div>
+        <div class="colourpalette-toolbar"></div>
         <div class="colourpalette-name">
           <input
             id="name"
@@ -153,6 +146,9 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
             Done
           </button>
         </div>
+        <div v-if="!tpsStore.isOpen" class="colourpalette-backbutton">
+          <button class="button" @click.stop.prevent="close">Back</button>
+        </div>
       </div>
     </div>
     <div class="paletteeditor-image"><ImageColourPicker /></div>
@@ -187,8 +183,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     flex-grow: 0;
     width: 25rem;
     height: 100%;
-    background-color: @background-colour;
-    border-right: @border;
+    background-color: #fff;
   }
 
   &-image {
@@ -201,17 +196,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 }
 
 .colourpalette {
-  &-toolbar {
-    width: 100%;
-    height: 4rem;
-
-    .back {
-      font-size: 2rem;
-      vertical-align: middle;
-      position: relative;
-      margin: 1.2rem;
-    }
-  }
+  margin-top: 4rem;
   &-name {
     padding: 1rem;
     padding-top: 0;
@@ -223,15 +208,15 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       background-color: #fff;
       padding: 0.5rem;
       font-size: 1.5rem;
+      line-height: 2rem;
       border-radius: 0.2rem;
       box-sizing: border-box;
       outline: none;
-      box-shadow: @box-shadow;
     }
     input:hover {
       border: @border;
       border-color: @border-colour-hover;
-      box-shadow: @box-shadow-hover;
+      box-shadow: @box-shadow;
     }
     input:focus {
       box-shadow: @box-shadow-active;
@@ -295,6 +280,13 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
     > button {
       width: 100%;
+    }
+  }
+  &-backbutton {
+    margin: 1rem 1.2rem;
+    text-align: center;
+    > button {
+      width: 10rem;
     }
   }
 }

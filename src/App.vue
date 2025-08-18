@@ -28,9 +28,9 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
       </section>
     </Transition>
     <Transition name="overlay">
-      <section id="palettesection" class="overlay" v-if="paletteStore.isOpen">
+      <section id="palettesection" v-if="paletteStore.isOpen">
         <div>
-          <ColourPaletteEditor />
+          <div><ColourPaletteEditor /></div>
         </div>
       </section>
     </Transition>
@@ -103,6 +103,7 @@ main {
   width: 100%;
   height: 100%;
   padding-top: 8rem;
+  position: relative;
 }
 #app {
   display: flex;
@@ -117,25 +118,39 @@ main {
 
 #palettesection {
   z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 8rem;
 
   > div {
-    margin: auto;
-    width: max(75rem, 80%);
-    min-width: 75rem;
-    max-width: 80%;
-    height: max(55rem, 80%);
-    min-height: 55rem;
-    max-height: 100rem;
-    border-radius: 0.2rem;
-    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: @background-colour;
+    padding-top: 4rem;
+
+    > div {
+      margin: auto;
+      width: max(75rem, 80%);
+      min-width: 75rem;
+      max-width: 80%;
+      height: max(55rem, 80%);
+      min-height: 55rem;
+      max-height: 100rem;
+      border-radius: 0.2rem;
+      box-shadow: @box-shadow;
+      background-color: #fff;
+      overflow: hidden;
+    }
   }
 }
 
 #tpssection {
-  display: flex;
-
   width: 100%;
   height: 100%;
+  padding-top: 4rem;
 
   > div {
     margin: auto;

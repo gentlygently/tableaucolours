@@ -62,7 +62,9 @@ function paste(event) {
     return
   }
 
-  const files = [...event.clipboardData.items].filter(i => i.kind === 'file').map(i => i.getAsFile())
+  const files = [...event.clipboardData.items]
+    .filter(i => i.kind === 'file')
+    .map(i => i.getAsFile())
 
   displayFirstImage(files)
 }
@@ -120,12 +122,13 @@ onUnmounted(() => window.removeEventListener('paste', paste))
     height: 10rem;
     flex-grow: 1;
     box-sizing: border-box;
+    border-left: @border;
   }
   &-toolbar {
     height: 4rem;
     width: 100%;
     box-sizing: border-box;
-    background-color: @background-colour;
+    background-color: #fff;
     border-bottom: @border;
     flex-shrink: 0;
     flex-grow: 0;

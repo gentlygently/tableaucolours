@@ -131,13 +131,13 @@ watch(isListOpen, newValue => {
   &-select {
     position: relative;
     background-color: #fff;
+    border: @border;
     border-radius: 0.2rem;
-    box-shadow: @box-shadow;
     z-index: 100;
     user-select: none;
 
     &:hover {
-      box-shadow: @box-shadow-hover;
+      box-shadow: @box-shadow;
     }
 
     &:focus,
