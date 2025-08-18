@@ -181,7 +181,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     position: relative;
     flex-shrink: 0;
     flex-grow: 0;
-    width: 25rem;
+    width: 27rem;
     height: 100%;
     background-color: #fff;
   }

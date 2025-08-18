@@ -52,7 +52,11 @@ function remove() {
     :style="{ 'grid-column': column, 'grid-row': row }"
     @click="click"
   >
-    <div class="colour-swatch" :style="{ 'background-color': colour.hex }" @dblclick="isPickerOpen = true"></div>
+    <div
+      class="colour-swatch"
+      :style="{ 'background-color': colour.hex }"
+      @dblclick="isPickerOpen = true"
+    ></div>
     <div class="colour-remove" title="Delete colour (Delete)" @click.prevent.stop="remove">
       <span class="fas fa-times"></span>
     </div>
@@ -78,11 +82,11 @@ function remove() {
   list-style: none;
   background-color: #fff;
   border-radius: 0.2rem;
-  box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
+  /*box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;*/
   position: relative;
 
   &:hover {
-    box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour-hover;
+    box-shadow: 0rem 0rem 0.2rem 0.2rem @border-colour;
   }
 
   &--selected,

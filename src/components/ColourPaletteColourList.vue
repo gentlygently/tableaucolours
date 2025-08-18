@@ -127,13 +127,19 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </template>
 
 <style scoped lang="less">
+@import '../variables.less';
 .colourlist {
-  margin: 0;
-  height: 29rem;
+  margin: 1rem;
+  height: 31rem;
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(5, 1fr);
+
+  border-radius: 0.2rem;
+  box-sizing: border-box;
+  box-shadow: @box-shadow;
+  background-color: @background-colour;
 
   &-colour {
     display: block;
