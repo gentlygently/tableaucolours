@@ -13,23 +13,33 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
 </script>
 
 <template>
-  <Transition name="overlay">
-    <section id="startmenu" class="overlay" v-if="isStartMenuOpen">
-      <StartMenu />
-    </section>
-  </Transition>
-  <Transition name="overlay">
-    <section id="palettesection" class="overlay" v-if="paletteStore.isOpen">
+  <header>
+    <div>
+      <div class="title">
+        <h1>Gently, gently</h1>
+        <div class="description">Tableau colour palette editor</div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <Transition name="overlay">
+      <section id="startmenu" v-if="isStartMenuOpen">
+        <StartMenu />
+      </section>
+    </Transition>
+    <Transition name="overlay">
+      <section id="palettesection" class="overlay" v-if="paletteStore.isOpen">
+        <div>
+          <ColourPaletteEditor />
+        </div>
+      </section>
+    </Transition>
+    <section id="tpssection" v-if="tpsStore.isOpen">
       <div>
-        <ColourPaletteEditor />
+        <TpsFileEditor />
       </div>
     </section>
-  </Transition>
-  <section id="tpssection" v-if="tpsStore.isOpen">
-    <div>
-      <TpsFileEditor />
-    </div>
-  </section>
+  </main>
 </template>
 
 <style lang="less">
@@ -53,6 +63,47 @@ textarea {
   font-size: 1rem;
 }
 
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 8rem;
+  background-image: linear-gradient(#ff4433, #ff5f15);
+
+  > div {
+    width: max(75rem, 80%);
+    min-width: 75rem;
+    max-width: 80%;
+    color: #fff;
+    margin: auto;
+    padding-bottom: 0.8rem;
+
+    .title {
+      display: inline-block;
+      text-align: center;
+    }
+    h1 {
+      font-family: Antonio, sans-serif;
+      font-size: 4rem;
+      font-weight: bold;
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+    .description {
+      margin: 0;
+      padding: 0;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+main {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding-top: 8rem;
+}
 #app {
   display: flex;
   flex-flow: row nowrap;
@@ -62,10 +113,6 @@ textarea {
   box-sizing: border-box;
   position: relative;
   background-color: @background-colour;
-}
-
-#startmenu {
-  background-color: rgba(0, 0, 0, 0.7);
 }
 
 #palettesection {
@@ -96,6 +143,22 @@ textarea {
     min-height: 55rem;
     max-height: 80%;
     height: max(55rem, 80%);
+    background-color: #fff;
+    border-radius: 0.2rem;
+    padding: 2.5rem;
+    box-shadow: @box-shadow;
+  }
+}
+
+#startmenu {
+  width: 100%;
+  height: 100%;
+
+  > div {
+    margin: auto;
+    margin-top: 8rem;
+    width: 75rem;
+    height: 40rem;
     background-color: #fff;
     border-radius: 0.2rem;
     padding: 2.5rem;
