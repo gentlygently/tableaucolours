@@ -1,31 +1,19 @@
-# vue
+# Gently, gently
 
-## Project setup
-```
-npm install
-```
+Gently, gently is a Tableau Preferences.tps file and colour palette editor written in Vue.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Colour palette editor
+The colour palette editor allows you to create and edit Tableau colour palettes:
+- Start from scratch, or import the XML of an existing palette to edit
+- Pick colours from a standard colour picker
+- Open an image, then pick colours from the image either automatically or manually
+- Add, remove and re-order colours
+- Change the palette type or name
+- Export the XML of the new/modified template
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
+## Preferences.tps file editor
+The file editor allows you to open and edit a Tableau Preferences.tps file:
+- Add, clone, edit (in the palette editor), remove and re-order colour palettes
+- Select a subset of palettes to export to a new .tps file
+- Search/filter palettes (useful when you have many)
+- Save your changes 
