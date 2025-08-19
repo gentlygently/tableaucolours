@@ -69,7 +69,7 @@ textarea {
 #app {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 8rem calc(100% - 8rem);
+  grid-template-rows: 6rem calc(100% - 6rem);
   height: 100%;
   box-sizing: border-box;
   position: relative;
@@ -84,14 +84,14 @@ header {
   grid-row: 1;
   grid-column: 1;
   width: 100%;
-  height: 8rem;
+  height: 6rem;
   background-image: linear-gradient(#ff4433, #ff5f15);
   z-index: 2;
 
   > div {
-    width: max(75rem, 80%);
+    width: clamp(75rem, 80%, 140rem);
     min-width: 75rem;
-    max-width: 80%;
+    max-width: min(80%, 140rem);
     color: #fff;
     margin: auto;
     padding-bottom: 0.8rem;
@@ -107,7 +107,7 @@ header {
 
       h1 {
         font-family: Antonio, sans-serif;
-        font-size: 4rem;
+        font-size: 3rem;
         font-weight: bold;
         display: block;
         margin: 0;
@@ -116,14 +116,14 @@ header {
       .description {
         margin: 0;
         padding: 0;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
     }
 
     .header-help {
       display: block;
       grid-column: 2;
-      padding-top: 2rem;
+      padding-top: 1.5rem;
     }
   }
 }
@@ -145,7 +145,7 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  padding-top: 4rem;
+  padding-top: 2.5rem;
 
   > div {
     width: 100%;
@@ -154,12 +154,12 @@ main {
 
     > div {
       margin: auto;
-      width: max(75rem, 90%);
+      width: clamp(75rem, 80%, 140rem);
       min-width: 75rem;
-      max-width: 80%;
-      height: max(55rem, 90%);
-      min-height: 55rem;
-      max-height: 100rem;
+      max-width: min(80%, 140rem);
+      height: clamp(60rem, 90%, 110rem);
+      min-height: 60rem;
+      max-height: min(90%, 110rem);
       border-radius: 0.2rem;
       box-shadow: @box-shadow;
       background-color: #fff;
@@ -174,7 +174,7 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  padding-top: 4rem;
+  padding-top: 2.5rem;
 
   > div {
     width: 100%;
@@ -183,13 +183,14 @@ main {
     > div {
       margin: auto;
       width: 75rem;
-      min-height: 55rem;
-      max-height: 80%;
-      height: max(55rem, 80%);
+      height: max(60rem, 90%);
+      min-height: 60rem;
+      max-height: 90%;
       background-color: #fff;
       border-radius: 0.2rem;
       padding: 2.5rem;
       box-shadow: @box-shadow;
+      box-sizing: border-box;
     }
   }
 }

@@ -31,13 +31,13 @@ const modalOpen = ref(false)
 <style lang="less">
 @import '../variables.less';
 .help {
-  height: 4rem;
+  height: 3rem;
   &-button {
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     border: solid 0.1rem #fff;
-    border-radius: 2rem;
-    font-size: 3rem;
+    border-radius: 1.5rem;
+    font-size: 2rem;
     display: block;
     color: #fff;
     float: right;
