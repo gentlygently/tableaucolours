@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps({
   show: Boolean,
+  full: Boolean,
   width: {
     type: String,
     required: true,
@@ -48,10 +49,17 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
-  <dialog ref="dialog" v-if="props.show" @mousedown="mouseDown">
+  <dialog
+    ref="dialog"
+    :class="['modal', props.full ? 'modal--full' : '']"
+    v-if="props.show"
+    @mousedown="mouseDown"
+  >
     <div class="modal-container" :style="{ width: props.width }" @click.stop>
       <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="close"></button>
-      <slot></slot>
+      <div class="modal-content">
+        <slot></slot>
+      </div>
     </div>
   </dialog>
 </template>
@@ -60,24 +68,40 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 @import '../variables.less';
 
 .modal {
+  overflow: hidden;
+  max-height: 85%;
+
+  &--full {
+    height: 85%;
+  }
+
   &-container {
     width: 30rem;
+    height: 100%;
+    max-height: 100%;
     margin: 0 auto;
     padding: 2rem;
-    padding-top: 2.5rem;
+    padding-top: 2.8rem;
     background-color: #fff;
     border-radius: 0.2rem;
     box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
     position: relative;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   &-close {
     position: absolute;
-    top: 0.3rem;
-    right: 0.5rem;
+    top: 0.5rem;
+    right: 0.6rem;
     font-size: 1.5rem;
+  }
+
+  &-content {
+    height: min-content;
+    max-height: 100%;
+    overflow: scroll;
   }
 
   /*

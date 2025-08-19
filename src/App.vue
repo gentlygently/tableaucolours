@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import Help from '@/components/Help.vue'
 import StartMenu from '@/components/StartMenu.vue'
 import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
 import TpsFileEditor from '@/components/TpsFileEditor.vue'
@@ -15,10 +16,11 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
 <template>
   <header>
     <div>
-      <div class="title">
+      <div class="header-title">
         <h1>Gently, gently</h1>
         <div class="description">Tableau colour palette editor</div>
       </div>
+      <div class="header-help"><Help /></div>
     </div>
   </header>
   <main>
@@ -69,6 +71,7 @@ header {
   width: 100%;
   height: 8rem;
   background-image: linear-gradient(#ff4433, #ff5f15);
+  z-index: 2;
 
   > div {
     width: max(75rem, 80%);
@@ -77,23 +80,36 @@ header {
     color: #fff;
     margin: auto;
     padding-bottom: 0.8rem;
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: auto;
 
-    .title {
+    .header-title {
+      grid-column: 1;
       display: inline-block;
       text-align: center;
+      text-wrap: nowrap;
+
+      h1 {
+        font-family: Antonio, sans-serif;
+        font-size: 4rem;
+        font-weight: bold;
+        display: block;
+        margin: 0;
+        padding: 0;
+      }
+      .description {
+        margin: 0;
+        padding: 0;
+        font-size: 1.5rem;
+      }
     }
-    h1 {
-      font-family: Antonio, sans-serif;
-      font-size: 4rem;
-      font-weight: bold;
+
+    .header-help {
       display: block;
-      margin: 0;
-      padding: 0;
-    }
-    .description {
-      margin: 0;
-      padding: 0;
-      font-size: 1.5rem;
+      grid-column: 2;
+      padding-top: 2rem;
+      font-size: 1.4rem;
     }
   }
 }
@@ -104,6 +120,7 @@ main {
   height: 100%;
   padding-top: 8rem;
   position: relative;
+  z-index: 1;
 }
 #app {
   display: flex;
@@ -178,34 +195,6 @@ main {
     border-radius: 0.2rem;
     padding: 2.5rem;
     box-shadow: @box-shadow;
-  }
-}
-
-.overlay {
-  display: flex;
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: opacity 0.5s ease;
-
-  &-enter-from {
-    opacity: 0;
-  }
-
-  &-leave-active {
-    opacity: 0;
-  }
-
-  &-enter-from > * {
-    transform: scale(1.1);
-  }
-
-  &-leave-active > * {
-    transform: scale(0);
   }
 }
 
