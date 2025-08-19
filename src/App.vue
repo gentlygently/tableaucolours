@@ -39,7 +39,7 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
     </Transition>
     <section id="tpssection" v-if="tpsStore.isOpen">
       <div>
-        <TpsFileEditor />
+        <div><TpsFileEditor /></div>
       </div>
     </section>
   </main>
@@ -66,9 +66,23 @@ textarea {
   font-size: 1rem;
 }
 
+#app {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 8rem calc(100% - 8rem);
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+  background-color: @background-colour;
+}
+
+#modals {
+  height: 0;
+}
+
 header {
-  position: fixed;
-  top: 0;
+  grid-row: 1;
+  grid-column: 1;
   width: 100%;
   height: 8rem;
   background-image: linear-gradient(#ff4433, #ff5f15);
@@ -115,22 +129,13 @@ header {
 }
 
 main {
+  grid-column: 1;
+  grid-row: 2;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  padding-top: 8rem;
   position: relative;
   z-index: 1;
-}
-#app {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-start;
-  align-content: stretch;
-  height: 100%;
-  box-sizing: border-box;
-  position: relative;
-  background-color: @background-colour;
 }
 
 #palettesection {
@@ -140,20 +145,19 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  padding-top: 8rem;
+  padding-top: 4rem;
 
   > div {
     width: 100%;
     height: 100%;
     background-color: @background-colour;
-    padding-top: 4rem;
 
     > div {
       margin: auto;
-      width: max(75rem, 80%);
+      width: max(75rem, 90%);
       min-width: 75rem;
       max-width: 80%;
-      height: max(55rem, 80%);
+      height: max(55rem, 90%);
       min-height: 55rem;
       max-height: 100rem;
       border-radius: 0.2rem;
@@ -165,20 +169,28 @@ main {
 }
 
 #tpssection {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   padding-top: 4rem;
 
   > div {
-    margin: auto;
-    width: 75rem;
-    min-height: 55rem;
-    max-height: 80%;
-    height: max(55rem, 80%);
-    background-color: #fff;
-    border-radius: 0.2rem;
-    padding: 2.5rem;
-    box-shadow: @box-shadow;
+    width: 100%;
+    height: 100%;
+
+    > div {
+      margin: auto;
+      width: 75rem;
+      min-height: 55rem;
+      max-height: 80%;
+      height: max(55rem, 80%);
+      background-color: #fff;
+      border-radius: 0.2rem;
+      padding: 2.5rem;
+      box-shadow: @box-shadow;
+    }
   }
 }
 
