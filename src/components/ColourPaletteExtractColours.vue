@@ -65,7 +65,7 @@ function close() {
 function extract() {
   const colourCount = Number.parseInt(numberOfColoursToExtract.value, 10)
   const colours = new ColorThief()
-    .getPalette(imageStore.image, colourCount, 1)
+    .getPalette(imageStore.image, colourCount, 10)
     .map(x => createColour(x[0], x[1], x[2]))
 
   colours.sort(compareColours)
@@ -207,6 +207,7 @@ onMounted(() => numberInput.value.focus())
 
 .extractcolours {
   color: lighten(#000, 10%);
+  padding-top: 0.2rem;
 
   &:after {
     content: ' ';

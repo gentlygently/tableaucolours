@@ -73,6 +73,10 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 
   &--full {
     height: 85%;
+
+    & .modal-content {
+      overflow-y: scroll;
+    }
   }
 
   &-container {
@@ -101,7 +105,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   &-content {
     height: min-content;
     max-height: 100%;
-    overflow: scroll;
+    overflow: hidden;
   }
 
   /*
