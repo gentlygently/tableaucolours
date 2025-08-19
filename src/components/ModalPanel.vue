@@ -49,19 +49,21 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
-  <dialog
-    ref="dialog"
-    :class="['modal', props.full ? 'modal--full' : '']"
-    v-if="props.show"
-    @mousedown="mouseDown"
-  >
-    <div class="modal-container" :style="{ width: props.width }" @click.stop>
-      <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="close"></button>
-      <div class="modal-content">
-        <slot></slot>
+  <Teleport to="#modals">
+    <dialog
+      ref="dialog"
+      :class="['modal', props.full ? 'modal--full' : '']"
+      v-if="props.show"
+      @mousedown="mouseDown"
+    >
+      <div class="modal-container" :style="{ width: props.width }" @click.stop>
+        <button class="modal-close iconbutton fas fa-times" @click.stop.prevent="close"></button>
+        <div class="modal-content">
+          <slot></slot>
+        </div>
       </div>
-    </div>
-  </dialog>
+    </dialog>
+  </Teleport>
 </template>
 
 <style scoped lang="less">
@@ -107,51 +109,30 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     max-height: 100%;
     overflow: hidden;
   }
-
-  /*
-    * The following styles are auto-applied to elements with
-    * transition="modal" when their visibility is toggled
-    * by Vue.js.
-    *
-    * You can easily play with the modal transition by editing
-    * these styles.
-    */
-
-  &-enter-from {
-    opacity: 0;
-  }
-
-  &-leave-active {
-    opacity: 0;
-  }
-
-  &-enter-from .modal-container,
-  &-leave-active .modal-container {
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
-  }
 }
 
 /* Open state of the dialog  */
-dialog:open {
+dialog {
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all 0.3s allow-discrete;
+  border: 0;
+  background-color: transparent;
+}
+
+dialog[open] {
   opacity: 1;
   transform: scaleY(1);
   border: 0;
   background-color: transparent;
 }
 
-/* Closed state of the dialog   */
-dialog {
-  opacity: 0;
-  transform: scaleY(0);
-  transition: all 0.3s allow-discrete;
-}
-
 /* Before open state  */
 /* Needs to be after the previous dialog:open rule to take effect,
     as the specificity is the same */
+
 @starting-style {
-  dialog:open {
+  dialog[open] {
     opacity: 0;
     transform: scaleY(1.1);
   }
@@ -163,14 +144,14 @@ dialog::backdrop {
   transition: all 0.3s allow-discrete;
 }
 
-dialog:open::backdrop {
+dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* This starting-style rule cannot be nested inside the above selector
 because the nesting selector cannot represent pseudo-elements. */
 @starting-style {
-  dialog:open::backdrop {
+  dialog[open]::backdrop {
     background-color: rgb(0 0 0 / 0%);
   }
 }

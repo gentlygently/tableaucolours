@@ -14,6 +14,7 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
 </script>
 
 <template>
+  <div id="modals"></div>
   <header>
     <div>
       <div class="header-title">
@@ -109,7 +110,6 @@ header {
       display: block;
       grid-column: 2;
       padding-top: 2rem;
-      font-size: 1.4rem;
     }
   }
 }

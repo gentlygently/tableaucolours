@@ -47,29 +47,32 @@ const modalOpen = ref(false)
       border-width: 0.2rem;
     }
   }
-  h1 {
-    font-size: 1.8rem;
-    margin: 0;
-    padding: 0;
-  }
-  h2 {
-    font-size: 1.6rem;
-    margin: 0;
-    padding: 0;
-    margin-block-start: 1rem;
-    margin-block-end: 0;
-  }
-  ul,
-  ol {
-    margin-block-start: 0rem;
-    margin-block-end: 0.5rem;
-  }
-  p {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-  }
-  .fas {
-    padding: 0 0.3rem;
+  &-content {
+    font-size: 1.4rem;
+    h1 {
+      font-size: 1.8rem;
+      margin: 0;
+      padding: 0;
+    }
+    h2 {
+      font-size: 1.6rem;
+      margin: 0;
+      padding: 0;
+      margin-block-start: 1rem;
+      margin-block-end: 0;
+    }
+    ul,
+    ol {
+      margin-block-start: 0rem;
+      margin-block-end: 0.5rem;
+    }
+    p {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    .fas {
+      padding: 0 0.3rem;
+    }
   }
 }
 </style>
