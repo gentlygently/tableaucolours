@@ -76,15 +76,22 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
   &--full {
     height: 85%;
 
+    & .modal-container {
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
+    }
+
     & .modal-content {
+      height: auto;
+      max-height: 100%;
+      overflow: hidden;
       overflow-y: scroll;
     }
   }
 
   &-container {
     width: 30rem;
-    height: 100%;
-    max-height: 100%;
     margin: 0 auto;
     padding: 2rem;
     padding-top: 2.8rem;
@@ -94,7 +101,6 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     transition: all 0.3s ease;
     position: relative;
     box-sizing: border-box;
-    overflow: hidden;
   }
 
   &-close {
@@ -102,12 +108,6 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     top: 0.5rem;
     right: 0.6rem;
     font-size: 1.5rem;
-  }
-
-  &-content {
-    height: min-content;
-    max-height: 100%;
-    overflow: hidden;
   }
 }
 

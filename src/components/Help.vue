@@ -44,7 +44,7 @@ const modalOpen = ref(false)
     background-color: transparent;
 
     &:hover {
-      border-width: 0.2rem;
+      background-color: #ff000099;
     }
   }
   &-content {
