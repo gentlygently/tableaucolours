@@ -96,6 +96,14 @@
     </section>
 
     <section>
+      <h2>Reversing colour order</h2>
+      <p>
+        Either click the reverse button (<span class="iconbutton fas fa-retweet"></span>) in the
+        menu or press the <em>R</em> key on the keyboard.
+      </p>
+    </section>
+
+    <section>
       <h2>Deleting colours</h2>
       <p>To delete a single colour using the mouse:</p>
       <ol>

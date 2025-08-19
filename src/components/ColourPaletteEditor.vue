@@ -43,6 +43,10 @@ function addColour() {
   paletteStore.addColour()
 }
 
+function reverseColours() {
+  paletteStore.reverseColours()
+}
+
 function keyUp(event) {
   if (event.target.tagName.toLowerCase() !== 'body') {
     return
@@ -55,6 +59,10 @@ function keyUp(event) {
     case 'Backspace':
     case 'Delete':
       removeSelectedColour()
+
+    case 'R':
+    case 'r':
+      reverseColours()
   }
 }
 
@@ -125,6 +133,13 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
               class="iconbutton fas fa-trash-alt"
               title="Delete all colours"
               @click.prevent.stop="discard"
+            ></button>
+          </li>
+          <li class="reverse">
+            <button
+              class="iconbutton fas fa-retweet"
+              title="Reverse colours (R)"
+              @click.prevent.stop="reverseColours"
             ></button>
           </li>
           <li class="add">
@@ -240,14 +255,14 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
     clear: both;
     list-style: none;
     margin: auto;
-    width: 22.5rem;
+    width: 24rem;
     padding: 0;
     box-sizing: border-box;
 
     > li {
       display: inline-block;
       height: 4rem;
-      width: 4.5rem;
+      width: 4rem;
       border-left: @border;
       border-top: @border;
       border-bottom: @border;
@@ -262,13 +277,6 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
       .iconbutton {
         font-size: 1.7rem;
         line-height: 3.8rem;
-      }
-
-      &.add {
-        padding-top: 0rem;
-        .iconbutton {
-          font-size: 2rem;
-        }
       }
     }
   }
