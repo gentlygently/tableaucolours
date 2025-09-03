@@ -27,7 +27,7 @@ const openPaletteEditor = () => paletteStore.open()
       <h2>Create a colour palette</h2>
       <p>
         Create a new Tableau colour palette from scratch, either by magically extracting colours
-        from an image or picking them yourself. You can also import the XML of an existing template.
+        from an image or picking them yourself. You can also import and edit existing palettes.
       </p>
       <div class="action">
         <button class="button" @click.stop.prevent="openPaletteEditor">Create a template</button>

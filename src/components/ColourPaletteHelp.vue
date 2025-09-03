@@ -83,7 +83,7 @@
     </section>
 
     <section>
-      <h2>Re-orering colours</h2>
+      <h2>Re-ordering colours</h2>
       <p>Using the mouse:</p>
       <ul>
         <li>Click and drag colour swatches to move them.</li>
@@ -91,7 +91,9 @@
       <p>Using the keyboard:</p>
       <ol>
         <li>Select a colour</li>
-        <li>Hold down the <em>Shift</em> key, then use the arrow keys to move the colour</li>
+        <li>
+          While holding down the <em>Shift</em> key, use the arrow keys to move the selected colour
+        </li>
       </ol>
     </section>
 
