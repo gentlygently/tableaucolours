@@ -20,7 +20,6 @@ export default [
   ...pluginVue.configs['flat/essential'],
   {
     rules: {
-      'vue/multi-word-component-names': 'off',
       'vue/no-mutating-props': 'off',
       'vue/return-in-computed-property': 'off',
     },
