@@ -4,6 +4,7 @@ import ColorThief from 'colorthief'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { converter, formatHex, useMode, modeLch, modeRgb, parse } from 'culori/fn'
+import { ColourPaletteExtractColoursTestIds } from '@/test-ids/ColourPaletteExtractColoursTestIds'
 
 const emit = defineEmits(['close'])
 
@@ -132,7 +133,7 @@ onMounted(() => numberInput.value.focus())
 </script>
 
 <template>
-  <div class="extractcolours">
+  <div class="extractcolours" :data-testid="ColourPaletteExtractColoursTestIds.Self">
     <div class="extractcolours-fields">
       <div class="extractcolours-field extractcolours-number">
         <label for="numberOfColours" class="extractcolours-numberlabel"
@@ -152,6 +153,7 @@ onMounted(() => numberInput.value.focus())
             min="1"
             :max="maximumColoursToExtract"
             class="extractcolours-numberinput"
+            :data-testid="ColourPaletteExtractColoursTestIds.NumberInput"
             tabindex="100"
             @focus="numberHasFocus = true"
             @blur="numberHasFocus = false"

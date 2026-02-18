@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import ScalableImage from '../ScalableImage/ScalableImage.vue'
 import { eventBus } from '@/eventbus'
+import { ImageCanvasTestIds } from '@/test-ids/ImageCanvasTestIds'
 
 const props = defineProps({
   canPickColour: Boolean,
@@ -85,6 +86,7 @@ function preventDefaults(event) {
   <div
     class="imagecanvas"
     :class="dropClass"
+    :data-testid="ImageCanvasTestIds.Self"
     @dragenter.prevent="dragEnter"
     @dragover.prevent="dragEnter"
     @dragleave.prevent="dragLeave"
@@ -99,7 +101,7 @@ function preventDefaults(event) {
         @colour-picked="colourPicked"
       />
     </div>
-    <div v-show="hasMessage" class="canvashint">
+    <div v-show="hasMessage" class="canvashint" :data-testid="ImageCanvasTestIds.Hint">
       <div class="canvashint-container">
         <div v-show="messageType === 'image'" class="canvashint-text">
           <a href="#" @click.prevent="openImageFile">Open</a>, paste or drop an image to get started
@@ -109,7 +111,7 @@ function preventDefaults(event) {
         </div>
       </div>
     </div>
-    <div ref="dropTarget" class="droptarget">
+    <div ref="dropTarget" class="droptarget" :data-testid="ImageCanvasTestIds.DropTarget">
       <div class="droptarget-textwrapper">
         <div class="droptarget-text">
           <span class="droptarget-icon fas fa-hand-point-down"></span>

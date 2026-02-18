@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import ColourPaletteTypeSelectorItem from '../ColourPaletteTypeSelectorItem/ColourPaletteTypeSelectorItem.vue'
 import { PaletteTypes } from '@/PaletteTypes'
+import { ColourPaletteTypeSelectorTestIds } from '@/test-ids/ColourPaletteTypeSelectorTestIds'
 
 const props = defineProps({
   selectedTypeName: {
@@ -84,6 +85,7 @@ watch(isListOpen, newValue => {
 <template>
   <div
     class="palettetypes"
+    :data-testid="ColourPaletteTypeSelectorTestIds.Self"
     @keyup.down.exact.stop.prevent="arrowDown"
     @keyup.up.exact.stop.prevent="arrowUp"
     @keyup.enter.exact.stop.prevent="toggleList"
@@ -95,14 +97,14 @@ watch(isListOpen, newValue => {
       :tabindex="props.tabIndex >= 0 ? props.tabIndex : ''"
       @click="toggleList"
     >
-      <div class="palettetypes-selectedtype">
+      <div class="palettetypes-selectedtype" :data-testid="ColourPaletteTypeSelectorTestIds.Selected">
         <ColourPaletteTypeSelectorItem :type="selectedType" />
       </div>
       <div class="palettetypes-selectindicator">
         <span class="fas fa-chevron-down"></span>
       </div>
     </div>
-    <ul class="palettetypes-list" :class="listClass">
+    <ul class="palettetypes-list" :class="listClass" :data-testid="ColourPaletteTypeSelectorTestIds.List">
       <li
         v-for="type in types"
         :key="type.name"

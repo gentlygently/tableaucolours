@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useTpsFileStore } from '@/stores/tpsfile'
+import { TpsPaletteExportTestIds } from '@/test-ids/TpsPaletteExportTestIds'
 
 const emit = defineEmits(['export'])
 const tpsStore = useTpsFileStore()
@@ -26,9 +27,9 @@ function click() {
 </script>
 
 <template>
-  <div class="paletteexport">
-    <input type="text" v-model="fileName" placeholder="Enter file name" />
-    <button class="button" :disabled="!canExport" :title="buttonTitle" @click.stop.prevent="click">Export</button>
+  <div class="paletteexport" :data-testid="TpsPaletteExportTestIds.Self">
+    <input type="text" v-model="fileName" :data-testid="TpsPaletteExportTestIds.FileName" placeholder="Enter file name" />
+    <button class="button" :disabled="!canExport" :data-testid="TpsPaletteExportTestIds.Button" :title="buttonTitle" @click.stop.prevent="click">Export</button>
   </div>
 </template>
 

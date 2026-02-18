@@ -11,6 +11,7 @@ import ImageColourPicker from '@/components/ImageColourPicker/ImageColourPicker.
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { useTpsFileStore } from '@/stores/tpsfile'
+import { ColourPaletteEditorTestIds } from '@/test-ids/ColourPaletteEditorTestIds'
 
 const imageStore = useImageStore()
 const paletteStore = usePaletteStore()
@@ -81,7 +82,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </script>
 
 <template>
-  <div class="paletteeditor">
+  <div class="paletteeditor" :data-testid="ColourPaletteEditorTestIds.Self">
     <div class="paletteeditor-editor">
       <div class="colourpalette">
         <div class="colourpalette-toolbar"></div>

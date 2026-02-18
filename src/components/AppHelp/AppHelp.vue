@@ -5,6 +5,7 @@ import TpsFileHelp from '@/components/TpsFileHelp/TpsFileHelp.vue'
 import ModalPanel from '../ModalPanel/ModalPanel.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
+import { AppHelpTestIds } from '@/test-ids/AppHelpTestIds'
 
 const paletteStore = usePaletteStore()
 const tpsStore = useTpsFileStore()
@@ -16,14 +17,15 @@ const modalOpen = ref(false)
     <button
       v-if="paletteStore.isOpen || tpsStore.isOpen"
       class="help-button"
+      :data-testid="AppHelpTestIds.Button"
       title="Help"
       @click.prevent.stop="modalOpen = true"
     >
       ?
     </button>
     <ModalPanel :show="modalOpen" full width="70rem" @close="modalOpen = false">
-      <ColourPaletteHelp v-if="paletteStore.isOpen" class="help-content" />
-      <TpsFileHelp v-if="tpsStore.isOpen && !paletteStore.isOpen" class="help-content" />
+      <ColourPaletteHelp v-if="paletteStore.isOpen" class="help-content" :data-testid="AppHelpTestIds.Content" />
+      <TpsFileHelp v-if="tpsStore.isOpen && !paletteStore.isOpen" class="help-content" :data-testid="AppHelpTestIds.Content" />
     </ModalPanel>
   </div>
 </template>

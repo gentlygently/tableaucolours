@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { ImageZoomTestIds } from '@/test-ids/ImageZoomTestIds'
 
 const props = defineProps({
   scale: { type: Number, required: true },
@@ -47,10 +48,11 @@ watch(sliderValue, newValue => {
 </script>
 
 <template>
-  <div class="imagezoom">
+  <div class="imagezoom" :data-testid="ImageZoomTestIds.Self">
     <button
       class="iconbutton imagezoom-out fas fa-image"
       title="Zoom out (Shift + Scroll-down)"
+      :data-testid="ImageZoomTestIds.ZoomOut"
       :disabled="!props.enabled"
       @click.prevent.stop="zoomOut"
     ></button>
@@ -61,16 +63,18 @@ watch(sliderValue, newValue => {
       max="100"
       :disabled="!props.enabled"
       class="imagezoom-slider"
+      :data-testid="ImageZoomTestIds.Slider"
       @mousedown="sliderActive = true"
       @mouseup="sliderActive = false"
     />
     <button
       class="iconbutton imagezoom-in fas fa-image"
       title="Zoom in (Shift + Scroll-up)"
+      :data-testid="ImageZoomTestIds.ZoomIn"
       :disabled="!props.enabled"
       @click.prevent.stop="zoomIn"
     ></button>
-    <div class="imagezoom-percentage">{{ percentage }}%</div>
+    <div class="imagezoom-percentage" :data-testid="ImageZoomTestIds.Percentage">{{ percentage }}%</div>
   </div>
 </template>
 
