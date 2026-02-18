@@ -82,14 +82,14 @@ export const usePaletteStore = defineStore('palette', () => {
   }
 
   function moveColour(colour, newIndex) {
-    let c = colours.value
+    const c = colours.value
     const oldIndex = c.indexOf(colour)
     c.splice(newIndex, 0, c.splice(oldIndex, 1)[0])
     hasChanges.value = true
   }
 
   function reverseColours() {
-    let c = colours.value
+    const c = colours.value
     if (c.length > 1) {
       c.reverse()
       hasChanges.value = true

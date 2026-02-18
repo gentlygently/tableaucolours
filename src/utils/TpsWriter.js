@@ -22,7 +22,7 @@ function colourPaletteXml(name, type, colours) {
     useNamedReferences: true,
   })}" type="${type}">\n`
 
-  colours.forEach(c => (x += `    <color>${typeof c == 'string' ? c : c.hex}</color>\n`))
+  colours.forEach(c => (x += `    <color>${typeof c === 'string' ? c : c.hex}</color>\n`))
 
   return x + '</color-palette>'
 }

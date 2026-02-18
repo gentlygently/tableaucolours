@@ -81,13 +81,13 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
 
     if (!hasActiveFilters.value) return palettes.value
 
-    const isMatch = filters.length == 1 ? filters[0].isMatch : p => filters.every(x => x.isMatch(p))
+    const isMatch = filters.length === 1 ? filters[0].isMatch : p => filters.every(x => x.isMatch(p))
 
     return palettes.value.filter(isMatch)
   })
 
   const arePalettesFiltered = computed(() => {
-    return filteredPalettes.value.length != palettes.value.length
+    return filteredPalettes.value.length !== palettes.value.length
   })
 
   function open(name, xml, parsedPalettes) {

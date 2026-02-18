@@ -27,9 +27,9 @@ const types = ref([
 
 function createType(name, classModifier, displayName) {
   return {
-    name: name,
-    classModifier: classModifier,
-    displayName: displayName,
+    name,
+    classModifier,
+    displayName,
     isSelected: name === props.selectedTypeName,
   }
 }
@@ -46,7 +46,7 @@ function arrowDown() {
 }
 
 function arrowUp() {
-  let selectedIndex = types.value.findIndex(x => x.isSelected)
+  const selectedIndex = types.value.findIndex(x => x.isSelected)
   if (selectedIndex > 0) {
     typeSelected(types.value[selectedIndex - 1].name)
   }

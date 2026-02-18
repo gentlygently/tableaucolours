@@ -13,7 +13,7 @@ const buttonTitle = computed(() => {
 
   const count = tpsStore.selectedPalettes.length
 
-  return `Save ${count == 1 ? 'selected palette' : `${count} palettes`} to ${fileName.value}`
+  return `Save ${count === 1 ? 'selected palette' : `${count} palettes`} to ${fileName.value}`
 })
 
 function click() {
