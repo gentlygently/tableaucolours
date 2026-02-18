@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ColourPaletteColourListItem from '../ColourPaletteColourListItem.vue'
+import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { usePaletteStore } from '@/stores/palette'
 

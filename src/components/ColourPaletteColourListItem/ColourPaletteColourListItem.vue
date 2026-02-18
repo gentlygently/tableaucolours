@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import ColourPicker from './ColourPicker.vue'
+import ColourPicker from '../ColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()
@@ -71,7 +71,7 @@ function remove() {
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .colour {
   display: block;
