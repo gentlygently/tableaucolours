@@ -157,7 +157,7 @@ function keyDown(event) {
     case 'ArrowUp':
       action(currentPaletteIndex.value - 1)
       event.preventDefault()
-      return
+      
   }
 }
 
@@ -181,7 +181,7 @@ function keyUp(event) {
     case 'Backspace':
     case 'Delete':
       deletePalette(tpsStore.currentPalette)
-      return
+      
   }
 }
 

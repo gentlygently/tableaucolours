@@ -35,8 +35,8 @@ function displayFirstImage(files) {
       const canvasHeight = canvas.value.clientHeight
 
       if (canvasWidth < this.width || canvasHeight < this.height) {
-        let xRatio = canvasWidth / this.width
-        let yRatio = canvasHeight / this.height
+        const xRatio = canvasWidth / this.width
+        const yRatio = canvasHeight / this.height
 
         scale = Math.floor(Math.min(xRatio, yRatio) * 100) / 100.0
       }

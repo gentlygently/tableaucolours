@@ -16,7 +16,7 @@ const palette = ref({})
 const hasCode = computed(() => !!xml.value)
 const hasValidationMessage = computed(() => !!validationMessage.value)
 const codeClasses = computed(() => {
-  let classes = []
+  const classes = []
 
   if (hasCode.value && !isValid.value) {
     classes.push('importcode-code--invalid')

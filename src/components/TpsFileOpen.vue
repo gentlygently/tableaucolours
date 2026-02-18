@@ -26,7 +26,7 @@ function fileSelected(event) {
     const result = parseTpsFile(fileContents)
 
     if (!result.isValid) {
-      parserErrors.value = { fileName: fileName, errors: result.validationMessages }
+      parserErrors.value = { fileName, errors: result.validationMessages }
       fileInput.value.value = null
       tpsStore.close()
       return

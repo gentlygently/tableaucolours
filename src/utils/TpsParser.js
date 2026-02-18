@@ -1,4 +1,4 @@
-//import { PaletteTypes } from '../PaletteTypes'
+// import { PaletteTypes } from '../PaletteTypes'
 
 const xmlParser = new DOMParser()
 const colourPattern = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?(?:[0-9a-f]{5})?$/i
@@ -41,7 +41,7 @@ function parseTpsFile(xml) {
     isValid: true,
     validationMessage: '',
     palettes: parsedPalettes.map(x => x.palette),
-    xml: xml,
+    xml,
   }
 }
 
@@ -101,8 +101,8 @@ function parsePaletteElement(element, requireColour) {
     validationMessage: '',
     palette: {
       name: element.getAttribute('name') ?? '',
-      type: type,
-      colours: colours,
+      type,
+      colours,
     },
   }
 }

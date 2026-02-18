@@ -21,7 +21,7 @@ const colour = ref(props.colour)
 const isPickerOpen = ref(false)
 
 const containerClasses = computed(() => {
-  let classes = []
+  const classes = []
   if (colour.value.isSelected) classes.push('colour--selected')
   if (isPickerOpen.value) classes.push('colour--pickeropen')
   if (props.draggingActive) classes.push('colour--dragging')

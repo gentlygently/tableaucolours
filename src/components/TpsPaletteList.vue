@@ -33,7 +33,7 @@ const toggleSelected = palette => {
 
 const paletteCount = computed(() => {
   const count = tpsStore.palettes.length
-  let message = `${count} colour palette${count == 1 ? '' : 's'}`
+  let message = `${count} colour palette${count === 1 ? '' : 's'}`
 
   const additional = []
   if (tpsStore.hasActiveFilters) additional.push(`showing ${tpsStore.filteredPalettes.length}`)

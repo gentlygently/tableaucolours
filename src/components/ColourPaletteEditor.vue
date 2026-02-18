@@ -59,10 +59,12 @@ function keyUp(event) {
     case 'Backspace':
     case 'Delete':
       removeSelectedColour()
+      break
 
     case 'R':
     case 'r':
       reverseColours()
+      break
   }
 }
 

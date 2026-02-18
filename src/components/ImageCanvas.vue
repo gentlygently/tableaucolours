@@ -104,7 +104,7 @@ function preventDefaults(event) {
         <div v-show="messageType === 'image'" class="canvashint-text">
           <a href="#" @click.prevent="openImageFile">Open</a>, paste or drop an image to get started
         </div>
-        <div v-show="messageType == 'colour'" class="canvashint-text">
+        <div v-show="messageType === 'colour'" class="canvashint-text">
           Select a colour in the palette to pick colours from the image
         </div>
       </div>
