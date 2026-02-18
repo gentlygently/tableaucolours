@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ColourPaletteColourListItem from './ColourPaletteColourListItem.vue'
+import ColourPaletteColourListItem from '../ColourPaletteColourListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -127,7 +127,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 .colourlist {
   margin: 1rem;
   height: 31rem;
