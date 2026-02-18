@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import TpsPaletteListItem from './TpsPaletteListItem/TpsPaletteListItem.vue'
+import TpsPaletteListItem from '../TpsPaletteListItem/TpsPaletteListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
@@ -73,7 +73,7 @@ const paletteCount = computed(() => {
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .palettelist {
   display: block;
