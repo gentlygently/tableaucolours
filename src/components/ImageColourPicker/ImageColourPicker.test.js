@@ -3,7 +3,6 @@ import { mount } from '@vue/test-utils'
 import { createTestPinia } from '@/testing/test-utils'
 import ImageColourPicker from './ImageColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
-import { useImageStore } from '@/stores/image'
 
 describe('ImageColourPicker', () => {
   let pinia
