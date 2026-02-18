@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
-import TpsFileOpen from '../TpsFileOpen.vue'
+import TpsFileOpen from '../TpsFileOpen/TpsFileOpen.vue'
 
 const openTpsFile = ref(null)
 const openTpsFileEditor = () => openTpsFile.value.selectFile()
