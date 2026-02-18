@@ -94,13 +94,8 @@ jobs:
           # Create updated release notes  
           DEPLOY_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           
-          # Build the deployment info
-          DEPLOYMENT_INFO="
-
----
-**Deployment Status:** ✅ Deployed to production
-**Deployed at:** ${DEPLOY_TIME}
-**Live URL:** https://gentlygently.github.io/"
+          # Build the deployment info using printf to avoid YAML indentation issues
+          DEPLOYMENT_INFO=$(printf "\n\n---\n**Deployment Status:** ✅ Deployed to production\n**Deployed at:** %s\n**Live URL:** https://gentlygently.github.io/" "${DEPLOY_TIME}")
           
           # Update release with deployment info
           gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes "${ORIGINAL_BODY}${DEPLOYMENT_INFO}"
