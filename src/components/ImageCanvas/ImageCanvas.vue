@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import ScalableImage from './ScalableImage.vue'
+import ScalableImage from '../ScalableImage/ScalableImage.vue'
 import { eventBus } from '@/eventbus'
 
 const props = defineProps({

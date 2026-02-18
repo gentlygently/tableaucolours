@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue'
-import ImageColourSwatch from './ImageColourSwatch.vue'
+import ImageColourSwatch from '../ImageColourSwatch.vue'
 
 const props = defineProps({
   canPickColour: {
