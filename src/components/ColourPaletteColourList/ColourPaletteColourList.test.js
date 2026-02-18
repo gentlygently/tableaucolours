@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import ColourPaletteColourList from './ColourPaletteColourList.vue'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -41,9 +41,7 @@ describe('ColourPaletteColourList', () => {
     const wrapper = renderList()
     store.selectColour(store.colours[0])
 
-    const event = new KeyboardEvent('keyup', { key: 'ArrowDown', bubbles: true })
-    Object.defineProperty(event, 'target', { value: document.body })
-    window.dispatchEvent(event)
+    await userEvent.keyboard('{ArrowDown}')
     await wrapper.vm.$nextTick()
 
     expect(store.selectedColour).toBe(store.colours[1])
@@ -53,9 +51,7 @@ describe('ColourPaletteColourList', () => {
     const wrapper = renderList()
     store.selectColour(store.colours[2])
 
-    const event = new KeyboardEvent('keyup', { key: 'ArrowUp', bubbles: true })
-    Object.defineProperty(event, 'target', { value: document.body })
-    window.dispatchEvent(event)
+    await userEvent.keyboard('{ArrowUp}')
     await wrapper.vm.$nextTick()
 
     expect(store.selectedColour).toBe(store.colours[1])
@@ -65,9 +61,7 @@ describe('ColourPaletteColourList', () => {
     const wrapper = renderList()
     store.selectColour(store.colours[4])
 
-    const event = new KeyboardEvent('keyup', { key: 'ArrowDown', bubbles: true })
-    Object.defineProperty(event, 'target', { value: document.body })
-    window.dispatchEvent(event)
+    await userEvent.keyboard('{ArrowDown}')
     await wrapper.vm.$nextTick()
 
     expect(store.selectedColour).toBe(store.colours[4])

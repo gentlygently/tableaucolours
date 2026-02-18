@@ -1,5 +1,7 @@
 import { describe, expect, it, beforeAll, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { fireEvent } from '@testing-library/dom'
+import { userEvent } from '@/testing/test-utils'
 import ModalPanel from './ModalPanel.vue'
 
 beforeAll(() => {
@@ -61,16 +63,15 @@ describe('ModalPanel', () => {
   it('emits close when close button is clicked', async () => {
     const wrapper = renderModal({ show: true })
 
-    await wrapper.find('.modal-close').trigger('click')
+    await userEvent.click(wrapper.find('.modal-close').element)
 
     expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
   it('emits close when clicking the dialog backdrop', async () => {
     const wrapper = renderModal({ show: true })
-    const dialog = wrapper.find('dialog')
 
-    await dialog.trigger('mousedown')
+    fireEvent.mouseDown(wrapper.find('dialog').element)
 
     expect(wrapper.emitted('close')).toHaveLength(1)
   })
@@ -78,17 +79,15 @@ describe('ModalPanel', () => {
   it('does not emit close when clicking inside the container', async () => {
     const wrapper = renderModal({ show: true })
 
-    await wrapper.find('.modal-container').trigger('mousedown')
+    fireEvent.mouseDown(wrapper.find('.modal-container').element)
 
     expect(wrapper.emitted('close')).toBeUndefined()
   })
 
   it('emits close on Escape key', async () => {
     const wrapper = renderModal({ show: true })
-    const event = new KeyboardEvent('keyup', { key: 'Escape', bubbles: true })
-    Object.defineProperty(event, 'target', { value: document.body })
 
-    window.dispatchEvent(event)
+    await userEvent.keyboard('{Escape}')
 
     expect(wrapper.emitted('close')).toHaveLength(1)
   })

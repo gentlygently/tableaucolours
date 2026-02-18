@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { fireEvent } from '@testing-library/dom'
+import { userEvent } from '@/testing/test-utils'
 import ColourPicker from './ColourPicker.vue'
 
 describe('ColourPicker', () => {
@@ -29,7 +31,7 @@ describe('ColourPicker', () => {
   it('emits done when Done button clicked', async () => {
     const wrapper = renderPicker()
 
-    await wrapper.find('.colourpicker-done').trigger('click')
+    await userEvent.click(wrapper.find('.colourpicker-done').element)
 
     expect(wrapper.emitted('done')).toHaveLength(1)
   })
@@ -37,7 +39,7 @@ describe('ColourPicker', () => {
   it('emits done on Enter key', async () => {
     const wrapper = renderPicker()
 
-    await wrapper.find('.colourpicker').trigger('keyup.enter')
+    fireEvent.keyUp(wrapper.find('.colourpicker').element, { key: 'Enter' })
 
     expect(wrapper.emitted('done')).toHaveLength(1)
   })

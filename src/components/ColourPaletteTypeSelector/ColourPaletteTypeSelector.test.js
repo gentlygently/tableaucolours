@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { fireEvent } from '@testing-library/dom'
+import { userEvent } from '@/testing/test-utils'
 import ColourPaletteTypeSelector from './ColourPaletteTypeSelector.vue'
 
 describe('ColourPaletteTypeSelector', () => {
@@ -26,7 +28,7 @@ describe('ColourPaletteTypeSelector', () => {
   it('opens the dropdown list on click', async () => {
     const wrapper = renderSelector()
 
-    await wrapper.find('.palettetypes-select').trigger('click')
+    await userEvent.click(wrapper.find('.palettetypes-select').element)
 
     expect(wrapper.find('.palettetypes-list').classes()).toContain('palettetypes-list--open')
   })
@@ -41,9 +43,9 @@ describe('ColourPaletteTypeSelector', () => {
   it('emits type-selected when a type is clicked', async () => {
     const wrapper = renderSelector('regular')
 
-    await wrapper.find('.palettetypes-select').trigger('click')
+    await userEvent.click(wrapper.find('.palettetypes-select').element)
     const items = wrapper.findAll('.palettetypes-type')
-    await items[1].trigger('click')
+    await userEvent.click(items[1].element)
 
     expect(wrapper.emitted('type-selected')).toHaveLength(1)
     expect(wrapper.emitted('type-selected')[0][0]).toBe('ordered-sequential')
@@ -52,7 +54,7 @@ describe('ColourPaletteTypeSelector', () => {
   it('navigates down with arrow key', async () => {
     const wrapper = renderSelector('regular')
 
-    await wrapper.find('.palettetypes').trigger('keyup', { key: 'ArrowDown' })
+    fireEvent.keyUp(wrapper.find('.palettetypes').element, { key: 'ArrowDown' })
 
     expect(wrapper.emitted('type-selected')[0][0]).toBe('ordered-sequential')
   })
@@ -60,7 +62,7 @@ describe('ColourPaletteTypeSelector', () => {
   it('navigates up with arrow key', async () => {
     const wrapper = renderSelector('ordered-diverging')
 
-    await wrapper.find('.palettetypes').trigger('keyup', { key: 'ArrowUp' })
+    fireEvent.keyUp(wrapper.find('.palettetypes').element, { key: 'ArrowUp' })
 
     expect(wrapper.emitted('type-selected')[0][0]).toBe('ordered-sequential')
   })
@@ -68,7 +70,7 @@ describe('ColourPaletteTypeSelector', () => {
   it('does not navigate below last type', async () => {
     const wrapper = renderSelector('ordered-diverging')
 
-    await wrapper.find('.palettetypes').trigger('keyup', { key: 'ArrowDown' })
+    fireEvent.keyUp(wrapper.find('.palettetypes').element, { key: 'ArrowDown' })
 
     expect(wrapper.emitted('type-selected')).toBeUndefined()
   })
@@ -76,7 +78,7 @@ describe('ColourPaletteTypeSelector', () => {
   it('does not navigate above first type', async () => {
     const wrapper = renderSelector('regular')
 
-    await wrapper.find('.palettetypes').trigger('keyup', { key: 'ArrowUp' })
+    fireEvent.keyUp(wrapper.find('.palettetypes').element, { key: 'ArrowUp' })
 
     expect(wrapper.emitted('type-selected')).toBeUndefined()
   })
