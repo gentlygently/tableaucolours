@@ -15,6 +15,7 @@ export const test = base.extend({
     await startMenu.goto()
     await startMenu.clickCreateTemplate()
     const colourPaletteEditor = new ColourPaletteEditor(page)
+    await colourPaletteEditor.component.waitFor({ state: 'visible' })
     await use(colourPaletteEditor)
   },
 

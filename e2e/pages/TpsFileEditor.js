@@ -34,30 +34,34 @@ export class TpsFileEditor {
 
   async clickPalette(index) {
     const items = await this.getPaletteItems()
-    if (items[index]) {
-      await items[index].click()
+    if (!items[index]) {
+      throw new Error(`Palette index ${index} out of bounds (${items.length} items)`)
     }
+    await items[index].click()
   }
 
   async doubleClickPalette(index) {
     const items = await this.getPaletteItems()
-    if (items[index]) {
-      await items[index].dblclick()
+    if (!items[index]) {
+      throw new Error(`Palette index ${index} out of bounds (${items.length} items)`)
     }
+    await items[index].dblclick()
   }
 
   async togglePaletteCheckbox(index) {
     const items = await this.getPaletteItems()
-    if (items[index]) {
-      await items[index].getByTestId(TpsPaletteListItemTestIds.Checkbox).click()
+    if (!items[index]) {
+      throw new Error(`Palette index ${index} out of bounds (${items.length} items)`)
     }
+    await items[index].getByTestId(TpsPaletteListItemTestIds.Checkbox).click()
   }
 
   async clickClonePalette(index) {
     const items = await this.getPaletteItems()
-    if (items[index]) {
-      await items[index].getByTestId(TpsPaletteListItemTestIds.Clone).click()
+    if (!items[index]) {
+      throw new Error(`Palette index ${index} out of bounds (${items.length} items)`)
     }
+    await items[index].getByTestId(TpsPaletteListItemTestIds.Clone).click()
   }
 
   // Action buttons

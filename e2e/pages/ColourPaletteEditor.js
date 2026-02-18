@@ -53,41 +53,43 @@ export class ColourPaletteEditor {
       const backgroundColor = await swatch.evaluate(
         (el) => el.ownerDocument.defaultView.getComputedStyle(el).backgroundColor,
       )
-      const rgbMatch = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(backgroundColor)
-      if (rgbMatch) {
-        const hex =
-          '#' +
-          [rgbMatch[1], rgbMatch[2], rgbMatch[3]]
-            .map((x) => {
-              const h = parseInt(x, 10).toString(16)
-              return h.length === 1 ? '0' + h : h
-            })
-            .join('')
-            .toUpperCase()
-        colours.push(hex)
+      const rgbMatch = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(backgroundColor)
+      if (!rgbMatch) {
+        throw new Error(`Could not parse background colour: "${backgroundColor}"`)
       }
+      const hex =
+        '#' +
+        [rgbMatch[1], rgbMatch[2], rgbMatch[3]]
+          .map((x) => {
+            const h = parseInt(x, 10).toString(16)
+            return h.length === 1 ? '0' + h : h
+          })
+          .join('')
+          .toUpperCase()
+      colours.push(hex)
     }
     return colours
   }
 
   async setColour(index, hex) {
     const items = await this.getColourItems()
-    if (items[index]) {
-      const swatch = items[index].getByTestId(ColourPaletteColourListItemTestIds.Swatch)
-      await swatch.dblclick()
-
-      const colourPicker = items[index].getByTestId(ColourPickerTestIds.Self)
-      await colourPicker.waitFor({ state: 'visible' })
-
-      // Target the hex input inside @ckpack/vue-color's Sketch picker
-      const hexInput = colourPicker.locator('input').first()
-      await hexInput.clear()
-      await hexInput.fill(hex.replace('#', ''))
-
-      // Press Enter to apply the colour — this also closes the picker
-      // (ColourPicker has @keyup.enter="done" on the container)
-      await colourPicker.locator('.colourpicker-done').click()
+    if (!items[index]) {
+      throw new Error(`Colour index ${index} out of bounds (${items.length} items)`)
     }
+    const swatch = items[index].getByTestId(ColourPaletteColourListItemTestIds.Swatch)
+    await swatch.dblclick()
+
+    const colourPicker = items[index].getByTestId(ColourPickerTestIds.Self)
+    await colourPicker.waitFor({ state: 'visible' })
+
+    // Target the hex input inside @ckpack/vue-color's Sketch picker
+    const hexInput = colourPicker.locator('input').first()
+    await hexInput.clear()
+    await hexInput.fill(hex.replace('#', ''))
+
+    // Click Done to apply and close the picker
+    await colourPicker.locator('.colourpicker-done').click()
+    await colourPicker.waitFor({ state: 'hidden' })
   }
 
   async setColours(hexColors) {
@@ -140,9 +142,10 @@ export class ColourPaletteEditor {
 
   async clickColour(index) {
     const items = await this.getColourItems()
-    if (items[index]) {
-      await items[index].click()
+    if (!items[index]) {
+      throw new Error(`Colour index ${index} out of bounds (${items.length} items)`)
     }
+    await items[index].click()
   }
 
   async selectColour(index) {
@@ -154,15 +157,16 @@ export class ColourPaletteEditor {
   }
 
   async clickAddColour() {
-    await this.page.locator('button[title="Add colour (+)"]').click({ force: true })
+    await this.page.locator('button[title="Add colour (+)"]').click()
   }
 
   async clickRemoveColour(index) {
     const items = await this.getColourItems()
-    if (items[index]) {
-      await items[index].hover()
-      await items[index].getByTestId(ColourPaletteColourListItemTestIds.Remove).click()
+    if (!items[index]) {
+      throw new Error(`Colour index ${index} out of bounds (${items.length} items)`)
     }
+    await items[index].hover()
+    await items[index].getByTestId(ColourPaletteColourListItemTestIds.Remove).click()
   }
 
   async addColoursWithKeyboard(count) {
@@ -315,8 +319,12 @@ export class ColourPaletteEditor {
 
   async dragColour(fromIndex, toIndex) {
     const items = await this.getColourItems()
-    if (items[fromIndex] && items[toIndex]) {
-      await items[fromIndex].dragTo(items[toIndex])
+    if (!items[fromIndex]) {
+      throw new Error(`Source index ${fromIndex} out of bounds (${items.length} items)`)
     }
+    if (!items[toIndex]) {
+      throw new Error(`Target index ${toIndex} out of bounds (${items.length} items)`)
+    }
+    await items[fromIndex].dragTo(items[toIndex])
   }
 }
