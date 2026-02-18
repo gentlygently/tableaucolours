@@ -2,10 +2,10 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { replacePalettesInTpsXml } from '../utils/TpsWriter'
-import TpsPaletteList from './TpsPaletteList/TpsPaletteList.vue'
-import TpsPaletteFilter from './TpsPaletteFilter/TpsPaletteFilter.vue'
-import TpsPaletteExport from './TpsPaletteExport/TpsPaletteExport.vue'
+import { replacePalettesInTpsXml } from '../../utils/TpsWriter'
+import TpsPaletteList from '../TpsPaletteList/TpsPaletteList.vue'
+import TpsPaletteFilter from '../TpsPaletteFilter/TpsPaletteFilter.vue'
+import TpsPaletteExport from '../TpsPaletteExport/TpsPaletteExport.vue'
 
 const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
@@ -291,7 +291,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .tpseditor {
   position: relative;
