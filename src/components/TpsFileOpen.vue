@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { parseTpsFile } from '@/utils/TpsParser'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import ModalPanel from './ModalPanel.vue'
+import ModalPanel from './ModalPanel/ModalPanel.vue'
 import TpsFileErrors from './TpsFileErrors.vue'
 
 const label = ref(null)

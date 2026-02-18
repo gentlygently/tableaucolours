@@ -67,7 +67,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .modal {
   overflow: hidden;
