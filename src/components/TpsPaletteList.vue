@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import TpsPaletteListItem from './TpsPaletteListItem.vue'
+import TpsPaletteListItem from './TpsPaletteListItem/TpsPaletteListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
 

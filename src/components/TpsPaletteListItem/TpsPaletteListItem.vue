@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import PalettePreview from './PalettePreview/PalettePreview.vue'
-import { PaletteTypes } from '../PaletteTypes'
+import PalettePreview from '../PalettePreview/PalettePreview.vue'
+import { PaletteTypes } from '../../PaletteTypes'
 
 const props = defineProps({
   palette: {
@@ -93,7 +93,7 @@ const toggleSelected = () => {
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .palette {
   display: grid;
