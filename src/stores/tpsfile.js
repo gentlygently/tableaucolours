@@ -179,7 +179,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
     const newFilters = []
     if (paletteFilterValues.value.name || paletteFilterValues.value.noName)
       newFilters.push(
-        new NameFilter(paletteFilterValues.value.name, paletteFilterValues.value.name)
+        new NameFilter(paletteFilterValues.value.name, paletteFilterValues.value.noName)
       )
 
     if (paletteFilterValues.value.types.length)

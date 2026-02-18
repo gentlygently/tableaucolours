@@ -19,3 +19,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+navigation_repro.test.js
+reproduce_issue.test.js
