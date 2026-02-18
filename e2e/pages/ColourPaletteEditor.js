@@ -83,9 +83,9 @@ export class ColourPaletteEditor {
       const hexInput = colourPicker.locator('input').first()
       await hexInput.clear()
       await hexInput.fill(hex.replace('#', ''))
-      await hexInput.press('Enter')
 
-      // Close the picker
+      // Press Enter to apply the colour — this also closes the picker
+      // (ColourPicker has @keyup.enter="done" on the container)
       await colourPicker.locator('.colourpicker-done').click()
     }
   }
@@ -158,6 +158,8 @@ export class ColourPaletteEditor {
   }
 
   async addColoursWithKeyboard(count) {
+    // Ensure focus is on body for keyboard shortcuts
+    await this.page.locator('body').click()
     const initialCount = await this.getColourCount()
     for (let i = 0; i < count; i++) {
       await this.page.keyboard.press('+')
