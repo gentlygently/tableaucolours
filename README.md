@@ -38,6 +38,12 @@ npm run dev
 # Lint code
 npm run lint
 
+# Run unit tests
+npm run test
+
+# Run unit tests in watch mode
+npm run test:watch
+
 # Build for production
 npm run build
 ```
@@ -51,6 +57,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 The CI workflow automatically runs on pull requests and pushes to the master branch:
 
 - **Linting**: Validates code style using ESLint
+- **Testing**: Runs unit tests using Vitest
 - **Building**: Creates production build using Vite
 - **Artifact Upload** (master only): On successful master builds, the `dist/` output is uploaded as a versioned artifact
 
