@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourPaletteColourList from './ColourPaletteColourList/ColourPaletteColourList.vue'
 import ColourPaletteGetCode from './ColourPaletteGetCode/ColourPaletteGetCode.vue'
-import ColourPaletteExtractColours from './ColourPaletteExtractColours.vue'
+import ColourPaletteExtractColours from './ColourPaletteExtractColours/ColourPaletteExtractColours.vue'
 import ColourPaletteImport from './ColourPaletteImport/ColourPaletteImport.vue'
 import ModalPanel from './ModalPanel/ModalPanel.vue'
 import PalettePreview from './PalettePreview/PalettePreview.vue'

@@ -203,7 +203,7 @@ onMounted(() => numberInput.value.focus())
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .extractcolours {
   color: lighten(#000, 10%);
