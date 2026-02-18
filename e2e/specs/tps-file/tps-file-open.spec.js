@@ -35,6 +35,8 @@ test.describe('TPS File Open', () => {
     await startMenu.openTpsFile(tpsFilePath)
     const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
     const tpsEditor = new TpsFileEditor(page)
+    await expect(tpsEditor.component).toBeVisible()
+    await expect(tpsEditor.paletteCount).toBeVisible()
 
     const count = await tpsEditor.getPaletteCount()
     expect(count).toBe(20)
