@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import ColourPaletteTypeSelectorItem from './ColourPaletteTypeSelectorItem.vue'
+import ColourPaletteTypeSelectorItem from '../ColourPaletteTypeSelectorItem.vue'
 import { PaletteTypes } from '@/PaletteTypes'
 
 const props = defineProps({
@@ -117,7 +117,7 @@ watch(isListOpen, newValue => {
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .palettetypes {
   display: block;
