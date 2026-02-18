@@ -1,12 +1,12 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ColourPaletteColourList from './ColourPaletteColourList/ColourPaletteColourList.vue'
-import ColourPaletteGetCode from './ColourPaletteGetCode/ColourPaletteGetCode.vue'
-import ColourPaletteExtractColours from './ColourPaletteExtractColours/ColourPaletteExtractColours.vue'
-import ColourPaletteImport from './ColourPaletteImport/ColourPaletteImport.vue'
-import ModalPanel from './ModalPanel/ModalPanel.vue'
-import PalettePreview from './PalettePreview/PalettePreview.vue'
-import ColourPaletteTypeSelector from './ColourPaletteTypeSelector/ColourPaletteTypeSelector.vue'
+import ColourPaletteColourList from '../ColourPaletteColourList/ColourPaletteColourList.vue'
+import ColourPaletteGetCode from '../ColourPaletteGetCode/ColourPaletteGetCode.vue'
+import ColourPaletteExtractColours from '../ColourPaletteExtractColours/ColourPaletteExtractColours.vue'
+import ColourPaletteImport from '../ColourPaletteImport/ColourPaletteImport.vue'
+import ModalPanel from '../ModalPanel/ModalPanel.vue'
+import PalettePreview from '../PalettePreview/PalettePreview.vue'
+import ColourPaletteTypeSelector from '../ColourPaletteTypeSelector/ColourPaletteTypeSelector.vue'
 import ImageColourPicker from '@/components/ImageColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
@@ -182,7 +182,7 @@ onUnmounted(() => window.removeEventListener('keyup', keyUp))
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .paletteeditor {
   display: flex;
