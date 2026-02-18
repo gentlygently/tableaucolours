@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import ImageCanvas from '../ImageCanvas/ImageCanvas.vue'
-import ImageFileOpen from '../ImageFileOpen.vue'
+import ImageFileOpen from '../ImageFileOpen/ImageFileOpen.vue'
 import ImageZoom from '../ImageZoom/ImageZoom.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
