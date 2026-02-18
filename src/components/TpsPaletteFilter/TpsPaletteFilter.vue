@@ -52,7 +52,7 @@ const tpsStore = useTpsFileStore()
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .palettefilter {
   display: block;

@@ -4,7 +4,7 @@ import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
 import { replacePalettesInTpsXml } from '../utils/TpsWriter'
 import TpsPaletteList from './TpsPaletteList.vue'
-import TpsPaletteFilter from './TpsPaletteFilter.vue'
+import TpsPaletteFilter from './TpsPaletteFilter/TpsPaletteFilter.vue'
 import TpsPaletteExport from './TpsPaletteExport.vue'
 
 const tpsStore = useTpsFileStore()
