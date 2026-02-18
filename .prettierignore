@@ -1,3 +1,13 @@
-/node_modules/**
-/dist/**
-/tests/unit/coverage/**
+.git
+.husky
+.vscode
+dist
+examples
+node_modules
+playwright-report
+.gitignore
+.prettierignore
+.prettierrc.js
+package-lock.lock
+*.tsbuildinfo
+*.sh
