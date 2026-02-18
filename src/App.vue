@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import Help from '@/components/Help.vue'
+import AppHelp from '@/components/AppHelp.vue'
 import StartMenu from '@/components/StartMenu.vue'
 import ColourPaletteEditor from '@/components/ColourPaletteEditor.vue'
 import TpsFileEditor from '@/components/TpsFileEditor.vue'
@@ -21,7 +21,7 @@ const isStartMenuOpen = computed(() => !tpsStore.isOpen && !paletteStore.isOpen)
         <h1>Gently, gently</h1>
         <div class="description">Tableau colour palette editor</div>
       </div>
-      <div class="header-help"><Help /></div>
+      <div class="header-help"><AppHelp /></div>
     </div>
   </header>
   <main>
