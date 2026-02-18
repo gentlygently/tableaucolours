@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import ColourPaletteHelp from '@/components/ColourPaletteHelp.vue'
 import TpsFileHelp from '@/components/TpsFileHelp.vue'
-import ModalPanel from './ModalPanel/ModalPanel.vue'
+import ModalPanel from '../ModalPanel/ModalPanel.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
@@ -29,7 +29,7 @@ const modalOpen = ref(false)
 </template>
 
 <style lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 .help {
   height: 3rem;
   &-button {

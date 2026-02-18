@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import AppHelp from '@/components/AppHelp.vue'
+import AppHelp from '@/components/AppHelp/AppHelp.vue'
 import StartMenu from '@/components/StartMenu/StartMenu.vue'
 import ColourPaletteEditor from '@/components/ColourPaletteEditor/ColourPaletteEditor.vue'
 import TpsFileEditor from '@/components/TpsFileEditor.vue'
