@@ -89,19 +89,17 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           # Get the original release body
-          ORIGINAL_BODY=$(gh release view "v${VERSION}" --json body --jq .body)
+          ORIGINAL_BODY=$(gh release view "v${VERSION}" --json body --jq -r .body)
           
-          # Create updated release notes
-          cat > release-notes.md <<EOF
-${ORIGINAL_BODY}
+          # Create updated release notes  
+          DEPLOY_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          # Update release with deployment info
+          gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes "${ORIGINAL_BODY}
 
 ---
 **Deployment Status:** ✅ Deployed to production
-**Deployed at:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-**Live URL:** https://gentlygently.github.io/
-EOF
-          
-          # Update release with deployment info
-          gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes-file release-notes.md
+**Deployed at:** ${DEPLOY_TIME}
+**Live URL:** https://gentlygently.github.io/"
           
           echo "Updated release v${VERSION} with deployment information"
