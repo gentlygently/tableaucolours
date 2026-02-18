@@ -332,17 +332,33 @@ describe('TPS file store', () => {
       store.paletteFilterValues.name = 'red'
       await nextTick()
 
-      // NameFilter also includes palettes with no name when a name filter is set
-      expect(store.filteredPalettes).toHaveLength(2)
+      expect(store.filteredPalettes).toHaveLength(1)
       expect(store.filteredPalettes[0].name).toBe('Red')
-      expect(store.filteredPalettes[1].name).toBe('')
     })
 
     it('filters by name case-insensitively', async () => {
       store.paletteFilterValues.name = 'RED'
       await nextTick()
 
+      expect(store.filteredPalettes).toHaveLength(1)
+    })
+
+    it('filters by noName to show only unnamed palettes', async () => {
+      store.paletteFilterValues.noName = true
+      await nextTick()
+
+      expect(store.filteredPalettes).toHaveLength(1)
+      expect(store.filteredPalettes[0].name).toBe('')
+    })
+
+    it('filters by name with noName includes matching and unnamed', async () => {
+      store.paletteFilterValues.name = 'red'
+      store.paletteFilterValues.noName = true
+      await nextTick()
+
       expect(store.filteredPalettes).toHaveLength(2)
+      expect(store.filteredPalettes[0].name).toBe('Red')
+      expect(store.filteredPalettes[1].name).toBe('')
     })
 
     it('filters by type', async () => {

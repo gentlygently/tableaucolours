@@ -25,14 +25,15 @@ describe('ImageCanvas', () => {
   it('shows hint message when no image is loaded', () => {
     const wrapper = renderCanvas()
 
-    expect(wrapper.find('.canvashint').exists()).toBe(true)
+    expect(wrapper.find('.canvashint').isVisible()).toBe(true)
   })
 
   it('shows image hint when no image', () => {
     const wrapper = renderCanvas()
 
-    expect(wrapper.text()).toContain('Open')
-    expect(wrapper.text()).toContain('drop an image')
+    const imageHint = wrapper.findAll('.canvashint-text')[0]
+    expect(imageHint.isVisible()).toBe(true)
+    expect(imageHint.text()).toContain('drop an image')
   })
 
   it('emits zoom on shift+wheel', async () => {
