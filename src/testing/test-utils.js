@@ -1,5 +1,8 @@
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import testingLibraryUserEvent from '@testing-library/user-event'
+
+export const userEvent = testingLibraryUserEvent.setup({ delay: null })
 
 /**
  * Creates a fresh Pinia instance and sets it as active.
