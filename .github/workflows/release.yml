@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.123, or leave empty for latest)'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Determine version to deploy
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ -z "$INPUT_VERSION" ]; then
+            echo "No version specified, fetching latest release..."
+            LATEST_RELEASE=$(gh release list --repo ${{ github.repository }} --limit 1 --exclude-drafts --exclude-pre-releases --json tagName --jq '.[0].tagName')
+            if [ -z "$LATEST_RELEASE" ]; then
+              echo "Error: No releases found in repository"
+              exit 1
+            fi
+            # Remove 'v' prefix from tag name
+            VERSION=${LATEST_RELEASE#v}
+            echo "Using latest release: ${VERSION}"
+          else
+            VERSION="$INPUT_VERSION"
+            echo "Using specified version: ${VERSION}"
+          fi
+          
+          # Validate version format
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Version must be in format MAJOR.MINOR.BUILD (e.g., 1.0.123)"
+            exit 1
+          fi
+          
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Version to deploy: ${VERSION}"
+      
+      - name: Download release artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Check if release exists
+          if ! gh release view "v${VERSION}" --repo ${{ github.repository }} > /dev/null 2>&1; then
+            echo "Error: Release v${VERSION} not found"
+            echo "Available releases:"
+            gh release list --repo ${{ github.repository }} --limit 10
+            exit 1
+          fi
+          
+          # Download the build archive
+          echo "Downloading build artifact for version ${VERSION}..."
+          gh release download "v${VERSION}" \
+            --repo ${{ github.repository }} \
+            --pattern "build-${VERSION}.zip"
+          
+          # Extract the archive
+          unzip -q "build-${VERSION}.zip" -d dist/
+          echo "Successfully downloaded and extracted build artifact"
+          ls -la dist/
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: gentlygently/gentlygently.github.io
+          publish_branch: main
+          publish_dir: ./dist
+          commit_message: "Deploy version ${{ steps.version.outputs.version }}"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          force_orphan: false
+      
+      - name: Update release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Get the original release body
+          ORIGINAL_BODY=$(gh release view "v${VERSION}" --json body --jq .body)
+          
+          # Update release with deployment info
+          gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes "$(cat <<EOF
+${ORIGINAL_BODY}
+
+---
+**Deployment Status:** ✅ Deployed to production
+**Deployed at:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+**Live URL:** https://gentlygently.github.io/
+EOF
+)"
+          
+          echo "Updated release v${VERSION} with deployment information"
