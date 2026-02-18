@@ -46,31 +46,33 @@ jobs:
           BUILD_NUMBER=${{ github.run_number }}
           # Construct full version
           VERSION="${VERSION_BASE}.${BUILD_NUMBER}"
-          COMMIT_SHA="${{ github.sha }}"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
-          echo "Generated version: ${VERSION} for commit ${COMMIT_SHA}"
+          echo "Generated version: ${VERSION}"
       
-      - name: Upload build artifact
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-${{ steps.version.outputs.version }}
-          path: dist/
-          retention-days: 90
-      
-      - name: Save build metadata
+      - name: Create release archive
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
-          mkdir -p build-metadata
-          echo "${{ steps.version.outputs.version }}" > build-metadata/version.txt
-          echo "${{ steps.version.outputs.commit_sha }}" > build-metadata/commit_sha.txt
-          echo "${{ github.run_id }}" > build-metadata/run_id.txt
+          cd dist
+          zip -r ../build-${{ steps.version.outputs.version }}.zip .
+          cd ..
+          echo "Created build-${{ steps.version.outputs.version }}.zip"
       
-      - name: Upload build metadata
+      - name: Create GitHub Release
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        uses: actions/upload-artifact@v4
+        uses: softprops/action-gh-release@v2
         with:
-          name: build-metadata-${{ steps.version.outputs.version }}
-          path: build-metadata/
-          retention-days: 90
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Build ${{ steps.version.outputs.version }}
+          body: |
+            Automated build from master branch
+            
+            **Version:** ${{ steps.version.outputs.version }}
+            **Commit:** ${{ github.sha }}
+            **Build:** #${{ github.run_number }}
+            
+            This release is ready to be deployed via the Release workflow.
+          files: build-${{ steps.version.outputs.version }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

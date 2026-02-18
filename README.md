@@ -52,7 +52,7 @@ The CI workflow automatically runs on pull requests and pushes to the master bra
 
 - **Linting**: Validates code style using ESLint
 - **Building**: Creates production build using Vite
-- **Artifact Upload** (master only): On successful master builds, the `dist/` output is uploaded as a versioned artifact
+- **Release Creation** (master only): On successful master builds, creates a GitHub release with the build archive attached
 
 **Versioning Strategy:**
 - Version format: `MAJOR.MINOR.BUILD` (e.g., `1.0.123`)
@@ -60,6 +60,8 @@ The CI workflow automatically runs on pull requests and pushes to the master bra
 - `BUILD`: Auto-incremented using GitHub Actions run number (global counter)
 - Example: With tag `v1.0`, builds become `1.0.1`, `1.0.2`, `1.0.3`, etc.
 - **Note:** The BUILD number is a global counter that never resets. When you create a new tag (e.g., `v1.1`), builds continue from the current run number, so you might see `1.1.124`, `1.1.125`, etc.
+
+Each successful master build creates a GitHub release tagged with the version number (e.g., `v1.0.123`) and includes the build archive (`build-1.0.123.zip`).
 
 **Creating a new version:**
 ```bash
@@ -73,14 +75,16 @@ git push origin v1.1
 
 #### Release Workflow
 
-The release workflow is manually triggered to deploy a specific version:
+The release workflow is manually triggered to deploy a specific version to production:
 
 1. Go to **Actions** → **Release** → **Run workflow**
 2. Enter the version number to release (e.g., `1.0.123`)
 3. The workflow will:
-   - Download the build artifact from the CI workflow
+   - Download the build archive from the corresponding GitHub release
    - Deploy to [gentlygently.github.io](https://gentlygently.github.io/)
-   - Create a GitHub Release with the build archive attached
+   - Update the release notes with deployment information
+
+**Note:** The version must correspond to an existing GitHub release created by the CI workflow. You can view available versions in the [Releases](../../releases) page.
 
 **Setup Requirements:**
 

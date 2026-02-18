@@ -22,52 +22,32 @@ jobs:
           fi
           echo "Version format validated: ${VERSION}"
       
-      - name: Download build metadata
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: ci.yml
-          name: build-metadata-${{ inputs.version }}
-          path: build-metadata/
-          search_artifacts: true
-      
-      - name: Read build metadata
-        id: metadata
+      - name: Download release artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
         run: |
-          if [ ! -f "build-metadata/commit_sha.txt" ]; then
-            echo "Error: Build metadata not found for version ${{ inputs.version }}"
-            echo "Make sure the CI workflow has created this version"
+          # Check if release exists
+          if ! gh release view "v${VERSION}" --repo ${{ github.repository }} > /dev/null 2>&1; then
+            echo "Error: Release v${VERSION} not found"
+            echo "Available releases:"
+            gh release list --repo ${{ github.repository }} --limit 10
             exit 1
           fi
-          COMMIT_SHA=$(cat build-metadata/commit_sha.txt)
-          RUN_ID=$(cat build-metadata/run_id.txt)
-          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
-          echo "run_id=${RUN_ID}" >> $GITHUB_OUTPUT
-          echo "Found build for commit: ${COMMIT_SHA} (run: ${RUN_ID})"
-      
-      - name: Checkout specific commit
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.metadata.outputs.commit_sha }}
-          fetch-depth: 0
-      
-      - name: Download build artifact
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: ci.yml
-          name: build-${{ inputs.version }}
-          path: dist/
-          search_artifacts: true
-      
-      - name: Verify artifact downloaded
-        run: |
-          if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
-            echo "Error: Build artifact for version ${{ inputs.version }} not found or empty"
-            exit 1
-          fi
-          echo "Successfully downloaded build artifact for version ${{ inputs.version }}"
+          
+          # Download the build archive
+          echo "Downloading build artifact for version ${VERSION}..."
+          gh release download "v${VERSION}" \
+            --repo ${{ github.repository }} \
+            --pattern "build-${VERSION}.zip"
+          
+          # Extract the archive
+          unzip "build-${VERSION}.zip" -d dist/
+          echo "Successfully downloaded and extracted build artifact"
           ls -la dist/
+      
+      - name: Checkout repository for deployment script
+        uses: actions/checkout@v4
       
       - name: Deploy to GitHub Pages
         env:
@@ -104,25 +84,23 @@ jobs:
           
           echo "Successfully deployed version ${VERSION} to GitHub Pages"
       
-      - name: Create release archive
-        run: |
-          cd dist
-          zip -r ../build-${{ inputs.version }}.zip .
-          cd ..
-      
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ inputs.version }}
-          name: Release ${{ inputs.version }}
-          body: |
-            Release version ${{ inputs.version }}
-            
-            Built from commit: ${{ steps.metadata.outputs.commit_sha }}
-            Deployed to: https://gentlygently.github.io/
-          files: build-${{ inputs.version }}.zip
-          draft: false
-          prerelease: false
-          target_commitish: ${{ steps.metadata.outputs.commit_sha }}
+      - name: Update release notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          # Get the original release body
+          ORIGINAL_BODY=$(gh release view "v${VERSION}" --json body --jq .body)
+          
+          # Update release with deployment info
+          gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes "$(cat <<EOF
+${ORIGINAL_BODY}
+
+---
+**Deployment Status:** ✅ Deployed to production
+**Deployed at:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+**Live URL:** https://gentlygently.github.io/
+EOF
+)"
+          
+          echo "Updated release v${VERSION} with deployment information"
