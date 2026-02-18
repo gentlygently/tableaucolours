@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import ColourPicker from '../ColourPicker.vue'
+import ColourPicker from '../ColourPicker/ColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
 
 const store = usePaletteStore()

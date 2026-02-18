@@ -38,7 +38,7 @@ onUnmounted(() => window.removeEventListener('click', done))
 </template>
 
 <style lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .colourpicker {
   background-color: @background-colour;
