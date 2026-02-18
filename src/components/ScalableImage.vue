@@ -30,7 +30,7 @@ const width = computed(() => props.image.width * props.scale)
 watch(image, resetImage)
 watch(scale, resetImage)
 onMounted(() => {
-  if (image) resetImage()
+  if (image.value) resetImage()
 })
 
 function resetImage() {
