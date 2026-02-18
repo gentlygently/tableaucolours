@@ -24,7 +24,7 @@ const swatchStyle = computed(() => ({
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .imagecolourswatch {
   display: block;
