@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for git describe
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linter
+        run: npm run lint
+      
+      - name: Build project
+        run: npm run build
+      
+      - name: Generate version number
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        id: version
+        run: |
+          # Get the latest tag matching v*.* pattern
+          LATEST_TAG=$(git describe --tags --match "v*.*" --abbrev=0 2>/dev/null || echo "v1.0.0")
+          # Remove 'v' prefix and extract MAJOR.MINOR
+          VERSION_BASE=${LATEST_TAG#v}
+          VERSION_BASE=$(echo $VERSION_BASE | cut -d. -f1-2)
+          # Use GitHub run number as BUILD number
+          BUILD_NUMBER=${{ github.run_number }}
+          # Construct full version
+          VERSION="${VERSION_BASE}.${BUILD_NUMBER}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Generated version: ${VERSION}"
+      
+      - name: Upload build artifact
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ steps.version.outputs.version }}
+          path: dist/
+          retention-days: 90
