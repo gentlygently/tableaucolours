@@ -75,16 +75,18 @@ git push origin v1.1
 
 #### Release Workflow
 
-The release workflow is manually triggered to deploy a specific version to production:
+The release workflow is manually triggered to deploy a specific version (or the latest version) to production:
 
 1. Go to **Actions** → **Release** → **Run workflow**
-2. Enter the version number to release (e.g., `1.0.123`)
-3. The workflow will:
+2. **Option A - Deploy latest:** Leave the version field empty to automatically deploy the most recent release
+3. **Option B - Deploy specific version:** Enter a version number (e.g., `1.0.123`) to deploy that specific build
+4. The workflow will:
+   - Determine which version to deploy (latest or specified)
    - Download the build archive from the corresponding GitHub release
    - Deploy to [gentlygently.github.io](https://gentlygently.github.io/) using peaceiris/actions-gh-pages
    - Update the release notes with deployment information
 
-**Note:** The version must correspond to an existing GitHub release created by the CI workflow. You can view available versions in the [Releases](../../releases) page.
+**Note:** You can view available versions in the [Releases](../../releases) page.
 
 **Deployment Behavior:**
 - Uses the industry-standard [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) action
