@@ -87,7 +87,7 @@ export const useTpsFileStore = defineStore('tpsFile', () => {
   })
 
   const arePalettesFiltered = computed(() => {
-    filteredPalettes.value.length != palettes.value.length
+    return filteredPalettes.value.length != palettes.value.length
   })
 
   function open(name, xml, parsedPalettes) {
