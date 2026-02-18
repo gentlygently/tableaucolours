@@ -94,12 +94,15 @@ jobs:
           # Create updated release notes  
           DEPLOY_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           
-          # Update release with deployment info
-          gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes "${ORIGINAL_BODY}
+          # Build the deployment info
+          DEPLOYMENT_INFO="
 
 ---
 **Deployment Status:** ✅ Deployed to production
 **Deployed at:** ${DEPLOY_TIME}
 **Live URL:** https://gentlygently.github.io/"
+          
+          # Update release with deployment info
+          gh release edit "v${VERSION}" --repo ${{ github.repository }} --notes "${ORIGINAL_BODY}${DEPLOYMENT_INFO}"
           
           echo "Updated release v${VERSION} with deployment information"
