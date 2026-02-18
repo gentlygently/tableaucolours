@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import ScalableImage from './ScalableImage.vue'
-import { eventBus } from '@/EventBus'
+import { eventBus } from '@/eventbus'
 
 const props = defineProps({
   canPickColour: Boolean,

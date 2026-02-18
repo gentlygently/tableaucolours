@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { eventBus } from '@/EventBus'
+import { eventBus } from '@/eventbus'
 
 const emit = defineEmits(['file-selected'])
 const label = ref(null)
