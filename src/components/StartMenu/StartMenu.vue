@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
-import TpsFileOpen from './TpsFileOpen.vue'
+import TpsFileOpen from '../TpsFileOpen.vue'
 
 const openTpsFile = ref(null)
 const openTpsFileEditor = () => openTpsFile.value.selectFile()
@@ -38,7 +38,7 @@ const openPaletteEditor = () => paletteStore.open()
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .startmenu {
   position: relative;
