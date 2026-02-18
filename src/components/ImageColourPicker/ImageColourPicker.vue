@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import ImageCanvas from './ImageCanvas/ImageCanvas.vue'
-import ImageFileOpen from './ImageFileOpen.vue'
-import ImageZoom from './ImageZoom/ImageZoom.vue'
+import ImageCanvas from '../ImageCanvas/ImageCanvas.vue'
+import ImageFileOpen from '../ImageFileOpen.vue'
+import ImageZoom from '../ImageZoom/ImageZoom.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { useTpsFileStore } from '@/stores/tpsfile'
@@ -106,7 +106,7 @@ onUnmounted(() => window.removeEventListener('paste', paste))
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .imagecolourpicker {
   display: flex;
