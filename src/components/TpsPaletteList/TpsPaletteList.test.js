@@ -10,13 +10,13 @@ describe('TpsPaletteList', () => {
   beforeEach(() => {
     pinia = createTestPinia()
     store = useTpsFileStore()
-    store.open('test.tps', '<xml/>', [
-      { name: 'Red', type: 'regular', colours: ['#FF0000'] },
-      { name: 'Blue', type: 'ordered-sequential', colours: ['#0000FF'] },
-    ])
   })
 
-  function renderList() {
+  function renderList(palettes = [
+    { name: 'Red', type: 'regular', colours: ['#FF0000'] },
+    { name: 'Blue', type: 'ordered-sequential', colours: ['#0000FF'] },
+  ]) {
+    store.open('test.tps', '<xml/>', palettes)
     return mount(TpsPaletteList, {
       global: {
         plugins: [pinia],
@@ -38,19 +38,18 @@ describe('TpsPaletteList', () => {
   })
 
   it('shows singular when one palette', () => {
-    store.close()
-    store.open('test.tps', '<xml/>', [
+    const wrapper = renderList([
       { name: 'One', type: 'regular', colours: ['#000'] },
     ])
-    const wrapper = renderList()
 
     expect(wrapper.find('.palettecount').text()).toContain('1 colour palette')
     expect(wrapper.find('.palettecount').text()).not.toContain('palettes')
   })
 
-  it('shows selected count when palettes are selected', () => {
-    store.palettes[0].isSelected = true
+  it('shows selected count when palettes are selected', async () => {
     const wrapper = renderList()
+    store.palettes[0].isSelected = true
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.palettecount').text()).toContain('1 selected')
   })

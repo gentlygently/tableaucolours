@@ -10,10 +10,10 @@ describe('ColourPaletteColourListItem', () => {
   beforeEach(() => {
     pinia = createTestPinia()
     store = usePaletteStore()
-    store.open({ name: '', type: 'regular', colours: ['#FF0000', '#00FF00', '#0000FF'] })
   })
 
-  function renderItem(index = 0) {
+  function renderItem(index = 0, colours = ['#FF0000', '#00FF00', '#0000FF']) {
+    store.open({ name: '', type: 'regular', colours })
     return mount(ColourPaletteColourListItem, {
       props: {
         colour: store.colours[index],
@@ -74,9 +74,7 @@ describe('ColourPaletteColourListItem', () => {
   })
 
   it('sets grid position based on index', () => {
-    // Add more colours so index 7 exists
-    store.addColours(['#aaa', '#bbb', '#ccc', '#ddd', '#eee'])
-    const wrapper = renderItem(7)
+    const wrapper = renderItem(7, ['#111', '#222', '#333', '#444', '#555', '#666', '#777', '#888'])
     const style = wrapper.find('.colour').attributes('style')
 
     // index 7: column = floor(7/5)+1 = 2, row = (7%5)+1 = 3

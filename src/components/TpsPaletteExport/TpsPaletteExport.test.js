@@ -10,12 +10,12 @@ describe('TpsPaletteExport', () => {
   beforeEach(() => {
     pinia = createTestPinia()
     store = useTpsFileStore()
-    store.open('test.tps', '<xml/>', [
-      { name: 'Red', type: 'regular', colours: ['#FF0000'] },
-    ])
   })
 
-  function renderExport() {
+  function renderExport(palettes = [
+    { name: 'Red', type: 'regular', colours: ['#FF0000'] },
+  ]) {
+    store.open('test.tps', '<xml/>', palettes)
     return mount(TpsPaletteExport, {
       global: { plugins: [pinia] },
     })
@@ -34,8 +34,8 @@ describe('TpsPaletteExport', () => {
   })
 
   it('disables export when no filename', () => {
-    store.palettes[0].isSelected = true
     const wrapper = renderExport()
+    store.palettes[0].isSelected = true
 
     expect(wrapper.find('button').attributes('disabled')).toBeDefined()
   })
@@ -49,8 +49,8 @@ describe('TpsPaletteExport', () => {
   })
 
   it('enables export when filename and palettes selected', async () => {
-    store.palettes[0].isSelected = true
     const wrapper = renderExport()
+    store.palettes[0].isSelected = true
 
     await wrapper.find('input').setValue('output.tps')
 
@@ -58,8 +58,8 @@ describe('TpsPaletteExport', () => {
   })
 
   it('emits export with filename on click', async () => {
-    store.palettes[0].isSelected = true
     const wrapper = renderExport()
+    store.palettes[0].isSelected = true
 
     await wrapper.find('input').setValue('output')
     await userEvent.click(wrapper.find('button').element)
@@ -69,8 +69,8 @@ describe('TpsPaletteExport', () => {
   })
 
   it('does not append .tps if already present', async () => {
-    store.palettes[0].isSelected = true
     const wrapper = renderExport()
+    store.palettes[0].isSelected = true
 
     await wrapper.find('input').setValue('output.tps')
     await userEvent.click(wrapper.find('button').element)

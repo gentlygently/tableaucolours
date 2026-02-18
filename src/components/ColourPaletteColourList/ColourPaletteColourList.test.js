@@ -10,10 +10,10 @@ describe('ColourPaletteColourList', () => {
   beforeEach(() => {
     pinia = createTestPinia()
     store = usePaletteStore()
-    store.open({ name: '', type: 'regular', colours: ['#111', '#222', '#333', '#444', '#555'] })
   })
 
-  function renderList() {
+  function renderList(colours = ['#111', '#222', '#333', '#444', '#555']) {
+    store.open({ name: '', type: 'regular', colours })
     return mount(ColourPaletteColourList, {
       global: {
         plugins: [pinia],

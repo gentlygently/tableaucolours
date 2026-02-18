@@ -10,11 +10,11 @@ describe('ColourPaletteGetCode', () => {
   beforeEach(() => {
     pinia = createTestPinia()
     store = usePaletteStore()
-    store.open({ name: 'Test', type: 'regular', colours: ['#ff0000'] })
     document.execCommand = vi.fn()
   })
 
-  function renderGetCode() {
+  function renderGetCode(palette = { name: 'Test', type: 'regular', colours: ['#ff0000'] }) {
+    store.open(palette)
     return mount(ColourPaletteGetCode, {
       global: { plugins: [pinia] },
     })

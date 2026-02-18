@@ -12,13 +12,13 @@ describe('TpsFileEditor', () => {
     pinia = createTestPinia()
     tpsStore = useTpsFileStore()
     paletteStore = usePaletteStore()
-    tpsStore.open('test.tps', '<xml/>', [
-      { name: 'Red', type: 'regular', colours: ['#FF0000'] },
-      { name: 'Blue', type: 'ordered-sequential', colours: ['#0000FF'] },
-    ])
   })
 
-  function renderEditor() {
+  function renderEditor(fileName = 'test.tps', palettes = [
+    { name: 'Red', type: 'regular', colours: ['#FF0000'] },
+    { name: 'Blue', type: 'ordered-sequential', colours: ['#0000FF'] },
+  ]) {
+    tpsStore.open(fileName, '<xml/>', palettes)
     return mount(TpsFileEditor, {
       global: {
         plugins: [pinia],
