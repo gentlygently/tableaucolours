@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import ColourPaletteEditor from './ColourPaletteEditor.vue'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -61,7 +61,7 @@ describe('ColourPaletteEditor', () => {
     const wrapper = renderEditor()
     const initialCount = paletteStore.colours.length
 
-    await wrapper.find('.add button').trigger('click')
+    await userEvent.click(wrapper.find('.add button').element)
 
     expect(paletteStore.colours.length).toBe(initialCount + 1)
   })
@@ -70,7 +70,7 @@ describe('ColourPaletteEditor', () => {
     paletteStore.replaceColours(['#111', '#222', '#333'])
     const wrapper = renderEditor()
 
-    await wrapper.find('.reverse button').trigger('click')
+    await userEvent.click(wrapper.find('.reverse button').element)
 
     expect(paletteStore.colours[0].hex).toBe('#333')
     expect(paletteStore.colours[2].hex).toBe('#111')
@@ -79,7 +79,7 @@ describe('ColourPaletteEditor', () => {
   it('closes palette editor when back button is clicked', async () => {
     const wrapper = renderEditor()
 
-    await wrapper.find('.colourpalette-backbutton button').trigger('click')
+    await userEvent.click(wrapper.find('.colourpalette-backbutton button').element)
 
     expect(paletteStore.isOpen).toBe(false)
   })
@@ -88,7 +88,7 @@ describe('ColourPaletteEditor', () => {
     const wrapper = renderEditor()
     paletteStore.addColour()
 
-    await wrapper.find('.colourpalette-backbutton button').trigger('click')
+    await userEvent.click(wrapper.find('.colourpalette-backbutton button').element)
 
     expect(confirm).toHaveBeenCalled()
   })

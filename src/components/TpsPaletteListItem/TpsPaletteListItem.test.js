@@ -1,5 +1,7 @@
 import { describe, expect, it, beforeAll } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { fireEvent } from '@testing-library/dom'
+import { userEvent } from '@/testing/test-utils'
 import TpsPaletteListItem from './TpsPaletteListItem.vue'
 
 beforeAll(() => {
@@ -66,7 +68,7 @@ describe('TpsPaletteListItem', () => {
     const palette = createPalette()
     const wrapper = renderItem(palette)
 
-    await wrapper.find('input[type="checkbox"]').trigger('change')
+    fireEvent.change(wrapper.find('input[type="checkbox"]').element)
 
     expect(wrapper.emitted('toggle-selected')).toHaveLength(1)
     expect(wrapper.emitted('toggle-selected')[0][0]).toStrictEqual(palette)
@@ -76,7 +78,7 @@ describe('TpsPaletteListItem', () => {
     const palette = createPalette()
     const wrapper = renderItem(palette)
 
-    await wrapper.find('.clone button').trigger('click')
+    await userEvent.click(wrapper.find('.clone button').element)
 
     expect(wrapper.emitted('clone')).toHaveLength(1)
     expect(wrapper.emitted('clone')[0][0]).toStrictEqual(palette)

@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import StartMenu from './StartMenu.vue'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -40,7 +40,7 @@ describe('StartMenu', () => {
 
     const buttons = wrapper.findAll('button')
     const createButton = buttons.find(b => b.text() === 'Create a template')
-    await createButton.trigger('click')
+    await userEvent.click(createButton.element)
 
     expect(store.isOpen).toBe(true)
   })

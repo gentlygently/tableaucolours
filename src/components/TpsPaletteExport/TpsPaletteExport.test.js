@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import TpsPaletteExport from './TpsPaletteExport.vue'
 import { useTpsFileStore } from '@/stores/tpsfile'
 
@@ -62,7 +62,7 @@ describe('TpsPaletteExport', () => {
     const wrapper = renderExport()
 
     await wrapper.find('input').setValue('output')
-    await wrapper.find('button').trigger('click')
+    await userEvent.click(wrapper.find('button').element)
 
     expect(wrapper.emitted('export')).toHaveLength(1)
     expect(wrapper.emitted('export')[0][0]).toBe('output.tps')
@@ -73,7 +73,7 @@ describe('TpsPaletteExport', () => {
     const wrapper = renderExport()
 
     await wrapper.find('input').setValue('output.tps')
-    await wrapper.find('button').trigger('click')
+    await userEvent.click(wrapper.find('button').element)
 
     expect(wrapper.emitted('export')[0][0]).toBe('output.tps')
   })

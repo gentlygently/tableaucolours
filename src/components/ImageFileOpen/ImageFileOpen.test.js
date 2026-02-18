@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { fireEvent } from '@testing-library/dom'
 import ImageFileOpen from './ImageFileOpen.vue'
 
 describe('ImageFileOpen', () => {
@@ -21,7 +22,7 @@ describe('ImageFileOpen', () => {
     const wrapper = mount(ImageFileOpen)
     const input = wrapper.find('input[type="file"]')
 
-    await input.trigger('input')
+    fireEvent.input(input.element)
 
     expect(wrapper.emitted('file-selected')).toHaveLength(1)
   })

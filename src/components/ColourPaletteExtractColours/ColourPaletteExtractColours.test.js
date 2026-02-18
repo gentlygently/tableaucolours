@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import ColourPaletteExtractColours from './ColourPaletteExtractColours.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
@@ -62,7 +62,7 @@ describe('ColourPaletteExtractColours', () => {
   it('emits close when cancel is clicked', async () => {
     const wrapper = renderExtract()
 
-    await wrapper.find('.extractcolours-button--cancel').trigger('click')
+    await userEvent.click(wrapper.find('.extractcolours-button--cancel').element)
 
     expect(wrapper.emitted('close')).toHaveLength(1)
   })
@@ -70,7 +70,7 @@ describe('ColourPaletteExtractColours', () => {
   it('extracts colours and replaces existing on extract', async () => {
     const wrapper = renderExtract()
 
-    await wrapper.find('.extractcolours-button--extract').trigger('click')
+    await userEvent.click(wrapper.find('.extractcolours-button--extract').element)
 
     expect(paletteStore.colours.length).toBeGreaterThan(0)
     expect(wrapper.emitted('close')).toHaveLength(1)
@@ -79,7 +79,7 @@ describe('ColourPaletteExtractColours', () => {
   it('saves number of colours to localStorage on extract', async () => {
     const wrapper = renderExtract()
 
-    await wrapper.find('.extractcolours-button--extract').trigger('click')
+    await userEvent.click(wrapper.find('.extractcolours-button--extract').element)
 
     expect(localStorage.numberOfColoursToExtract).toBeDefined()
   })

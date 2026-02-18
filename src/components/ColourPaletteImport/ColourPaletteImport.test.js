@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import ColourPaletteImport from './ColourPaletteImport.vue'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -65,7 +65,7 @@ describe('ColourPaletteImport', () => {
       '<color-palette name="Imported" type="ordered-sequential"><color>#ff0000</color></color-palette>'
 
     await wrapper.find('textarea').setValue(validXml)
-    await wrapper.find('.importcode-button--import').trigger('click')
+    await userEvent.click(wrapper.find('.importcode-button--import').element)
 
     expect(store.name).toBe('Imported')
     expect(store.type).toBe('ordered-sequential')
@@ -76,7 +76,7 @@ describe('ColourPaletteImport', () => {
   it('emits close on cancel click', async () => {
     const wrapper = renderImport()
 
-    await wrapper.find('.importcode-button--cancel').trigger('click')
+    await userEvent.click(wrapper.find('.importcode-button--cancel').element)
 
     expect(wrapper.emitted('close')).toHaveLength(1)
   })

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { userEvent } from '@/testing/test-utils'
 import TpsFileErrors from './TpsFileErrors.vue'
 
 describe('TpsFileErrors', () => {
@@ -62,7 +63,7 @@ describe('TpsFileErrors', () => {
       },
     })
 
-    await wrapper.find('button').trigger('click')
+    await userEvent.click(wrapper.find('button').element)
 
     expect(wrapper.emitted('close')).toHaveLength(1)
   })

@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import ColourPaletteGetCode from './ColourPaletteGetCode.vue'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -39,7 +39,7 @@ describe('ColourPaletteGetCode', () => {
   it('calls document.execCommand("copy") when copy button is clicked', async () => {
     const wrapper = renderGetCode()
 
-    await wrapper.find('.getcode-copy').trigger('click')
+    await userEvent.click(wrapper.find('.getcode-copy').element)
 
     expect(document.execCommand).toHaveBeenCalledWith('copy')
   })
@@ -47,7 +47,7 @@ describe('ColourPaletteGetCode', () => {
   it('changes button text to "Copied" after copying', async () => {
     const wrapper = renderGetCode()
 
-    await wrapper.find('.getcode-copy').trigger('click')
+    await userEvent.click(wrapper.find('.getcode-copy').element)
 
     expect(wrapper.find('.getcode-copy--copied').exists()).toBe(true)
     expect(wrapper.find('.getcode-copy').text()).toContain('Copied')

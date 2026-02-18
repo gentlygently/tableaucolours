@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import ColourPaletteColourListItem from './ColourPaletteColourListItem.vue'
 import { usePaletteStore } from '@/stores/palette'
 
@@ -45,7 +45,7 @@ describe('ColourPaletteColourListItem', () => {
   it('selects the colour on click', async () => {
     const wrapper = renderItem(1)
 
-    await wrapper.find('.colour').trigger('click')
+    await userEvent.click(wrapper.find('.colour').element)
 
     expect(store.selectedColour).toBe(store.colours[1])
   })
@@ -54,7 +54,7 @@ describe('ColourPaletteColourListItem', () => {
     const wrapper = renderItem(1)
     const initialLength = store.colours.length
 
-    await wrapper.find('.colour-remove').trigger('click')
+    await userEvent.click(wrapper.find('.colour-remove').element)
 
     expect(store.colours).toHaveLength(initialLength - 1)
   })

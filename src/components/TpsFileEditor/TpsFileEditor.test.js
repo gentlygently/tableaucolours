@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestPinia } from '@/testing/test-utils'
+import { createTestPinia, userEvent } from '@/testing/test-utils'
 import TpsFileEditor from './TpsFileEditor.vue'
 import { useTpsFileStore } from '@/stores/tpsfile'
 import { usePaletteStore } from '@/stores/palette'
@@ -98,7 +98,7 @@ describe('TpsFileEditor', () => {
   it('opens palette editor when Add palette clicked', async () => {
     const wrapper = renderEditor()
 
-    await wrapper.find('.paletteactions-add button').trigger('click')
+    await userEvent.click(wrapper.find('.paletteactions-add button').element)
 
     expect(paletteStore.isOpen).toBe(true)
   })

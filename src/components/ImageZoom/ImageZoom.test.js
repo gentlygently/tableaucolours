@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { userEvent } from '@/testing/test-utils'
 import ImageZoom from './ImageZoom.vue'
 
 describe('ImageZoom', () => {
@@ -20,7 +21,7 @@ describe('ImageZoom', () => {
   it('emits zoom with increased scale when zoom in clicked', async () => {
     const wrapper = renderZoom({ scale: 1 })
 
-    await wrapper.find('.imagezoom-in').trigger('click')
+    await userEvent.click(wrapper.find('.imagezoom-in').element)
 
     expect(wrapper.emitted('zoom')).toHaveLength(1)
     expect(wrapper.emitted('zoom')[0][0]).toBeCloseTo(1.1)
@@ -29,7 +30,7 @@ describe('ImageZoom', () => {
   it('emits zoom with decreased scale when zoom out clicked', async () => {
     const wrapper = renderZoom({ scale: 1 })
 
-    await wrapper.find('.imagezoom-out').trigger('click')
+    await userEvent.click(wrapper.find('.imagezoom-out').element)
 
     expect(wrapper.emitted('zoom')).toHaveLength(1)
     expect(wrapper.emitted('zoom')[0][0]).toBeCloseTo(0.9)
@@ -38,8 +39,8 @@ describe('ImageZoom', () => {
   it('does not emit zoom when disabled', async () => {
     const wrapper = renderZoom({ enabled: false })
 
-    await wrapper.find('.imagezoom-in').trigger('click')
-    await wrapper.find('.imagezoom-out').trigger('click')
+    await userEvent.click(wrapper.find('.imagezoom-in').element)
+    await userEvent.click(wrapper.find('.imagezoom-out').element)
 
     expect(wrapper.emitted('zoom')).toBeUndefined()
   })
