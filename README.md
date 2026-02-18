@@ -86,6 +86,11 @@ The release workflow is manually triggered to deploy a specific version to produ
 
 **Note:** The version must correspond to an existing GitHub release created by the CI workflow. You can view available versions in the [Releases](../../releases) page.
 
+**Deployment Behavior:**
+- The workflow replaces all files in the deployment repository
+- Preserves the `react/` directory (for hosting multiple applications)
+- Preserves GitHub Pages configuration files (`CNAME`, `.nojekyll`)
+
 **Setup Requirements:**
 
 To enable the release workflow, configure the following repository secret:

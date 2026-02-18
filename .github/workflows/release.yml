@@ -42,12 +42,9 @@ jobs:
             --pattern "build-${VERSION}.zip"
           
           # Extract the archive
-          unzip "build-${VERSION}.zip" -d dist/
+          unzip -q "build-${VERSION}.zip" -d dist/
           echo "Successfully downloaded and extracted build artifact"
           ls -la dist/
-      
-      - name: Checkout repository for deployment script
-        uses: actions/checkout@v4
       
       - name: Deploy to GitHub Pages
         env:
@@ -67,9 +64,9 @@ jobs:
           git reset --hard
           git pull
           
-          # Remove all files except .git and react directory
-          find . -maxdepth 1 ! -name 'react' ! -name '.git' ! -name '.' ! -name '..' -type f -exec rm -rf {} +
-          find . -maxdepth 1 ! -name 'react' ! -name '.git' ! -name '.' ! -name '..' -type d -exec rm -rf {} +
+          # Remove all files except .git, react directory, and GitHub Pages config files
+          find . -maxdepth 1 ! -name 'react' ! -name 'CNAME' ! -name '.nojekyll' ! -name '.git' ! -name '.' ! -name '..' -type f -exec rm -rf {} +
+          find . -maxdepth 1 ! -name 'react' ! -name 'CNAME' ! -name '.nojekyll' ! -name '.git' ! -name '.' ! -name '..' -type d -exec rm -rf {} +
           
           # Copy build artifacts
           cp -R ../dist/. .
