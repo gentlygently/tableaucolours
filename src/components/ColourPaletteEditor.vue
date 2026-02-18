@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourPaletteColourList from './ColourPaletteColourList.vue'
-import ColourPaletteGetCode from './ColourPaletteGetCode.vue'
+import ColourPaletteGetCode from './ColourPaletteGetCode/ColourPaletteGetCode.vue'
 import ColourPaletteExtractColours from './ColourPaletteExtractColours.vue'
 import ColourPaletteImport from './ColourPaletteImport/ColourPaletteImport.vue'
 import ModalPanel from './ModalPanel/ModalPanel.vue'

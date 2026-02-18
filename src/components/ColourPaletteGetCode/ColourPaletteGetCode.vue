@@ -45,7 +45,7 @@ const xml = () => colourPaletteXml(store.name, store.type, store.colours)
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .getcode {
   &:after {
