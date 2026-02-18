@@ -39,6 +39,12 @@ jobs:
       - name: Build project
         run: npm run build
       
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run E2E tests
+        run: npx playwright test --project=chromium
+      
       - name: Generate version number
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         id: version
