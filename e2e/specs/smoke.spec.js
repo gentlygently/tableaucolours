@@ -1,6 +1,4 @@
 import { test, expect } from '../fixtures/base.js'
-import { ColourPaletteEditorTestIds } from '../../src/test-ids/ColourPaletteEditorTestIds.js'
-import { AppHelpTestIds } from '../../src/test-ids/AppHelpTestIds.js'
 
 test.describe('Smoke Tests', () => {
   test('should load the application', async ({ page, startMenu }) => {

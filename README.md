@@ -44,6 +44,13 @@ npm run test
 # Run unit tests in watch mode
 npm run test:watch
 
+# Run E2E tests (requires browsers to be installed)
+npx playwright install --with-deps
+npm run e2e
+
+# Run E2E tests for a specific browser
+npm run e2e -- --project=chromium
+
 # Build for production
 npm run build
 ```
@@ -59,6 +66,7 @@ The CI workflow automatically runs on pull requests and pushes to the master bra
 - **Linting**: Validates code style using ESLint
 - **Testing**: Runs unit tests using Vitest
 - **Building**: Creates production build using Vite
+- **E2E Testing**: Runs Playwright end-to-end tests (Chromium) against the production build
 - **Artifact Upload** (master only): On successful master builds, the `dist/` output is uploaded as a versioned artifact
 
 **Versioning Strategy:**

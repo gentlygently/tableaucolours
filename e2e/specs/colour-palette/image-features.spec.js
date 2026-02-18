@@ -272,24 +272,17 @@ test.describe('Canvas Hints', () => {
 })
 
 test.describe('Image Drag and Drop', () => {
-  const testImagePath = join(
-    __dirname,
-    '..',
-    '..',
-    'fixtures',
-    'test-files',
-    'sample.png',
-  )
-
   test('should show drop target overlay when dragging image over canvas', async ({
     colourPaletteEditor,
   }) => {
     await colourPaletteEditor.imageCanvas.evaluate((el) => {
+      // eslint-disable-next-line no-undef
       const dataTransfer = new DataTransfer()
       dataTransfer.items.add(
         new File([''], 'test.png', { type: 'image/png' }),
       )
       el.dispatchEvent(
+        // eslint-disable-next-line no-undef
         new DragEvent('dragenter', { dataTransfer, bubbles: true }),
       )
     })
@@ -304,11 +297,13 @@ test.describe('Image Drag and Drop', () => {
       'trigger dragenter to show overlay',
       async () => {
         await colourPaletteEditor.imageCanvas.evaluate((el) => {
+          // eslint-disable-next-line no-undef
           const dataTransfer = new DataTransfer()
           dataTransfer.items.add(
             new File([''], 'test.png', { type: 'image/png' }),
           )
           el.dispatchEvent(
+            // eslint-disable-next-line no-undef
             new DragEvent('dragenter', { dataTransfer, bubbles: true }),
           )
         })
@@ -321,6 +316,7 @@ test.describe('Image Drag and Drop', () => {
       'trigger dragleave on drop target to hide overlay',
       async () => {
         await colourPaletteEditor.imageDropTarget.evaluate((el) => {
+          // eslint-disable-next-line no-undef
           el.dispatchEvent(new DragEvent('dragleave', { bubbles: true }))
         })
 

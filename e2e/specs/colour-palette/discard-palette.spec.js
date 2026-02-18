@@ -9,7 +9,7 @@ test.describe('Discard Palette', () => {
 
     const dialogPromise = page.waitForEvent('dialog')
     // Don't await the click — it blocks until dialog is handled
-    void colourPaletteEditor.clickDiscardPalette()
+    colourPaletteEditor.clickDiscardPalette()
     const dialog = await dialogPromise
 
     expect(dialog.type()).toBe('confirm')
