@@ -30,20 +30,20 @@ describe('ColourPaletteColourListItem', () => {
   }
 
   it('renders the colour swatch with the correct background', () => {
-    const wrapper = renderItem(0)
+    const wrapper = renderItem(0, ['#FF0000'])
     const swatch = wrapper.find('.colour-swatch')
 
-    expect(swatch.attributes('style')).toContain('background-color')
+    expect(swatch.attributes('style')).toContain('background-color: rgb(255, 0, 0)')
   })
 
   it('shows the hex value in the title', () => {
-    const wrapper = renderItem(0)
+    const wrapper = renderItem(0, ['#ABCDEF'])
 
-    expect(wrapper.find('.colour').attributes('title')).toContain('#FF0000')
+    expect(wrapper.find('.colour').attributes('title')).toContain('#ABCDEF')
   })
 
   it('selects the colour on click', async () => {
-    const wrapper = renderItem(1)
+    const wrapper = renderItem(1, ['#111', '#222'])
 
     await userEvent.click(wrapper.find('.colour').element)
 
@@ -51,24 +51,23 @@ describe('ColourPaletteColourListItem', () => {
   })
 
   it('removes the colour when remove button is clicked', async () => {
-    const wrapper = renderItem(1)
-    const initialLength = store.colours.length
+    const wrapper = renderItem(1, ['#111', '#222', '#333'])
 
     await userEvent.click(wrapper.find('.colour-remove').element)
 
-    expect(store.colours).toHaveLength(initialLength - 1)
+    expect(store.colours).toHaveLength(2)
   })
 
   it('adds selected class when colour is selected', () => {
+    const wrapper = renderItem(0, ['#111', '#222'])
     store.selectColour(store.colours[0])
-    const wrapper = renderItem(0)
 
     expect(wrapper.find('.colour').classes()).toContain('colour--selected')
   })
 
   it('does not add selected class when colour is not selected', () => {
+    const wrapper = renderItem(1, ['#111', '#222'])
     store.selectColour(store.colours[0])
-    const wrapper = renderItem(1)
 
     expect(wrapper.find('.colour').classes()).not.toContain('colour--selected')
   })

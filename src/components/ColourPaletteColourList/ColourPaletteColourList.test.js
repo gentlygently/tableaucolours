@@ -32,13 +32,15 @@ describe('ColourPaletteColourList', () => {
   }
 
   it('renders a colour item for each colour in the store', () => {
-    const wrapper = renderList()
+    const colours = ['#111', '#222', '#333', '#444', '#555']
+    const wrapper = renderList(colours)
 
-    expect(wrapper.findAll('.colour-stub')).toHaveLength(5)
+    expect(wrapper.findAll('.colour-stub')).toHaveLength(colours.length)
   })
 
   it('selects a colour by keyboard arrow down', async () => {
-    const wrapper = renderList()
+    const colours = ['#111', '#222', '#333']
+    const wrapper = renderList(colours)
     store.selectColour(store.colours[0])
 
     await userEvent.keyboard('{ArrowDown}')
@@ -48,7 +50,8 @@ describe('ColourPaletteColourList', () => {
   })
 
   it('selects a colour by keyboard arrow up', async () => {
-    const wrapper = renderList()
+    const colours = ['#111', '#222', '#333']
+    const wrapper = renderList(colours)
     store.selectColour(store.colours[2])
 
     await userEvent.keyboard('{ArrowUp}')
@@ -58,12 +61,13 @@ describe('ColourPaletteColourList', () => {
   })
 
   it('does not navigate past the last colour in a column', async () => {
-    const wrapper = renderList()
-    store.selectColour(store.colours[4])
+    const colours = ['#111', '#222', '#333']
+    const wrapper = renderList(colours)
+    store.selectColour(store.colours[2])
 
     await userEvent.keyboard('{ArrowDown}')
     await wrapper.vm.$nextTick()
 
-    expect(store.selectedColour).toBe(store.colours[4])
+    expect(store.selectedColour).toBe(store.colours[2])
   })
 })

@@ -21,13 +21,13 @@ describe('ColourPaletteGetCode', () => {
   }
 
   it('displays the palette XML in a pre element', () => {
-    const wrapper = renderGetCode()
+    const wrapper = renderGetCode({ name: 'My Palette', type: 'ordered-diverging', colours: ['#aabbcc'] })
     const code = wrapper.find('.getcode-code').text()
 
     expect(code).toContain('<color-palette')
-    expect(code).toContain('name="Test"')
-    expect(code).toContain('type="regular"')
-    expect(code).toContain('#FF0000')
+    expect(code).toContain('name="My Palette"')
+    expect(code).toContain('type="ordered-diverging"')
+    expect(code).toContain('#AABBCC')
   })
 
   it('shows "Copy to clipboard" button initially', () => {

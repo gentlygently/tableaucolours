@@ -32,7 +32,11 @@ describe('TpsPaletteList', () => {
   }
 
   it('renders palette count', () => {
-    const wrapper = renderList()
+    const palettes = [
+      { name: 'Red', type: 'regular', colours: ['#FF0000'] },
+      { name: 'Blue', type: 'ordered-sequential', colours: ['#0000FF'] },
+    ]
+    const wrapper = renderList(palettes)
 
     expect(wrapper.find('.palettecount').text()).toContain('2 colour palettes')
   })
@@ -47,7 +51,11 @@ describe('TpsPaletteList', () => {
   })
 
   it('shows selected count when palettes are selected', async () => {
-    const wrapper = renderList()
+    const palettes = [
+      { name: 'Red', type: 'regular', colours: ['#FF0000'] },
+      { name: 'Blue', type: 'ordered-sequential', colours: ['#0000FF'] },
+    ]
+    const wrapper = renderList(palettes)
     store.palettes[0].isSelected = true
     await wrapper.vm.$nextTick()
 

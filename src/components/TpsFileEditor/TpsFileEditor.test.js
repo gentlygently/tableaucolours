@@ -32,9 +32,9 @@ describe('TpsFileEditor', () => {
   }
 
   it('renders file name', () => {
-    const wrapper = renderEditor()
+    const wrapper = renderEditor('Preferences.tps')
 
-    expect(wrapper.find('.file').text()).toBe('test.tps')
+    expect(wrapper.find('.file').text()).toBe('Preferences.tps')
   })
 
   it('renders palette list', () => {
