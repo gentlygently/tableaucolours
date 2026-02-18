@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { fireEvent } from '@testing-library/dom'
 import ImageCanvas from './ImageCanvas.vue'
 
 describe('ImageCanvas', () => {
@@ -42,8 +43,7 @@ describe('ImageCanvas', () => {
     Object.defineProperty(img, 'height', { value: 100 })
     const wrapper = renderCanvas({ image: img, canPickColour: true })
 
-    const wheelEvent = new WheelEvent('wheel', { deltaY: -100, shiftKey: true, bubbles: true })
-    wrapper.find('.imagecanvas-canvas').element.dispatchEvent(wheelEvent)
+    fireEvent.wheel(wrapper.find('.imagecanvas-canvas').element, { deltaY: -100, shiftKey: true })
 
     expect(wrapper.emitted('zoom')).toHaveLength(1)
   })
@@ -52,7 +52,7 @@ describe('ImageCanvas', () => {
     const wrapper = renderCanvas()
     const files = [new File([''], 'test.png', { type: 'image/png' })]
 
-    await wrapper.find('.imagecanvas').trigger('drop', {
+    fireEvent.drop(wrapper.find('.imagecanvas').element, {
       dataTransfer: { files },
     })
 
