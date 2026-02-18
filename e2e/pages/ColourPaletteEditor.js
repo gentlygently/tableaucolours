@@ -94,16 +94,24 @@ export class ColourPaletteEditor {
     const initialCount = await this.getColourCount()
 
     if (initialCount > 0) {
-      this.page.once('dialog', async (dialog) => {
-        await dialog.accept()
-      })
+      // "Delete all colours" actually resets to 1 white colour (store defaults to ['#FFFFFF'])
+      this.page.once('dialog', (dialog) => dialog.accept())
       await this.page.locator('button[title="Delete all colours"]').click()
       await expect(
         this.page.getByTestId(ColourPaletteColourListItemTestIds.Self),
-      ).toHaveCount(0)
+      ).toHaveCount(1)
     }
 
-    for (let i = 0; i < hexColors.length; i++) {
+    // Set the first colour (which already exists after discard)
+    if (hexColors.length > 0) {
+      await this.setColour(0, hexColors[0])
+    }
+
+    // Click body to ensure keyboard shortcuts work
+    await this.page.locator('body').click()
+
+    // Add remaining colours via keyboard
+    for (let i = 1; i < hexColors.length; i++) {
       await this.page.keyboard.press('+')
       await this.page
         .getByTestId(ColourPaletteColourListItemTestIds.Self)
