@@ -81,15 +81,16 @@ The release workflow is manually triggered to deploy a specific version to produ
 2. Enter the version number to release (e.g., `1.0.123`)
 3. The workflow will:
    - Download the build archive from the corresponding GitHub release
-   - Deploy to [gentlygently.github.io](https://gentlygently.github.io/)
+   - Deploy to [gentlygently.github.io](https://gentlygently.github.io/) using peaceiris/actions-gh-pages
    - Update the release notes with deployment information
 
 **Note:** The version must correspond to an existing GitHub release created by the CI workflow. You can view available versions in the [Releases](../../releases) page.
 
 **Deployment Behavior:**
-- The workflow replaces all files in the deployment repository
-- Preserves the `react/` directory (for hosting multiple applications)
-- Preserves GitHub Pages configuration files (`CNAME`, `.nojekyll`)
+- Uses the industry-standard [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) action
+- Replaces all content in the deployment repository with the new build
+- Automatically preserves GitHub Pages configuration (CNAME for custom domains)
+- Automatic .nojekyll handling for proper asset serving
 
 **Setup Requirements:**
 

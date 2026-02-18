@@ -47,39 +47,16 @@ jobs:
           ls -la dist/
       
       - name: Deploy to GitHub Pages
-        env:
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-          VERSION: ${{ inputs.version }}
-        run: |
-          # Configure git
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Clone the deployment repository
-          git clone https://x-access-token:${DEPLOY_TOKEN}@github.com/gentlygently/gentlygently.github.io.git deploy-repo
-          
-          cd deploy-repo
-          
-          # Reset and pull latest
-          git reset --hard
-          git pull
-          
-          # Remove all files except .git, react directory, and GitHub Pages config files
-          find . -maxdepth 1 ! -name 'react' ! -name 'CNAME' ! -name '.nojekyll' ! -name '.git' ! -name '.' ! -name '..' -type f -exec rm -rf {} +
-          find . -maxdepth 1 ! -name 'react' ! -name 'CNAME' ! -name '.nojekyll' ! -name '.git' ! -name '.' ! -name '..' -type d -exec rm -rf {} +
-          
-          # Copy build artifacts
-          cp -R ../dist/. .
-          
-          # Commit and push
-          git add .
-          git commit -m "Deploy version ${VERSION}" || echo "No changes to commit"
-          git push
-          
-          cd ..
-          rm -rf deploy-repo
-          
-          echo "Successfully deployed version ${VERSION} to GitHub Pages"
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: gentlygently/gentlygently.github.io
+          publish_branch: main
+          publish_dir: ./dist
+          commit_message: "Deploy version ${{ inputs.version }}"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          force_orphan: false
       
       - name: Update release notes
         env:
