@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import PalettePreview from './PalettePreview.vue'
+import PalettePreview from './PalettePreview/PalettePreview.vue'
 import { PaletteTypes } from '../PaletteTypes'
 
 const props = defineProps({

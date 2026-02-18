@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { PaletteTypes } from '../PaletteTypes'
+import { PaletteTypes } from '../../PaletteTypes'
 
 const props = defineProps({
   type: {
@@ -46,7 +46,7 @@ const hex = colour => (typeof colour === 'string' ? colour : colour.hex)
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .palettepreview {
   height: 100%;
