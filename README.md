@@ -57,8 +57,9 @@ The CI workflow automatically runs on pull requests and pushes to the master bra
 **Versioning Strategy:**
 - Version format: `MAJOR.MINOR.BUILD` (e.g., `1.0.123`)
 - `MAJOR.MINOR`: Set via git tags (e.g., `v1.0`, `v1.1`, `v2.0`)
-- `BUILD`: Auto-incremented using GitHub Actions run number
+- `BUILD`: Auto-incremented using GitHub Actions run number (global counter)
 - Example: With tag `v1.0`, builds become `1.0.1`, `1.0.2`, `1.0.3`, etc.
+- **Note:** The BUILD number is a global counter that never resets. When you create a new tag (e.g., `v1.1`), builds continue from the current run number, so you might see `1.1.124`, `1.1.125`, etc.
 
 **Creating a new version:**
 ```bash
@@ -66,7 +67,8 @@ The CI workflow automatically runs on pull requests and pushes to the master bra
 git tag -a v1.1 -m "Version 1.1"
 git push origin v1.1
 
-# Subsequent builds on master will be 1.1.1, 1.1.2, etc.
+# Subsequent builds on master will use 1.1.x where x is the global run number
+# For example: 1.1.124, 1.1.125, 1.1.126, etc.
 ```
 
 #### Release Workflow

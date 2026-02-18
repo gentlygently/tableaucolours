@@ -46,8 +46,10 @@ jobs:
           BUILD_NUMBER=${{ github.run_number }}
           # Construct full version
           VERSION="${VERSION_BASE}.${BUILD_NUMBER}"
+          COMMIT_SHA="${{ github.sha }}"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "Generated version: ${VERSION}"
+          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
+          echo "Generated version: ${VERSION} for commit ${COMMIT_SHA}"
       
       - name: Upload build artifact
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
@@ -55,4 +57,20 @@ jobs:
         with:
           name: build-${{ steps.version.outputs.version }}
           path: dist/
+          retention-days: 90
+      
+      - name: Save build metadata
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          mkdir -p build-metadata
+          echo "${{ steps.version.outputs.version }}" > build-metadata/version.txt
+          echo "${{ steps.version.outputs.commit_sha }}" > build-metadata/commit_sha.txt
+          echo "${{ github.run_id }}" > build-metadata/run_id.txt
+      
+      - name: Upload build metadata
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-metadata-${{ steps.version.outputs.version }}
+          path: build-metadata/
           retention-days: 90
