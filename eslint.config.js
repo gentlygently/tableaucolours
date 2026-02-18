@@ -18,10 +18,5 @@ export default [
     },
   },
   ...pluginVue.configs['flat/essential'],
-  {
-    rules: {
-      'vue/return-in-computed-property': 'off',
-    },
-  },
   skipFormatting,
 ]
