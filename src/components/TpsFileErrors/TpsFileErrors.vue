@@ -16,7 +16,7 @@ const emit = defineEmits(['close'])
 </template>
 
 <style scoped lang="less">
-@import '../variables.less';
+@import '../../variables.less';
 
 .tpserrors {
   font-size: 1.5rem;
