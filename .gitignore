@@ -21,3 +21,9 @@ yarn-error.log*
 *.sw*
 navigation_repro.test.js
 reproduce_issue.test.js
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

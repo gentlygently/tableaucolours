@@ -11,6 +11,9 @@
     "lint:fix": "eslint . --color --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "e2e": "npx playwright test",
+    "e2e:ui": "npx playwright test --ui",
+    "e2e:report": "npx playwright show-report",
     "lint-staged": "lint-staged",
     "format": "prettier --write .",
     "prepare": "husky"
@@ -26,6 +29,7 @@
     "vue-draggable-plus": "^0.6.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-vue": "^6.0.4",
