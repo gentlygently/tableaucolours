@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import ImageCanvas from './ImageCanvas.vue'
 import ImageFileOpen from './ImageFileOpen.vue'
-import ImageZoom from './ImageZoom.vue'
+import ImageZoom from './ImageZoom/ImageZoom.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { useTpsFileStore } from '@/stores/tpsfile'
