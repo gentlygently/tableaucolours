@@ -11,7 +11,7 @@ const props = defineProps({
   canMove: Boolean,
 })
 
-const emit = defineEmits(['clone'])
+const emit = defineEmits(['clone', 'toggle-selected'])
 
 const element = ref(null)
 
@@ -56,6 +56,10 @@ const cloneClick = () => {
   moreClick()
   emit('clone', props.palette)
 }
+
+const toggleSelected = () => {
+  emit('toggle-selected', props.palette)
+}
 </script>
 
 <template>
@@ -77,7 +81,7 @@ const cloneClick = () => {
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
     <div class="select">
-      <input type="checkbox" v-model="palette.isSelected" title="Select palette" @click.stop />
+      <input type="checkbox" :checked="palette.isSelected" @change="toggleSelected" title="Select palette" @click.stop />
     </div>
     <div class="clone" title="">
       <button class="iconbutton fas fa-stamp" title="Clone palette" @click.stop.prevent="cloneClick"></button>

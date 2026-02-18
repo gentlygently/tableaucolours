@@ -27,6 +27,10 @@ const clonePalette = palette => emit('clone-palette', palette)
 const deletePalette = palette => emit('delete-palette', palette)
 const paletteMoved = event => emit('move-palette', tpsStore.palettes[event.oldIndex], event.newIndex)
 
+const toggleSelected = palette => {
+  palette.isSelected = !palette.isSelected
+}
+
 const paletteCount = computed(() => {
   const count = tpsStore.palettes.length
   let message = `${count} colour palette${count == 1 ? '' : 's'}`
@@ -62,6 +66,7 @@ const paletteCount = computed(() => {
       @dblclick.stop.prevent="doubleClick(palette)"
       @delete="deletePalette"
       @clone="clonePalette"
+      @toggle-selected="toggleSelected"
     />
   </VueDraggable>
   <div class="palettecount">{{ paletteCount }}</div>
