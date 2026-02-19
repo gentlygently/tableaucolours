@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import TpsFileOpen from '../TpsFileOpen/TpsFileOpen.vue'
+import { StartMenuTestIds } from './StartMenuTestIds'
 
 const openTpsFile = ref(null)
 const openTpsFileEditor = () => openTpsFile.value.selectFile()
@@ -11,7 +12,7 @@ const openPaletteEditor = () => paletteStore.open()
 </script>
 
 <template>
-  <div class="startmenu">
+  <div class="startmenu" :data-testid="StartMenuTestIds.Self">
     <div class="function">
       <h2>Manage Preferences.tps</h2>
       <p>
@@ -20,7 +21,7 @@ const openPaletteEditor = () => paletteStore.open()
         .tps file.
       </p>
       <div class="action">
-        <button class="button" @click.stop.prevent="openTpsFileEditor">Open file...</button>
+        <button class="button" :data-testid="StartMenuTestIds.OpenFile" @click.stop.prevent="openTpsFileEditor">Open file...</button>
       </div>
     </div>
     <div class="function">
@@ -30,7 +31,7 @@ const openPaletteEditor = () => paletteStore.open()
         from an image or picking them yourself. You can also import and edit existing palettes.
       </p>
       <div class="action">
-        <button class="button" @click.stop.prevent="openPaletteEditor">Create a template</button>
+        <button class="button" :data-testid="StartMenuTestIds.CreateTemplate" @click.stop.prevent="openPaletteEditor">Create a template</button>
       </div>
     </div>
   </div>

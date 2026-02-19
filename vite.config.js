@@ -26,7 +26,7 @@ const testConfig = defineTestConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['src/testing/test-setup.js'],
-    exclude: ['**/node_modules/**', '**/dist/**', '*.test.js'],
+    exclude: ['**/node_modules/**', '**/dist/**', '*.test.js', '**/e2e/**'],
     deps: {
       optimizer: {
         web: {

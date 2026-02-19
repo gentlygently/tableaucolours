@@ -6,6 +6,7 @@ import { replacePalettesInTpsXml } from '../../utils/TpsWriter'
 import TpsPaletteList from '../TpsPaletteList/TpsPaletteList.vue'
 import TpsPaletteFilter from '../TpsPaletteFilter/TpsPaletteFilter.vue'
 import TpsPaletteExport from '../TpsPaletteExport/TpsPaletteExport.vue'
+import { TpsFileEditorTestIds } from './TpsFileEditorTestIds'
 
 const tpsStore = useTpsFileStore()
 const paletteStore = usePaletteStore()
@@ -198,8 +199,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="tpseditor">
-    <div class="file">{{ tpsStore.fileName }}</div>
+  <div class="tpseditor" :data-testid="TpsFileEditorTestIds.Self">
+    <div class="file" :data-testid="TpsFileEditorTestIds.FileName">{{ tpsStore.fileName }}</div>
     <div class="palettes">
       <TpsPaletteList
         @double-click-palette="openPalette"

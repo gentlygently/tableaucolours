@@ -5,6 +5,7 @@ dist
 examples
 node_modules
 playwright-report
+test-results
 .gitignore
 .prettierignore
 .prettierrc.js

@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import PalettePreview from '../PalettePreview/PalettePreview.vue'
 import { PaletteTypes } from '../../PaletteTypes'
+import { TpsPaletteListItemTestIds } from './TpsPaletteListItemTestIds'
 
 const props = defineProps({
   palette: {
@@ -67,6 +68,7 @@ const toggleSelected = () => {
     ref="element"
     class="palette"
     :title="tooltip"
+    :data-testid="TpsPaletteListItemTestIds.Self"
     :class="[
       {
         'palette--current': palette.isCurrent,
@@ -81,10 +83,10 @@ const toggleSelected = () => {
     </div>
     <div class="preview"><PalettePreview :type="palette.type" :colours="palette.colours" /></div>
     <div class="select">
-      <input type="checkbox" :checked="palette.isSelected" @change="toggleSelected" title="Select palette" @click.stop />
+      <input type="checkbox" :checked="palette.isSelected" :data-testid="TpsPaletteListItemTestIds.Checkbox" @change="toggleSelected" title="Select palette" @click.stop />
     </div>
     <div class="clone" title="">
-      <button class="iconbutton fas fa-stamp" title="Clone palette" @click.stop.prevent="cloneClick"></button>
+      <button class="iconbutton fas fa-stamp" :data-testid="TpsPaletteListItemTestIds.Clone" title="Clone palette" @click.stop.prevent="cloneClick"></button>
     </div>
     <div class="drag" title="Move" v-if="canMove">
       <span class="fas fa-ellipsis-v"></span>

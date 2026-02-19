@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { colourPaletteXml } from '@/utils/TpsWriter'
+import { ColourPaletteGetCodeTestIds } from './ColourPaletteGetCodeTestIds'
 
 const store = usePaletteStore()
 
@@ -30,13 +31,13 @@ const xml = () => colourPaletteXml(store.name, store.type, store.colours)
 </script>
 
 <template>
-  <div class="getcode">
+  <div class="getcode" :data-testid="ColourPaletteGetCodeTestIds.Self">
     <div class="getcode-codecontainer">
-      <pre ref="code" class="getcode-code">{{ xml() }}</pre>
+      <pre ref="code" class="getcode-code" :data-testid="ColourPaletteGetCodeTestIds.Code">{{ xml() }}</pre>
     </div>
     <transition mode="out-in">
-      <button v-if="!copied" class="button getcode-copy" @click.stop.prevent="copy">Copy to clipboard</button>
-      <button v-else-if="copied" class="button getcode-copy getcode-copy--copied" @click.stop.prevent="copy">
+      <button v-if="!copied" class="button getcode-copy" :data-testid="ColourPaletteGetCodeTestIds.Button" @click.stop.prevent="copy">Copy to clipboard</button>
+      <button v-else-if="copied" class="button getcode-copy getcode-copy--copied" :data-testid="ColourPaletteGetCodeTestIds.Button" @click.stop.prevent="copy">
         Copied
         <span class="fas fa-check"></span>
       </button>

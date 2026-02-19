@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import ColourPicker from '../ColourPicker/ColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
+import { ColourPaletteColourListItemTestIds } from './ColourPaletteColourListItemTestIds'
 
 const store = usePaletteStore()
 
@@ -50,14 +51,16 @@ function remove() {
     :class="containerClasses"
     :title="colour.hex + ' (double click to edit)'"
     :style="{ 'grid-column': column, 'grid-row': row }"
+    :data-testid="ColourPaletteColourListItemTestIds.Self"
     @click="click"
   >
     <div
       class="colour-swatch"
       :style="{ 'background-color': colour.hex }"
+      :data-testid="ColourPaletteColourListItemTestIds.Swatch"
       @dblclick="isPickerOpen = true"
     ></div>
-    <div class="colour-remove" title="Delete colour (Delete)" @click.prevent.stop="remove">
+    <div class="colour-remove" :data-testid="ColourPaletteColourListItemTestIds.Remove" title="Delete colour (Delete)" @click.prevent.stop="remove">
       <span class="fas fa-times"></span>
     </div>
     <colour-picker

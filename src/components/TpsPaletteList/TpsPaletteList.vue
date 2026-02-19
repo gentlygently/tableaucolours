@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import TpsPaletteListItem from '../TpsPaletteListItem/TpsPaletteListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
+import { TpsPaletteListTestIds } from './TpsPaletteListTestIds'
 
 const tpsStore = useTpsFileStore()
 
@@ -48,6 +49,7 @@ const paletteCount = computed(() => {
   <VueDraggable
     v-model="palettes"
     class="palettelist"
+    :data-testid="TpsPaletteListTestIds.Self"
     :options="{ delay: 25 }"
     :disabled="!tpsStore.canMovePalettes"
     tag="ul"
@@ -69,7 +71,7 @@ const paletteCount = computed(() => {
       @toggle-selected="toggleSelected"
     />
   </VueDraggable>
-  <div class="palettecount">{{ paletteCount }}</div>
+  <div class="palettecount" :data-testid="TpsPaletteListTestIds.Count">{{ paletteCount }}</div>
 </template>
 
 <style scoped lang="less">

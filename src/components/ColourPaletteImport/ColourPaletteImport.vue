@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { parseColourPalette } from '@/utils/TpsParser'
+import { ColourPaletteImportTestIds } from './ColourPaletteImportTestIds'
 
 const store = usePaletteStore()
 
@@ -46,19 +47,20 @@ onMounted(() => code.value.focus())
 </script>
 
 <template>
-  <div class="importcode">
+  <div class="importcode" :data-testid="ColourPaletteImportTestIds.Self">
     <div class="importcode-codecontainer">
       <textarea
         ref="code"
         v-model.trim="xml"
         class="importcode-code"
         :class="codeClasses"
+        :data-testid="ColourPaletteImportTestIds.Code"
         placeholder="Paste a &lt;color-palette&gt;"
         autocorrect="off"
         autocapitalize="off"
         spellcheck="false"
       ></textarea>
-      <div v-show="hasValidationMessage" class="importcode-validationmessage">{{ validationMessage }}</div>
+      <div v-show="hasValidationMessage" class="importcode-validationmessage" :data-testid="ColourPaletteImportTestIds.ValidationMessage">{{ validationMessage }}</div>
     </div>
     <button class="importcode-button importcode-button--import" :disabled="!isValid" @click="importXml">Import</button>
     <button class="importcode-button importcode-button--cancel" @click="$emit('close')">Cancel</button>

@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue'
 import ImageColourSwatch from '../ImageColourSwatch/ImageColourSwatch.vue'
+import { ScalableImageTestIds } from './ScalableImageTestIds'
 
 const props = defineProps({
   canPickColour: {
@@ -103,6 +104,7 @@ function setMousePosition(event) {
       />
       <canvas
         ref="imageCanvas"
+        :data-testid="ScalableImageTestIds.Canvas"
         @click="click"
         @mouseover="setMouseAndColour"
         @mousemove="setMouseAndColour"
