@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { parseColourPalette } from '@/utils/TpsParser'
-import { ColourPaletteImportTestIds } from '@/test-ids/ColourPaletteImportTestIds'
+import { ColourPaletteImportTestIds } from './ColourPaletteImportTestIds'
 
 const store = usePaletteStore()
 

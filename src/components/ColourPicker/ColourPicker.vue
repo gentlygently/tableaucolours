@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { Sketch as SketchColourPicker } from '@ckpack/vue-color'
-import { ColourPickerTestIds } from '@/test-ids/ColourPickerTestIds'
+import { ColourPickerTestIds } from './ColourPickerTestIds'
 
 const props = defineProps({
   hex: {

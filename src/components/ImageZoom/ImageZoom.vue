@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { ImageZoomTestIds } from '@/test-ids/ImageZoomTestIds'
+import { ImageZoomTestIds } from './ImageZoomTestIds'
 
 const props = defineProps({
   scale: { type: Number, required: true },

@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { TpsPaletteExportTestIds } from '@/test-ids/TpsPaletteExportTestIds'
+import { TpsPaletteExportTestIds } from './TpsPaletteExportTestIds'
 
 const emit = defineEmits(['export'])
 const tpsStore = useTpsFileStore()

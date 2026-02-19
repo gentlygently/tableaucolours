@@ -1,4 +1,4 @@
-import { ColourPaletteGetCodeTestIds } from '../../src/test-ids/ColourPaletteGetCodeTestIds.js'
+import { ColourPaletteGetCodeTestIds } from '../../src/components/ColourPaletteGetCode/ColourPaletteGetCodeTestIds.js'
 
 export class ExportModal {
   constructor(page) {

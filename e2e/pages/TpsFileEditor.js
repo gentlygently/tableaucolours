@@ -1,7 +1,7 @@
-import { TpsFileEditorTestIds } from '../../src/test-ids/TpsFileEditorTestIds.js'
-import { TpsPaletteListTestIds } from '../../src/test-ids/TpsPaletteListTestIds.js'
-import { TpsPaletteListItemTestIds } from '../../src/test-ids/TpsPaletteListItemTestIds.js'
-import { TpsPaletteExportTestIds } from '../../src/test-ids/TpsPaletteExportTestIds.js'
+import { TpsFileEditorTestIds } from '../../src/components/TpsFileEditor/TpsFileEditorTestIds.js'
+import { TpsPaletteListTestIds } from '../../src/components/TpsPaletteList/TpsPaletteListTestIds.js'
+import { TpsPaletteListItemTestIds } from '../../src/components/TpsPaletteListItem/TpsPaletteListItemTestIds.js'
+import { TpsPaletteExportTestIds } from '../../src/components/TpsPaletteExport/TpsPaletteExportTestIds.js'
 
 export class TpsFileEditor {
   constructor(page) {

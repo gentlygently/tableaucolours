@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import TpsPaletteListItem from '../TpsPaletteListItem/TpsPaletteListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { TpsPaletteListTestIds } from '@/test-ids/TpsPaletteListTestIds'
+import { TpsPaletteListTestIds } from './TpsPaletteListTestIds'
 
 const tpsStore = useTpsFileStore()
 

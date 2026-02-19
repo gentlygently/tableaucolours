@@ -11,7 +11,7 @@ import ImageColourPicker from '@/components/ImageColourPicker/ImageColourPicker.
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { ColourPaletteEditorTestIds } from '@/test-ids/ColourPaletteEditorTestIds'
+import { ColourPaletteEditorTestIds } from './ColourPaletteEditorTestIds'
 
 const imageStore = useImageStore()
 const paletteStore = usePaletteStore()

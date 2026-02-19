@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import { colourPaletteXml } from '@/utils/TpsWriter'
-import { ColourPaletteGetCodeTestIds } from '@/test-ids/ColourPaletteGetCodeTestIds'
+import { ColourPaletteGetCodeTestIds } from './ColourPaletteGetCodeTestIds'
 
 const store = usePaletteStore()
 

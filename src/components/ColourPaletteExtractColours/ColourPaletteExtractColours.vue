@@ -4,7 +4,7 @@ import ColorThief from 'colorthief'
 import { usePaletteStore } from '@/stores/palette'
 import { useImageStore } from '@/stores/image'
 import { converter, formatHex, useMode, modeLch, modeRgb, parse } from 'culori/fn'
-import { ColourPaletteExtractColoursTestIds } from '@/test-ids/ColourPaletteExtractColoursTestIds'
+import { ColourPaletteExtractColoursTestIds } from './ColourPaletteExtractColoursTestIds'
 
 const emit = defineEmits(['close'])
 

@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import PalettePreview from '../PalettePreview/PalettePreview.vue'
 import { PaletteTypes } from '../../PaletteTypes'
-import { TpsPaletteListItemTestIds } from '@/test-ids/TpsPaletteListItemTestIds'
+import { TpsPaletteListItemTestIds } from './TpsPaletteListItemTestIds'
 
 const props = defineProps({
   palette: {

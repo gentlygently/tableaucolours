@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import ColourPicker from '../ColourPicker/ColourPicker.vue'
 import { usePaletteStore } from '@/stores/palette'
-import { ColourPaletteColourListItemTestIds } from '@/test-ids/ColourPaletteColourListItemTestIds'
+import { ColourPaletteColourListItemTestIds } from './ColourPaletteColourListItemTestIds'
 
 const store = usePaletteStore()
 

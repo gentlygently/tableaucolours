@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { usePaletteStore } from '@/stores/palette'
-import { ColourPaletteColourListTestIds } from '@/test-ids/ColourPaletteColourListTestIds'
+import { ColourPaletteColourListTestIds } from './ColourPaletteColourListTestIds'
 
 const store = usePaletteStore()
 const draggingActive = ref(false)

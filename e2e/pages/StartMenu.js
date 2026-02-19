@@ -1,4 +1,4 @@
-import { StartMenuTestIds } from '../../src/test-ids/StartMenuTestIds.js'
+import { StartMenuTestIds } from '../../src/components/StartMenu/StartMenuTestIds.js'
 
 export class StartMenu {
   constructor(page) {

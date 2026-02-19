@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/base.js'
-import { ColourPaletteEditorTestIds } from '../../src/test-ids/ColourPaletteEditorTestIds.js'
-import { TpsFileEditorTestIds } from '../../src/test-ids/TpsFileEditorTestIds.js'
-import { AppHelpTestIds } from '../../src/test-ids/AppHelpTestIds.js'
+import { ColourPaletteEditorTestIds } from '../../src/components/ColourPaletteEditor/ColourPaletteEditorTestIds.js'
+import { TpsFileEditorTestIds } from '../../src/components/TpsFileEditor/TpsFileEditorTestIds.js'
+import { AppHelpTestIds } from '../../src/components/AppHelp/AppHelpTestIds.js'
 import { createTpsFile } from '../fixtures/tps-builder.js'
 
 test.describe('Start Menu', () => {

@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import ColourPaletteTypeSelectorItem from '../ColourPaletteTypeSelectorItem/ColourPaletteTypeSelectorItem.vue'
 import { PaletteTypes } from '@/PaletteTypes'
-import { ColourPaletteTypeSelectorTestIds } from '@/test-ids/ColourPaletteTypeSelectorTestIds'
+import { ColourPaletteTypeSelectorTestIds } from './ColourPaletteTypeSelectorTestIds'
 
 const props = defineProps({
   selectedTypeName: {

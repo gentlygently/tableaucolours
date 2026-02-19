@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { usePaletteStore } from '@/stores/palette'
 import TpsFileOpen from '../TpsFileOpen/TpsFileOpen.vue'
-import { StartMenuTestIds } from '@/test-ids/StartMenuTestIds'
+import { StartMenuTestIds } from './StartMenuTestIds'
 
 const openTpsFile = ref(null)
 const openTpsFileEditor = () => openTpsFile.value.selectFile()

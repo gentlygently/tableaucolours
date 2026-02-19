@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import ScalableImage from '../ScalableImage/ScalableImage.vue'
 import { eventBus } from '@/eventbus'
-import { ImageCanvasTestIds } from '@/test-ids/ImageCanvasTestIds'
+import { ImageCanvasTestIds } from './ImageCanvasTestIds'
 
 const props = defineProps({
   canPickColour: Boolean,

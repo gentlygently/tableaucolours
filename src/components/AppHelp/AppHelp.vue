@@ -5,7 +5,7 @@ import TpsFileHelp from '@/components/TpsFileHelp/TpsFileHelp.vue'
 import ModalPanel from '../ModalPanel/ModalPanel.vue'
 import { usePaletteStore } from '@/stores/palette'
 import { useTpsFileStore } from '@/stores/tpsfile'
-import { AppHelpTestIds } from '@/test-ids/AppHelpTestIds'
+import { AppHelpTestIds } from './AppHelpTestIds'
 
 const paletteStore = usePaletteStore()
 const tpsStore = useTpsFileStore()

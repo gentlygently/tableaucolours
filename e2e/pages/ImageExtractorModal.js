@@ -1,4 +1,4 @@
-import { ColourPaletteExtractColoursTestIds } from '../../src/test-ids/ColourPaletteExtractColoursTestIds.js'
+import { ColourPaletteExtractColoursTestIds } from '../../src/components/ColourPaletteExtractColours/ColourPaletteExtractColoursTestIds.js'
 
 export class ImageExtractorModal {
   constructor(page) {
