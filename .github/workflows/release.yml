@@ -76,7 +76,7 @@ jobs:
         with:
           personal_token: ${{ secrets.DEPLOY_TOKEN }}
           external_repository: gentlygently/gentlygently.github.io
-          publish_branch: main
+          publish_branch: master
           publish_dir: ./dist
           commit_message: "Deploy version ${{ steps.version.outputs.version }}"
           user_name: 'github-actions[bot]'
