@@ -32,6 +32,25 @@ export class TpsFileEditor {
     return this.page.getByTestId(TpsPaletteListItemTestIds.Self).count()
   }
 
+  async getCurrentPaletteIndex() {
+    const items = await this.getPaletteItems()
+    let currentIndex = -1
+    let currentCount = 0
+    for (let i = 0; i < items.length; i++) {
+      const classList = await items[i].getAttribute('class')
+      if (classList?.includes('palette--current')) {
+        currentIndex = i
+        currentCount++
+      }
+    }
+    if (currentCount > 1) {
+      throw new Error(
+        `Expected at most one current palette, but found ${currentCount}`,
+      )
+    }
+    return currentIndex
+  }
+
   async clickPalette(index) {
     const items = await this.getPaletteItems()
     if (!items[index]) {
