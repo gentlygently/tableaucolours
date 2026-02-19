@@ -89,7 +89,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           # Get the original release body
-          ORIGINAL_BODY=$(gh release view "v${VERSION}" --json body --jq '.body')
+          ORIGINAL_BODY=$(gh release view "v${VERSION}" --repo ${{ github.repository }} --json body --jq '.body')
           
           # Create updated release notes  
           DEPLOY_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
