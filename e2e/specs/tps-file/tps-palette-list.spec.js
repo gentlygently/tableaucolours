@@ -1,51 +1,37 @@
 import { test, expect } from '../../fixtures/base'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createTpsFile } from '../../fixtures/tps-builder.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const tpsFilePath = join(
-  __dirname,
-  '..',
-  '..',
-  'fixtures',
-  'test-files',
-  'all-valid.tps',
-)
-
-// Helper fixture that opens the TPS file before each test
-const tpsTest = test.extend({
-  openTpsFile: async ({ startMenu, page }, use) => {
-    const { StartMenu } = await import('../../pages/StartMenu.js')
-    const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
-    const startMenuPO = new StartMenu(page)
-    await startMenuPO.openTpsFile(tpsFilePath)
-    const tpsEditor = new TpsFileEditor(page)
-    await expect(tpsEditor.component).toBeVisible()
-    await use(tpsEditor)
-  },
-})
-
-tpsTest.describe('TPS Palette List', () => {
-  tpsTest(
+test.describe('TPS Palette List', () => {
+  test(
     'should make first palette current by default',
-    async ({ openTpsFile: tpsEditor }) => {
-      const items = await tpsEditor.getPaletteItems()
-      await expect(items[0]).toHaveClass(/palette--current/)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(0)
     },
   )
 
-  tpsTest(
+  test(
     'should select and deselect palette with checkbox',
-    async ({ openTpsFile: tpsEditor }) => {
-      await tpsTest.step('select palette', async () => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
+      await test.step('select palette', async () => {
         await tpsEditor.togglePaletteCheckbox(0)
         const items = await tpsEditor.getPaletteItems()
         const checkbox = items[0].getByTestId('TpsPaletteListItem Checkbox')
         await expect(checkbox).toBeChecked()
       })
 
-      await tpsTest.step('deselect palette', async () => {
+      await test.step('deselect palette', async () => {
         await tpsEditor.togglePaletteCheckbox(0)
         const items = await tpsEditor.getPaletteItems()
         const checkbox = items[0].getByTestId('TpsPaletteListItem Checkbox')
@@ -54,9 +40,15 @@ tpsTest.describe('TPS Palette List', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should open palette editor on double-click',
-    async ({ openTpsFile: tpsEditor, page }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.doubleClickPalette(0)
       await expect(
         page.getByTestId('ColourPaletteEditor Component'),
@@ -64,39 +56,57 @@ tpsTest.describe('TPS Palette List', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should clone a palette and open editor with copy name',
-    async ({ openTpsFile: tpsEditor, page }) => {
-      // Cloning opens the palette editor with the cloned palette
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, [
+        { name: 'Sunset Warm' },
+        { name: 'Ocean Blue' },
+      ])
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickClonePalette(0)
       await expect(
         page.getByTestId('ColourPaletteEditor Component'),
       ).toBeVisible()
 
-      // Name should have "(Copy)" suffix
       const nameInput = page.locator('input#name')
-      await expect(nameInput).toHaveValue('Pablo Honey (Copy)')
+      await expect(nameInput).toHaveValue(
+        `${tpsFile.palettes[0].name} (Copy)`,
+      )
     },
   )
 
-  tpsTest(
+  test(
     'should delete a palette with confirmation',
-    async ({ openTpsFile: tpsEditor, page }) => {
-      const initialCount = await tpsEditor.getPaletteCount()
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 4)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
 
-      // Select palette first, then delete
       await tpsEditor.togglePaletteCheckbox(0)
       page.once('dialog', (dialog) => dialog.accept())
       await tpsEditor.deleteSelectedButton.click()
 
       const newCount = await tpsEditor.getPaletteCount()
-      expect(newCount).toBe(initialCount - 1)
+      expect(newCount).toBe(tpsFile.palettes.length - 1)
     },
   )
 
-  tpsTest(
+  test(
     'should select all palettes',
-    async ({ openTpsFile: tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickSelectAll()
 
       const items = await tpsEditor.getPaletteItems()
@@ -107,9 +117,15 @@ tpsTest.describe('TPS Palette List', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should clear all palette selections',
-    async ({ openTpsFile: tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickSelectAll()
       await tpsEditor.clickClearSelection()
 
@@ -121,9 +137,15 @@ tpsTest.describe('TPS Palette List', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should update palette count when selecting palettes',
-    async ({ openTpsFile: tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.togglePaletteCheckbox(0)
       await tpsEditor.togglePaletteCheckbox(1)
 

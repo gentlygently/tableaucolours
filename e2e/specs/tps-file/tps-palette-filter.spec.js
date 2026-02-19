@@ -1,36 +1,16 @@
 import { test, expect } from '../../fixtures/base'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createTpsFile } from '../../fixtures/tps-builder.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const tpsFilePath = join(
-  __dirname,
-  '..',
-  '..',
-  'fixtures',
-  'test-files',
-  'all-valid.tps',
-)
-
-// Helper fixture that opens TPS file and navigates to editor
-const tpsTest = test.extend({
-  tpsEditor: async ({ page }, use) => {
-    const { StartMenu } = await import('../../pages/StartMenu.js')
-    const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
-    const startMenu = new StartMenu(page)
-    await startMenu.goto()
-    await startMenu.openTpsFile(tpsFilePath)
-    const tpsEditor = new TpsFileEditor(page)
-    await expect(tpsEditor.component).toBeVisible()
-    await use(tpsEditor)
-  },
-})
-
-tpsTest.describe('TPS Palette Filter', () => {
-  tpsTest(
+test.describe('TPS Palette Filter', () => {
+  test(
     'should open and close filter panel',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 2)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickFilter()
       await expect(tpsEditor.filterNameInput).toBeVisible()
 
@@ -39,11 +19,21 @@ tpsTest.describe('TPS Palette Filter', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should filter palettes by name',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, [
+        { name: 'Sunset Warm' },
+        { name: 'Ocean Blue' },
+        { name: 'Forest Green' },
+      ])
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickFilter()
-      await tpsEditor.filterNameInput.fill('Pablo')
+      await tpsEditor.filterNameInput.fill('Ocean')
 
       const count = await tpsEditor.getPaletteCount()
       expect(count).toBe(1)
@@ -52,37 +42,59 @@ tpsTest.describe('TPS Palette Filter', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should show all palettes when filter is cleared',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, [
+        { name: 'Sunset Warm' },
+        { name: 'Ocean Blue' },
+        { name: 'Forest Green' },
+      ])
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickFilter()
-      await tpsEditor.filterNameInput.fill('Pablo')
+      await tpsEditor.filterNameInput.fill('Ocean')
       expect(await tpsEditor.getPaletteCount()).toBe(1)
 
       await tpsEditor.filterNameInput.clear()
-      expect(await tpsEditor.getPaletteCount()).toBe(20)
+      expect(await tpsEditor.getPaletteCount()).toBe(tpsFile.palettes.length)
     },
   )
 
-  tpsTest(
+  test(
     'should filter by selected palettes only',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 4)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       // Select first two palettes
       await tpsEditor.togglePaletteCheckbox(0)
       await tpsEditor.togglePaletteCheckbox(1)
 
       // Open filter and check "Only selected"
       await tpsEditor.clickFilter()
-      await tpsEditor.page.getByText('Only selected').click()
+      await page.getByText('Only selected').click()
 
       const count = await tpsEditor.getPaletteCount()
       expect(count).toBe(2)
     },
   )
 
-  tpsTest(
+  test(
     'should filter by modified palettes only',
-    async ({ tpsEditor, page }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       // Modify a palette by double-clicking to edit, changing name, then saving
       await tpsEditor.doubleClickPalette(0)
       await expect(
@@ -105,16 +117,26 @@ tpsTest.describe('TPS Palette Filter', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should combine name and selected filters',
-    async ({ tpsEditor }) => {
-      // Select first palette (Pablo Honey)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, [
+        { name: 'Sunset Warm' },
+        { name: 'Ocean Blue' },
+        { name: 'Forest Green' },
+      ])
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
+      // Select first palette
       await tpsEditor.togglePaletteCheckbox(0)
 
       // Open filter, filter by name and selected
       await tpsEditor.clickFilter()
-      await tpsEditor.filterNameInput.fill('Pablo')
-      await tpsEditor.page.getByText('Only selected').click()
+      await tpsEditor.filterNameInput.fill(tpsFile.palettes[0].name)
+      await page.getByText('Only selected').click()
 
       const count = await tpsEditor.getPaletteCount()
       expect(count).toBe(1)

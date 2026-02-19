@@ -2,11 +2,7 @@ import { test, expect } from '../fixtures/base.js'
 import { ColourPaletteEditorTestIds } from '../../src/test-ids/ColourPaletteEditorTestIds.js'
 import { TpsFileEditorTestIds } from '../../src/test-ids/TpsFileEditorTestIds.js'
 import { AppHelpTestIds } from '../../src/test-ids/AppHelpTestIds.js'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import { createTpsFile } from '../fixtures/tps-builder.js'
 
 test.describe('Start Menu', () => {
   test('should navigate to palette editor when clicking Create a template', async ({
@@ -21,9 +17,9 @@ test.describe('Start Menu', () => {
   test('should navigate to TPS file editor when opening a file', async ({
     page,
     startMenu,
-  }) => {
-    const tpsFilePath = join(__dirname, '..', 'fixtures', 'test-files', 'all-valid.tps')
-    await startMenu.openTpsFile(tpsFilePath)
+  }, testInfo) => {
+    const tpsFile = createTpsFile(testInfo, 1)
+    await startMenu.openTpsFile(tpsFile.path)
     await expect(page.getByTestId(TpsFileEditorTestIds.Self)).toBeVisible()
     await expect(startMenu.component).not.toBeVisible()
   })

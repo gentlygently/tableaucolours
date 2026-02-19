@@ -1,100 +1,85 @@
 import { test, expect } from '../../fixtures/base'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createTpsFile } from '../../fixtures/tps-builder.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const tpsFilePath = join(
-  __dirname,
-  '..',
-  '..',
-  'fixtures',
-  'test-files',
-  'all-valid.tps',
-)
-
-// Helper fixture that opens TPS file
-const tpsTest = test.extend({
-  tpsEditor: async ({ startMenu, page }, use) => {
-    const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
-    await startMenu.openTpsFile(tpsFilePath)
-    const tpsEditor = new TpsFileEditor(page)
-    await expect(tpsEditor.component).toBeVisible()
-    await use(tpsEditor)
-  },
-})
-
-tpsTest.describe('TPS Keyboard Shortcuts', () => {
-  tpsTest(
+test.describe('TPS Keyboard Shortcuts', () => {
+  test(
     'should navigate down with ArrowDown',
-    async ({ tpsEditor, page }) => {
-      // Wait for first palette to be marked as current
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').first(),
-      ).toHaveClass(/palette--current/)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 4)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(0)
 
       await page.locator('header').click()
       await page.keyboard.press('ArrowDown')
-
-      const itemsAfter = await tpsEditor.getPaletteItems()
-      await expect(itemsAfter[1]).toHaveClass(/palette--current/)
-      await expect(itemsAfter[0]).not.toHaveClass(/palette--current/)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(1)
     },
   )
 
-  tpsTest(
+  test(
     'should navigate up with ArrowUp',
-    async ({ tpsEditor, page }) => {
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').first(),
-      ).toHaveClass(/palette--current/)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 4)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
 
       await page.locator('header').click()
       await page.keyboard.press('ArrowDown')
       await page.keyboard.press('ArrowDown')
-
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').nth(2),
-      ).toHaveClass(/palette--current/)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(2)
 
       await page.keyboard.press('ArrowUp')
-
-      const itemsAfter = await tpsEditor.getPaletteItems()
-      await expect(itemsAfter[1]).toHaveClass(/palette--current/)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(1)
     },
   )
 
-  tpsTest(
+  test(
     'should not navigate above first palette',
-    async ({ tpsEditor, page }) => {
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').first(),
-      ).toHaveClass(/palette--current/)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 4)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
 
       await page.locator('header').click()
       await page.keyboard.press('ArrowUp')
-
-      const itemsAfter = await tpsEditor.getPaletteItems()
-      await expect(itemsAfter[0]).toHaveClass(/palette--current/)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(0)
     },
   )
 
-  tpsTest(
+  test(
     'should add palette with + key',
-    async ({ tpsEditor, page }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await page.locator('header').click()
       await page.keyboard.press('+')
 
-      // Adding opens the palette editor
       await expect(
         page.getByTestId('ColourPaletteEditor Component'),
       ).toBeVisible()
     },
   )
 
-  tpsTest(
+  test(
     'should open palette editor with Enter key',
-    async ({ tpsEditor, page }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 3)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await page.locator('header').click()
       await page.keyboard.press('Enter')
 
@@ -104,9 +89,15 @@ tpsTest.describe('TPS Keyboard Shortcuts', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should delete current palette with Delete key',
-    async ({ tpsEditor, page }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 4)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       const initialCount = await tpsEditor.getPaletteCount()
       await page.locator('header').click()
 
@@ -118,53 +109,61 @@ tpsTest.describe('TPS Keyboard Shortcuts', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should move palette down with Shift+ArrowDown',
-    async ({ tpsEditor, page }) => {
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').first(),
-      ).toHaveClass(/palette--current/)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, [
+        { name: 'First' },
+        { name: 'Second' },
+        { name: 'Third' },
+      ])
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
 
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(0)
       await page.locator('header').click()
-
-      const itemsBefore = await tpsEditor.getPaletteItems()
-      const firstName = await itemsBefore[0].locator('.name').textContent()
 
       await page.keyboard.press('Shift+ArrowDown')
 
-      // The first palette should have moved to index 1
+      // First palette should have moved to index 1
       const itemsAfter = await tpsEditor.getPaletteItems()
       const secondNameAfter = await itemsAfter[1].locator('.name').textContent()
-      expect(secondNameAfter?.trim()).toBe(firstName?.trim())
-      await expect(itemsAfter[1]).toHaveClass(/palette--current/)
+      expect(secondNameAfter?.trim()).toBe(tpsFile.palettes[0].name)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(1)
     },
   )
 
-  tpsTest(
+  test(
     'should move palette up with Shift+ArrowUp',
-    async ({ tpsEditor, page }) => {
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').first(),
-      ).toHaveClass(/palette--current/)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, [
+        { name: 'First' },
+        { name: 'Second' },
+        { name: 'Third' },
+      ])
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
 
       await page.locator('header').click()
 
-      // Navigate to second palette first
+      // Navigate to second palette
       await page.keyboard.press('ArrowDown')
-      await expect(
-        page.getByTestId('TpsPaletteListItem Component').nth(1),
-      ).toHaveClass(/palette--current/)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(1)
 
       const items = await tpsEditor.getPaletteItems()
       const secondName = await items[1].locator('.name').textContent()
 
       await page.keyboard.press('Shift+ArrowUp')
 
-      // The second palette should have moved to index 0
+      // Second palette should have moved to index 0
       const itemsAfter = await tpsEditor.getPaletteItems()
       const firstNameAfter = await itemsAfter[0].locator('.name').textContent()
       expect(firstNameAfter?.trim()).toBe(secondName?.trim())
-      await expect(itemsAfter[0]).toHaveClass(/palette--current/)
+      expect(await tpsEditor.getCurrentPaletteIndex()).toBe(0)
     },
   )
 })

@@ -1,53 +1,45 @@
 import { test, expect } from '../../fixtures/base'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createTpsFile } from '../../fixtures/tps-builder.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const tpsFilePath = join(
-  __dirname,
-  '..',
-  '..',
-  'fixtures',
-  'test-files',
-  'all-valid.tps',
-)
-
-// Helper fixture that opens TPS file
-const tpsTest = test.extend({
-  tpsEditor: async ({ page }, use) => {
-    const { StartMenu } = await import('../../pages/StartMenu.js')
-    const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
-    const startMenu = new StartMenu(page)
-    await startMenu.goto()
-    await startMenu.openTpsFile(tpsFilePath)
-    const tpsEditor = new TpsFileEditor(page)
-    await expect(tpsEditor.component).toBeVisible()
-    await use(tpsEditor)
-  },
-})
-
-tpsTest.describe('TPS Palette Export', () => {
-  tpsTest(
+test.describe('TPS Palette Export', () => {
+  test(
     'should open export panel',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 2)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickExport()
       await expect(tpsEditor.exportFileName).toBeVisible()
       await expect(tpsEditor.exportSaveButton).toBeVisible()
     },
   )
 
-  tpsTest(
+  test(
     'should disable export button when no filename entered',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 2)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickExport()
       await expect(tpsEditor.exportSaveButton).toBeDisabled()
     },
   )
 
-  tpsTest(
+  test(
     'should disable export button when no palettes selected',
-    async ({ tpsEditor }) => {
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 2)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
+
       await tpsEditor.clickExport()
       await tpsEditor.exportFileName.fill('export-test')
       // No palettes selected — button should still be disabled
@@ -55,12 +47,16 @@ tpsTest.describe('TPS Palette Export', () => {
     },
   )
 
-  tpsTest(
+  test(
     'should enable export button when filename entered and palettes selected',
-    async ({ tpsEditor }) => {
-      // Select some palettes
-      await tpsEditor.togglePaletteCheckbox(0)
+    async ({ startMenu, page }, testInfo) => {
+      const tpsFile = createTpsFile(testInfo, 2)
+      await startMenu.openTpsFile(tpsFile.path)
+      const { TpsFileEditor } = await import('../../pages/TpsFileEditor.js')
+      const tpsEditor = new TpsFileEditor(page)
+      await expect(tpsEditor.component).toBeVisible()
 
+      await tpsEditor.togglePaletteCheckbox(0)
       await tpsEditor.clickExport()
       await tpsEditor.exportFileName.fill('export-test')
 

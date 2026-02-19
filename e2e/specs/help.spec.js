@@ -1,16 +1,5 @@
 import { test, expect } from '../fixtures/base'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const tpsFilePath = join(
-  __dirname,
-  '..',
-  'fixtures',
-  'test-files',
-  'all-valid.tps',
-)
+import { createTpsFile } from '../fixtures/tps-builder.js'
 
 test.describe('Help', () => {
   test('should not show help button on start menu', async ({
@@ -53,8 +42,9 @@ test.describe('Help', () => {
   test('should show TPS help content when in TPS editor', async ({
     startMenu,
     page,
-  }) => {
-    await startMenu.openTpsFile(tpsFilePath)
+  }, testInfo) => {
+    const tpsFile = createTpsFile(testInfo, 1)
+    await startMenu.openTpsFile(tpsFile.path)
     await expect(page.getByTestId('TpsFileEditor Component')).toBeVisible()
 
     await page.getByTestId('AppHelp Button').click()
