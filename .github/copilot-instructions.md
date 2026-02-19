@@ -18,7 +18,7 @@ Trust these instructions. Only search the codebase if the information here is in
 | E2E tests        | Playwright (Chromium-only in CI)                                        |
 | Linting          | ESLint flat config (`eslint.config.js`) — Vue + StandardJS rules        |
 | Formatting       | Prettier (`.prettierrc.js`); enforced on commit via husky + lint-staged |
-| Node.js (CI)     | 20                                                                      |
+| Node.js (CI)     | 24                                                                      |
 
 ## Build & Validation Commands
 
