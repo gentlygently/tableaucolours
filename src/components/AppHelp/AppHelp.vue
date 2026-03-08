@@ -24,8 +24,16 @@ const modalOpen = ref(false)
       ?
     </button>
     <ModalPanel :show="modalOpen" full width="70rem" @close="modalOpen = false">
-      <ColourPaletteHelp v-if="paletteStore.isOpen" class="help-content" :data-testid="AppHelpTestIds.Content" />
-      <TpsFileHelp v-if="tpsStore.isOpen && !paletteStore.isOpen" class="help-content" :data-testid="AppHelpTestIds.Content" />
+      <ColourPaletteHelp
+        v-if="paletteStore.isOpen"
+        class="help-content"
+        :data-testid="AppHelpTestIds.Content"
+      />
+      <TpsFileHelp
+        v-if="tpsStore.isOpen && !paletteStore.isOpen"
+        class="help-content"
+        :data-testid="AppHelpTestIds.Content"
+      />
     </ModalPanel>
   </div>
 </template>
@@ -37,16 +45,21 @@ const modalOpen = ref(false)
   &-button {
     width: 3rem;
     height: 3rem;
-    border: solid 0.1rem #fff;
+    border: solid 0.1rem rgba(255, 255, 255, 0.6);
     border-radius: 1.5rem;
     font-size: 2rem;
     display: block;
     color: #fff;
     float: right;
     background-color: transparent;
+    cursor: pointer;
+    transition:
+      background-color @transition-standard,
+      border-color @transition-standard;
 
     &:hover {
-      background-color: #ff000099;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.8);
     }
   }
   &-content {
