@@ -70,7 +70,7 @@ textarea {
 #app {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 6rem calc(100% - 6rem);
+  grid-template-rows: 7rem calc(100% - 7rem);
   height: 100%;
   box-sizing: border-box;
   position: relative;
@@ -85,7 +85,7 @@ header {
   grid-row: 1;
   grid-column: 1;
   width: 100%;
-  height: 6rem;
+  height: 7rem;
   background-image: linear-gradient(135deg, #ff4433, #ff5f15);
   z-index: 2;
   position: relative;
@@ -142,9 +142,9 @@ header {
       .description {
         margin: 0;
         padding: 0;
-        font-size: 1.2rem;
+        font-size: 0.9rem;
         text-transform: uppercase;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.04em;
         opacity: 0.85;
       }
     }
