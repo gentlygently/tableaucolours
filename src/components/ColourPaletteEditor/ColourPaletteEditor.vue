@@ -48,6 +48,15 @@ function reverseColours() {
   paletteStore.reverseColours()
 }
 
+function keyDown(event) {
+  if (event.target.tagName.toLowerCase() !== 'body') {
+    return
+  }
+  if (event.key === 'Backspace' || event.key === 'Delete') {
+    event.preventDefault()
+  }
+}
+
 function keyUp(event) {
   if (event.target.tagName.toLowerCase() !== 'body') {
     return
@@ -77,8 +86,14 @@ function typeSelected(type) {
   paletteStore.type = type
 }
 
-onMounted(() => window.addEventListener('keyup', keyUp, false))
-onUnmounted(() => window.removeEventListener('keyup', keyUp))
+onMounted(() => {
+  window.addEventListener('keydown', keyDown, false)
+  window.addEventListener('keyup', keyUp, false)
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', keyDown)
+  window.removeEventListener('keyup', keyUp)
+})
 </script>
 
 <template>

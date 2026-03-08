@@ -43,10 +43,10 @@ jobs:
         run: pnpm run build
 
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps
 
       - name: Run E2E tests
-        run: pnpm exec playwright test --project=chromium
+        run: pnpm exec playwright test
       
       - name: Generate version number
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'

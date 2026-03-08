@@ -143,7 +143,9 @@ function moveCurrentPalete(newIndex) {
 
 // Actions that can repeat when a key is held down
 function keyDown(event) {
-  if (!isValidKeyTarget || !tpsStore.hasCurrentPalette) return
+  if (!isValidKeyTarget(event)) return
+
+  if (!tpsStore.hasCurrentPalette) return
 
   const action = event.getModifierState('Shift') ? moveCurrentPalete : makePaletteAtIndexCurrent
 
@@ -158,7 +160,12 @@ function keyDown(event) {
     case 'ArrowUp':
       action(currentPaletteIndex.value - 1)
       event.preventDefault()
-      
+      return
+
+    case 'Backspace':
+    case 'Delete':
+      event.preventDefault()
+      break
   }
 }
 
@@ -182,7 +189,7 @@ function keyUp(event) {
     case 'Backspace':
     case 'Delete':
       deletePalette(tpsStore.currentPalette)
-      
+      break
   }
 }
 

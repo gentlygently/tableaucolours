@@ -15,7 +15,7 @@ Trust these instructions. Only search the codebase if the information here is in
 | Build tool       | Vite 7                                                                  |
 | Styling          | LESS (`src/variables.less` for shared vars)                             |
 | Unit tests       | Vitest + @vue/test-utils + @testing-library/jest-dom                    |
-| E2E tests        | Playwright (Chromium-only in CI)                                        |
+| E2E tests        | Playwright (Chromium, Firefox, WebKit in CI)                            |
 | Linting          | ESLint flat config (`eslint.config.js`) — Vue + StandardJS rules        |
 | Package manager  | pnpm                                                                    |
 | Formatting       | Prettier (`.prettierrc.js`); enforced on commit via husky + lint-staged |
@@ -38,8 +38,8 @@ E2E tests need a production preview server. The `webServer` config in `playwrigh
 
 ```bash
 pnpm exec playwright install --with-deps chromium
-pnpm exec playwright test --project=chromium   # run Chromium only (matches CI)
-pnpm exec playwright test                      # run all browsers (chromium, firefox, webkit)
+pnpm exec playwright test --project=chromium   # run Chromium only
+pnpm exec playwright test                      # run all browsers (chromium, firefox, webkit) — matches CI
 ```
 
 ### CI Pipeline (`.github/workflows/ci.yml`)
@@ -50,8 +50,8 @@ Runs on every PR and push to `master` in this exact order:
 2. `pnpm run lint`
 3. `pnpm run test`
 4. `pnpm run build`
-5. `pnpm exec playwright install --with-deps chromium`
-6. `pnpm exec playwright test --project=chromium`
+5. `pnpm exec playwright install --with-deps`
+6. `pnpm exec playwright test`
 
 A PR will be rejected if any of these steps fail. Always validate locally with lint → test → build before pushing.
 
