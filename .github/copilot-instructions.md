@@ -17,18 +17,19 @@ Trust these instructions. Only search the codebase if the information here is in
 | Unit tests       | Vitest + @vue/test-utils + @testing-library/jest-dom                    |
 | E2E tests        | Playwright (Chromium-only in CI)                                        |
 | Linting          | ESLint flat config (`eslint.config.js`) — Vue + StandardJS rules        |
+| Package manager  | pnpm                                                                    |
 | Formatting       | Prettier (`.prettierrc.js`); enforced on commit via husky + lint-staged |
 | Node.js (CI)     | 24                                                                      |
 
 ## Build & Validation Commands
 
-**Always run `npm install` before any other command.** ESLint is not globally installed; without it, `npm run lint` fails with `eslint: command not found`.
+**Always run `pnpm install` before any other command.** ESLint is not globally installed; without it, `pnpm run lint` fails with `eslint: command not found`.
 
 ```bash
-npm install               # install dependencies — always do this first
-npm run lint              # ESLint — must pass with zero errors
-npm run test              # Vitest unit tests (34 files, ~289 tests, ~5–6 s)
-npm run build             # Vite production build → dist/
+pnpm install              # install dependencies — always do this first
+pnpm run lint             # ESLint — must pass with zero errors
+pnpm run test             # Vitest unit tests (34 files, ~289 tests, ~5–6 s)
+pnpm run build            # Vite production build → dist/
 ```
 
 ### Running E2E Tests Locally
@@ -36,21 +37,21 @@ npm run build             # Vite production build → dist/
 E2E tests need a production preview server. The `webServer` config in `playwright.config.js` handles this automatically, but Playwright browsers must be installed first:
 
 ```bash
-npx playwright install --with-deps chromium
-npx playwright test --project=chromium   # run Chromium only (matches CI)
-npx playwright test                      # run all browsers (chromium, firefox, webkit)
+pnpm exec playwright install --with-deps chromium
+pnpm exec playwright test --project=chromium   # run Chromium only (matches CI)
+pnpm exec playwright test                      # run all browsers (chromium, firefox, webkit)
 ```
 
 ### CI Pipeline (`.github/workflows/ci.yml`)
 
 Runs on every PR and push to `master` in this exact order:
 
-1. `npm ci`
-2. `npm run lint`
-3. `npm run test`
-4. `npm run build`
-5. `npx playwright install --with-deps chromium`
-6. `npx playwright test --project=chromium`
+1. `pnpm install --frozen-lockfile`
+2. `pnpm run lint`
+3. `pnpm run test`
+4. `pnpm run build`
+5. `pnpm exec playwright install --with-deps chromium`
+6. `pnpm exec playwright test --project=chromium`
 
 A PR will be rejected if any of these steps fail. Always validate locally with lint → test → build before pushing.
 
@@ -99,5 +100,5 @@ __mocks__/
 - **Mounting in tests**: Use `mountWithPinia()` from `src/testing/test-utils.js` instead of bare `mount()`. It injects Pinia and stubs `<teleport>`.
 - **Colour values**: Always stored and compared as uppercase hex strings (e.g. `#FF0000`).
 - **No router**: Navigation between the start menu, palette editor, and TPS editor is event-driven via the `eventBus` (mitt), not Vue Router.
-- **Formatting**: Prettier config uses single quotes, no semis, 100-char print width, trailing commas (ES5). The pre-commit hook auto-fixes staged files; running `npm run format` manually also works.
+- **Formatting**: Prettier config uses single quotes, no semis, 100-char print width, trailing commas (ES5). The pre-commit hook auto-fixes staged files; running `pnpm run format` manually also works.
 - **Lint rule**: `@vue/eslint-config-standard` enforces StandardJS style. The most common lint failure is missing spaces around operators or extra/missing blank lines.

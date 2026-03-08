@@ -35,7 +35,7 @@ if [ ! -d "$deploy_path" ]; then
   exit 1
 fi
 
-npm run build || exit 1
+pnpm run build || exit 1
 
 cd "${deploy_path}" && git reset --hard && cd -|| exit 1
 cd "${deploy_path}" && git pull && cd -|| exit 1

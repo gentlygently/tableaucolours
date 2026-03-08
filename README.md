@@ -30,29 +30,29 @@ The file editor allows you to open and edit a Tableau Preferences.tps file:
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run development server
-npm run dev
+pnpm run dev
 
 # Lint code
-npm run lint
+pnpm run lint
 
 # Run unit tests
-npm run test
+pnpm run test
 
 # Run unit tests in watch mode
-npm run test:watch
+pnpm run test:watch
 
 # Run E2E tests (requires browsers to be installed)
-npx playwright install --with-deps
-npm run e2e
+pnpm exec playwright install --with-deps
+pnpm run e2e
 
 # Run E2E tests for a specific browser
-npm run e2e -- --project=chromium
+pnpm run e2e -- --project=chromium
 
 # Build for production
-npm run build
+pnpm run build
 ```
 
 ### CI/CD Workflows
@@ -70,12 +70,14 @@ The CI workflow automatically runs on pull requests and pushes to the master bra
 - **Artifact Upload** (master only): On successful master builds, the `dist/` output is uploaded as a versioned artifact
 
 **Versioning Strategy:**
+
 - Version format: `MAJOR.MINOR.BUILD` (e.g., `1.0.123`)
 - `MAJOR.MINOR`: Set via git tags (e.g., `v1.0`, `v1.1`, `v2.0`)
 - `BUILD`: Auto-incremented using GitHub Actions run number
 - Example: With tag `v1.0`, builds become `1.0.1`, `1.0.2`, `1.0.3`, etc.
 
 **Creating a new version:**
+
 ```bash
 # To bump to version 1.1.x
 git tag -a v1.1 -m "Version 1.1"
@@ -102,6 +104,7 @@ To enable the release workflow, configure the following repository secret:
 - `DEPLOY_TOKEN`: A Personal Access Token (PAT) with `repo` scope and write access to the `gentlygently/gentlygently.github.io` repository
 
 **Creating a PAT:**
+
 1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Generate new token with `repo` scope
 3. Add it as a repository secret named `DEPLOY_TOKEN`
