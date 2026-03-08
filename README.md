@@ -108,11 +108,3 @@ To enable the release workflow, configure the following repository secret:
 1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Generate new token with `repo` scope
 3. Add it as a repository secret named `DEPLOY_TOKEN`
-
-### Manual Deployment
-
-The legacy `deploy.sh` script can still be used for local deployments:
-
-```bash
-./deploy.sh "commit message"
-```
