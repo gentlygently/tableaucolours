@@ -82,8 +82,8 @@ export class ColourPaletteEditor {
     const colourPicker = items[index].getByTestId(ColourPickerTestIds.Self)
     await colourPicker.waitFor({ state: 'visible' })
 
-    // Target the hex input inside @ckpack/vue-color's Sketch picker
-    const hexInput = colourPicker.locator('input').first()
+    // Target the hex input inside the custom SketchColourPicker
+    const hexInput = colourPicker.locator('input[type="text"]').first()
     await hexInput.clear()
     await hexInput.fill(hex.replace('#', ''))
 

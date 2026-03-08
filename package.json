@@ -19,7 +19,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ckpack/vue-color": "^1.6.0",
     "colorthief": "^2.6.0",
     "culori": "^4.0.2",
     "he": "^1.2.0",
