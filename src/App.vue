@@ -152,7 +152,7 @@ header {
     .header-help {
       display: block;
       grid-column: 3;
-      padding-top: 1.5rem;
+      align-self: center;
     }
   }
 }
