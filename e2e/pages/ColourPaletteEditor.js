@@ -51,7 +51,7 @@ export class ColourPaletteEditor {
     for (const item of items) {
       const swatch = item.getByTestId(ColourPaletteColourListItemTestIds.Swatch)
       const backgroundColor = await swatch.evaluate(
-        (el) => el.ownerDocument.defaultView.getComputedStyle(el).backgroundColor,
+        el => el.ownerDocument.defaultView.getComputedStyle(el).backgroundColor
       )
       const rgbMatch = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(backgroundColor)
       if (!rgbMatch) {
@@ -60,7 +60,7 @@ export class ColourPaletteEditor {
       const hex =
         '#' +
         [rgbMatch[1], rgbMatch[2], rgbMatch[3]]
-          .map((x) => {
+          .map(x => {
             const h = parseInt(x, 10).toString(16)
             return h.length === 1 ? '0' + h : h
           })
@@ -87,8 +87,8 @@ export class ColourPaletteEditor {
     await hexInput.clear()
     await hexInput.fill(hex.replace('#', ''))
 
-    // Click Done to apply and close the picker
-    await colourPicker.locator('.colourpicker-done').click()
+    // Press Enter to apply and close the picker
+    await hexInput.press('Enter')
     await colourPicker.waitFor({ state: 'hidden' })
   }
 
@@ -97,11 +97,9 @@ export class ColourPaletteEditor {
 
     if (initialCount > 0) {
       // "Delete all colours" actually resets to 1 white colour (store defaults to ['#FFFFFF'])
-      this.page.once('dialog', (dialog) => dialog.accept())
+      this.page.once('dialog', dialog => dialog.accept())
       await this.page.locator('button[title="Delete all colours"]').click()
-      await expect(
-        this.page.getByTestId(ColourPaletteColourListItemTestIds.Self),
-      ).toHaveCount(1)
+      await expect(this.page.getByTestId(ColourPaletteColourListItemTestIds.Self)).toHaveCount(1)
     }
 
     // Set the first colour (which already exists after discard)
@@ -150,9 +148,7 @@ export class ColourPaletteEditor {
 
   async selectColour(index) {
     await this.clickColour(index)
-    const colourItem = this.page
-      .getByTestId(ColourPaletteColourListItemTestIds.Self)
-      .nth(index)
+    const colourItem = this.page.getByTestId(ColourPaletteColourListItemTestIds.Self).nth(index)
     await expect(colourItem).toHaveClass(/selected/)
   }
 
@@ -220,17 +216,13 @@ export class ColourPaletteEditor {
   }
 
   async getSelectedType() {
-    const selectedElement = this.typeSelector.getByTestId(
-      ColourPaletteTypeSelectorTestIds.Selected,
-    )
+    const selectedElement = this.typeSelector.getByTestId(ColourPaletteTypeSelectorTestIds.Selected)
     const label = selectedElement.locator('label')
     return label.textContent()
   }
 
   async focusTypeSelector() {
-    const selectedElement = this.typeSelector.getByTestId(
-      ColourPaletteTypeSelectorTestIds.Selected,
-    )
+    const selectedElement = this.typeSelector.getByTestId(ColourPaletteTypeSelectorTestIds.Selected)
     const selectDiv = selectedElement.locator('..')
     await selectDiv.focus()
   }
