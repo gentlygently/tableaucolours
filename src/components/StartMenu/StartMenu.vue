@@ -78,13 +78,10 @@ const openPaletteEditor = () => paletteStore.open()
     border-radius: 0.4rem;
     padding: 3rem;
     box-shadow: @card-shadow;
-    transition:
-      box-shadow @transition-standard,
-      transform @transition-standard;
+    transition: box-shadow @transition-standard;
 
     &:hover {
       box-shadow: @card-shadow-hover;
-      transform: translateY(-0.1rem);
     }
 
     .function-icon {
