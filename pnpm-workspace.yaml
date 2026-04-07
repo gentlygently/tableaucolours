@@ -1,0 +1,8 @@
+# Fail if a package's trust level has decreased
+trustPolicy: no-downgrade
+
+# Ignore the check for packages published more than 30 days ago
+# Useful for older packages that pre-date provenance support
+trustPolicyIgnoreAfter: 43200 # minutes (30 days)
+
+minimumReleaseAge: 7200 # 5 days (in minutes)
